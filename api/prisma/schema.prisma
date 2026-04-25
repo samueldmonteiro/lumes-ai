@@ -1,0 +1,35 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Tabela principal — cada chunk de texto com seu vetor
+model KnowledgeChunk {
+  id        Int                     @id @default(autoincrement())
+  content   String                  // texto original do chunk
+  embedding Unsupported("vector(384)")?  // vetor gerado pelo nomic-embed-text
+  category  String                  // 'biblioteca', 'contatos', 'cursos', 'servicos', etc.
+  source    String                  // nome do arquivo ou origem
+  metadata  Json                    @default("{}")
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+
+  @@map("knowledge_chunks")
+}
+
+// Log de perguntas e respostas (útil para melhorar o sistema)
+model ChatLog {
+  id          Int      @id @default(autoincrement())
+  question    String
+  answer      String
+  sources     Json     @default("[]") // quais chunks foram usados
+  similarity  Float?   // similaridade média dos chunks encontrados
+  createdAt   DateTime @default(now())
+
+  @@map("chat_logs")
+}
