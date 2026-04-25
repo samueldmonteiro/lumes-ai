@@ -1,6 +1,6 @@
 export interface ApiResponse<T = any> {
     code: number;
-    status: boolean;
+    ok: boolean;
     message: string;
     data?: T;
 }

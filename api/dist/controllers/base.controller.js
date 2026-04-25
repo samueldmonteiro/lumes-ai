@@ -5,7 +5,7 @@ class BaseController {
     success(data, message = 'Operação realizada com sucesso', code = 200) {
         return {
             code,
-            status: true,
+            ok: true,
             message,
             data,
         };
@@ -13,7 +13,7 @@ class BaseController {
     created(data, message = 'Recurso criado com sucesso') {
         return {
             code: 201,
-            status: true,
+            ok: true,
             message,
             data,
         };
@@ -21,14 +21,14 @@ class BaseController {
     error(message = 'Erro ao processar requisição', code = 400) {
         return {
             code,
-            status: false,
+            ok: false,
             message,
         };
     }
     notFound(message = 'Recurso não encontrado') {
         return {
             code: 404,
-            status: false,
+            ok: false,
             message,
         };
     }

@@ -1,6 +1,6 @@
 export interface ApiResponse<T = any> {
   code: number;
-  status: boolean;
+  ok: boolean;
   message: string;
   data?: T;
 }
@@ -13,7 +13,7 @@ export class BaseController {
   ): ApiResponse<T> {
     return {
       code,
-      status: true,
+      ok: true,
       message,
       data,
     };
@@ -25,7 +25,7 @@ export class BaseController {
   ): ApiResponse<T> {
     return {
       code: 201,
-      status: true,
+      ok: true,
       message,
       data,
     };
@@ -37,7 +37,7 @@ export class BaseController {
   ): ApiResponse {
     return {
       code,
-      status: false,
+      ok: false,
       message,
     };
   }
@@ -45,7 +45,7 @@ export class BaseController {
   protected notFound(message: string = 'Recurso não encontrado'): ApiResponse {
     return {
       code: 404,
-      status: false,
+      ok: false,
       message,
     };
   }

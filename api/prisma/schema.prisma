@@ -12,7 +12,7 @@ datasource db {
 model KnowledgeChunk {
   id        Int                     @id @default(autoincrement())
   content   String                  // texto original do chunk
-  embedding Unsupported("vector(384)")?  // vetor gerado pelo nomic-embed-text
+  embedding Unsupported("vector(768)")?  // vetor gerado pelo nomic-embed-text
   category  String                  // 'biblioteca', 'contatos', 'cursos', 'servicos', etc.
   source    String                  // nome do arquivo ou origem
   metadata  Json                    @default("{}")
