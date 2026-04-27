@@ -4,7 +4,6 @@ import { extractFromText } from '@/lib/extractors';
 import { OllamaService } from './ollama.service';
 import { prisma } from '@/lib/prisma';
 
-
 export interface IngestResult {
   ok: boolean;
   source: string;
