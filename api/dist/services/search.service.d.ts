@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { OllamaService } from './ollama.service';
+import { EmbeddingProvider } from "../ai/embedding-providers/embedding-provider";
 export interface SearchResult {
     id: number;
     content: string;
@@ -8,10 +8,10 @@ export interface SearchResult {
     similarity: number;
 }
 export declare class SearchService {
-    private ollama;
+    private embeddingProvider;
     private readonly logger;
     private topK;
     private minSimilarity;
-    constructor(ollama: OllamaService);
+    constructor(embeddingProvider: EmbeddingProvider);
     findSimilarChunks(question: string, topK?: number): Promise<SearchResult[]>;
 }

@@ -1,0 +1,27 @@
+# syntax=docker/dockerfile:1
+
+FROM node:25-alpine
+
+# Install OpenSSL for Prisma
+RUN apk add --no-cache openssl libc6-compat
+
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install dependencies
+COPY package.json pnpm-lock.yaml* ./
+COPY prisma ./prisma
+RUN pnpm install
+
+# Copy source code
+COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
+
+EXPOSE 3000
+
+# Start development server
+CMD ["sh", "-c", "npx prisma generate && pnpm run start:dev"]

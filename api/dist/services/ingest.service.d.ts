@@ -1,5 +1,5 @@
 import { ChunkerService } from './chunker.service';
-import { OllamaService } from './ollama.service';
+import { EmbeddingProvider } from "../ai/embedding-providers/embedding-provider";
 export interface IngestResult {
     ok: boolean;
     source: string;
@@ -9,9 +9,9 @@ export interface IngestResult {
 }
 export declare class IngestService {
     private readonly chunker;
-    private readonly ollama;
+    private readonly embeddingProvider;
     private readonly logger;
-    constructor(chunker: ChunkerService, ollama: OllamaService);
+    constructor(chunker: ChunkerService, embeddingProvider: EmbeddingProvider);
     ingestText(raw: string, source: string, category: string): Promise<IngestResult>;
     private processText;
     private delay;

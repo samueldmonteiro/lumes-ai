@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ChunkerService } from './chunker.service';
 import { extractFromText } from '@/lib/extractors';
-import { OllamaService } from './ollama.service';
+import { Prisma } from '@/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import { EmbeddingProvider } from '@/ai/embedding-providers/embedding-provider';
 
 export interface IngestResult {
   ok: boolean;
@@ -18,7 +19,7 @@ export class IngestService {
 
   constructor(
     private readonly chunker: ChunkerService,
-    private readonly ollama: OllamaService,
+    private readonly embeddingProvider: EmbeddingProvider,
 
   ) { }
 
@@ -63,27 +64,33 @@ export class IngestService {
 
     for (const chunk of chunks) {
       try {
-        // Enriquecer o chunk com contexto (metadados) melhora drasticamente a busca vetorial no RAG
-        const contextAwareText = `Documento: ${source}\nCategoria: ${category}\n\n${chunk.content}`;
+        // O embedding é gerado a partir do conteúdo puro do chunk.
+        // IMPORTANTE: NÃO adicionar prefixos ("Documento:", "Categoria:") aqui,
+        // pois a busca vetorial embeda apenas a pergunta do usuário.
+        // Assimetria entre o texto da ingestão e o da busca derruba a similaridade cosseno.
+        const embedding = await this.embeddingProvider.generateEmbedding(chunk.content);
 
-        // Gera o vetor do chunk enriquecido via Ollama (nomic-embed-text)
-        const embedding = await this.ollama.generateEmbedding(contextAwareText);
-
-        // Salva no PostgreSQL usando SQL puro ($executeRaw) pois o Prisma não suporta 
+        // Salva no PostgreSQL usando SQL puro pois o Prisma não suporta
         // nativamente o tipo 'vector' em operações de CRUD (é marcado como Unsupported).
-        const vectorStr = this.ollama.formatVectorForPg(embedding);
+        // IMPORTANTE: usar Prisma.raw() para o vetor — o pgvector não aceita
+        // o cast ::vector via bind parameter ($1::vector), precisa ser literal na query.
+        const vectorStr = this.embeddingProvider.formatVectorForPg(embedding);
+        const vectorLiteral = Prisma.raw(`'${vectorStr}'::vector`);
+        const metadataLiteral = Prisma.raw(`'${JSON.stringify({ chunkIndex: chunk.index })}'::jsonb`);
 
-        await prisma.$executeRaw`
-          INSERT INTO "knowledge_chunks" ("content", "embedding", "category", "source", "metadata", "updatedAt")
-          VALUES (
-            ${chunk.content}, 
-            ${vectorStr}::vector, 
-            ${category}, 
-            ${source}, 
-            ${{ chunkIndex: chunk.index }}::jsonb,
-            NOW()
-          )
-        `;
+        await prisma.$executeRaw(
+          Prisma.sql`
+            INSERT INTO "knowledge_chunks" ("content", "embedding", "category", "source", "metadata", "updatedAt")
+            VALUES (
+              ${chunk.content},
+              ${vectorLiteral},
+              ${category},
+              ${source},
+              ${metadataLiteral},
+              NOW()
+            )
+          `,
+        );
 
         saved++;
 
