@@ -12,13 +12,14 @@ const app_controller_1 = require("./http/controllers/app.controller");
 const ingest_controller_1 = require("./http/controllers/ingest.controller");
 const ingest_service_1 = require("./services/ingest.service");
 const chunker_service_1 = require("./services/chunker.service");
-const ollama_service_1 = require("./services/ollama.service");
 const search_service_1 = require("./services/search.service");
 const prompt_service_1 = require("./services/prompt.service");
 const chat_controller_1 = require("./http/controllers/chat.controller");
 const chat_service_1 = require("./services/chat.service");
 const ai_provider_1 = require("./ai/providers/ai.provider");
 const gemini_provider_1 = require("./ai/providers/gemini.provider");
+const embedding_provider_1 = require("./ai/embedding-providers/embedding-provider");
+const ollama_embedding_provider_1 = require("./ai/embedding-providers/ollama.embedding-provider");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -29,7 +30,6 @@ exports.AppModule = AppModule = __decorate([
         providers: [
             ingest_service_1.IngestService,
             chunker_service_1.ChunkerService,
-            ollama_service_1.OllamaService,
             search_service_1.SearchService,
             prompt_service_1.PromptService,
             chat_service_1.ChatService,
@@ -37,6 +37,10 @@ exports.AppModule = AppModule = __decorate([
             {
                 provide: ai_provider_1.AIProvider,
                 useClass: gemini_provider_1.GeminiProvider,
+            },
+            {
+                provide: embedding_provider_1.EmbeddingProvider,
+                useClass: ollama_embedding_provider_1.OllamaEmbeddingProvider,
             },
         ],
     })

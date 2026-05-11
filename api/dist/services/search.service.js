@@ -13,41 +13,53 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SearchService = void 0;
 require("dotenv/config");
 const common_1 = require("@nestjs/common");
-const ollama_service_1 = require("./ollama.service");
+const client_1 = require("../generated/prisma/client");
 const prisma_1 = require("../lib/prisma");
+const embedding_provider_1 = require("../ai/embedding-providers/embedding-provider");
 let SearchService = SearchService_1 = class SearchService {
-    ollama;
+    embeddingProvider;
     logger = new common_1.Logger(SearchService_1.name);
     topK;
     minSimilarity;
-    constructor(ollama) {
-        this.ollama = ollama;
+    constructor(embeddingProvider) {
+        this.embeddingProvider = embeddingProvider;
         this.topK = parseInt(process.env.SEARCH_TOP_K || '4');
         this.minSimilarity = parseFloat(process.env.SEARCH_MIN_SIMILARITY || '0.5');
     }
     async findSimilarChunks(question, topK) {
-        const embedding = await this.ollama.generateEmbedding(question);
-        const vector = this.ollama.formatVectorForPg(embedding);
+        const embedding = await this.embeddingProvider.generateEmbedding(question);
+        const vector = this.embeddingProvider.formatVectorForPg(embedding);
         const limit = topK ?? this.topK;
-        const rows = await prisma_1.prisma.$queryRaw `
-      SELECT
-         id,
-         content,
-         category,
-         source,
-         1 - (embedding <=> ${vector}::vector) AS similarity
-       FROM knowledge_chunks
-       WHERE 1 - (embedding <=> ${vector}::vector) > ${this.minSimilarity}
-       ORDER BY embedding <=> ${vector}::vector
-       LIMIT ${limit}
-    `;
-        this.logger.log(`🔍 "${question}" → ${rows.length} chunks encontrados`);
+        const vectorLiteral = client_1.Prisma.raw(`'${vector}'::vector`);
+        const minSim = client_1.Prisma.raw(String(this.minSimilarity));
+        const limitRaw = client_1.Prisma.raw(String(limit));
+        const debugRows = await prisma_1.prisma.$queryRaw(client_1.Prisma.sql `
+        SELECT id, source, 1 - (embedding <=> ${vectorLiteral}) AS similarity
+        FROM knowledge_chunks
+        ORDER BY embedding <=> ${vectorLiteral}
+        LIMIT 5
+      `);
+        this.logger.debug(`📊 Top-5 similaridades brutas para "${question}":\n` +
+            debugRows.map(r => `  [${r.id}] ${r.source} → ${Number(r.similarity).toFixed(4)}`).join('\n'));
+        const rows = await prisma_1.prisma.$queryRaw(client_1.Prisma.sql `
+        SELECT
+          id,
+          content,
+          category,
+          source,
+          1 - (embedding <=> ${vectorLiteral}) AS similarity
+        FROM knowledge_chunks
+        WHERE 1 - (embedding <=> ${vectorLiteral}) > ${minSim}
+        ORDER BY embedding <=> ${vectorLiteral}
+        LIMIT ${limitRaw}
+      `);
+        this.logger.log(`🔍 "${question}" → ${rows.length} chunks encontrados (threshold: ${this.minSimilarity})`);
         return rows;
     }
 };
 exports.SearchService = SearchService;
 exports.SearchService = SearchService = SearchService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [ollama_service_1.OllamaService])
+    __metadata("design:paramtypes", [embedding_provider_1.EmbeddingProvider])
 ], SearchService);
 //# sourceMappingURL=search.service.js.map

@@ -14,15 +14,16 @@ exports.IngestService = void 0;
 const common_1 = require("@nestjs/common");
 const chunker_service_1 = require("./chunker.service");
 const extractors_1 = require("../lib/extractors");
-const ollama_service_1 = require("./ollama.service");
+const client_1 = require("../generated/prisma/client");
 const prisma_1 = require("../lib/prisma");
+const embedding_provider_1 = require("../ai/embedding-providers/embedding-provider");
 let IngestService = IngestService_1 = class IngestService {
     chunker;
-    ollama;
+    embeddingProvider;
     logger = new common_1.Logger(IngestService_1.name);
-    constructor(chunker, ollama) {
+    constructor(chunker, embeddingProvider) {
         this.chunker = chunker;
-        this.ollama = ollama;
+        this.embeddingProvider = embeddingProvider;
     }
     async ingestText(raw, source, category) {
         this.logger.log(`📝 Ingerindo texto: ${source}`);
@@ -50,20 +51,21 @@ let IngestService = IngestService_1 = class IngestService {
         console.log('Chunks gerados e prontos para embedding');
         for (const chunk of chunks) {
             try {
-                const contextAwareText = `Documento: ${source}\nCategoria: ${category}\n\n${chunk.content}`;
-                const embedding = await this.ollama.generateEmbedding(contextAwareText);
-                const vectorStr = this.ollama.formatVectorForPg(embedding);
-                await prisma_1.prisma.$executeRaw `
-          INSERT INTO "knowledge_chunks" ("content", "embedding", "category", "source", "metadata", "updatedAt")
-          VALUES (
-            ${chunk.content}, 
-            ${vectorStr}::vector, 
-            ${category}, 
-            ${source}, 
-            ${{ chunkIndex: chunk.index }}::jsonb,
-            NOW()
-          )
-        `;
+                const embedding = await this.embeddingProvider.generateEmbedding(chunk.content);
+                const vectorStr = this.embeddingProvider.formatVectorForPg(embedding);
+                const vectorLiteral = client_1.Prisma.raw(`'${vectorStr}'::vector`);
+                const metadataLiteral = client_1.Prisma.raw(`'${JSON.stringify({ chunkIndex: chunk.index })}'::jsonb`);
+                await prisma_1.prisma.$executeRaw(client_1.Prisma.sql `
+            INSERT INTO "knowledge_chunks" ("content", "embedding", "category", "source", "metadata", "updatedAt")
+            VALUES (
+              ${chunk.content},
+              ${vectorLiteral},
+              ${category},
+              ${source},
+              ${metadataLiteral},
+              NOW()
+            )
+          `);
                 saved++;
                 await this.delay(80);
             }
@@ -88,6 +90,6 @@ exports.IngestService = IngestService;
 exports.IngestService = IngestService = IngestService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [chunker_service_1.ChunkerService,
-        ollama_service_1.OllamaService])
+        embedding_provider_1.EmbeddingProvider])
 ], IngestService);
 //# sourceMappingURL=ingest.service.js.map

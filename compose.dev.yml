@@ -1,0 +1,83 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: postgres-lumesai-dev
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - pgdata_lumesai_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    build:
+      context: ./api/ollama
+      dockerfile: Dockerfile
+    container_name: ollama-lumesai-dev
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data_dev:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    container_name: api-lumesai-dev
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_DATABASE}?schema=public
+      - OLLAMA_URL=http://ollama:11434
+      - NODE_ENV=development
+    volumes:
+      # Monta o código local para dentro do container
+      - ./api:/app
+      # Evita que a pasta node_modules do seu PC sobrescreva a do container
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: frontend-lumesai-dev
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - NODE_ENV=development
+    volumes:
+      # Monta o código local para dentro do container
+      - ./frontend:/app
+      # Protege os diretórios gerados internamente pelo container
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+
+volumes:
+  pgdata_lumesai_dev:
+  ollama_data_dev:
