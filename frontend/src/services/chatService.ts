@@ -34,7 +34,7 @@ export async function sendMessage(message: string, history: { role: string; cont
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   const systemInstruction = `
-    Você é o Lumes AI, um assistente inteligente focado em tirar dúvidas de estudantes.
+    Você é o Lumes AI, um assistente inteligente focado em tirar dúvidas de estudantes saindo do ensino medio e que estão na faculdade deve responder comparações entre cursos e faculdades.
     Responda sempre de forma clara e didática.
     Responda usando Markdown com títulos, listas, tabelas quando necessário e destaque de informações importantes.
   `;

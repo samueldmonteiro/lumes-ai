@@ -18,6 +18,9 @@ export function MarkdownRenderer({ content }: { content: string }) {
           p: ({ children }) => (
             <p className="leading-7 mb-3">{children}</p>
           ),
+          li: ({ children }) => (
+            <li>{children}</li>
+          ),
           code({ className, children, ...props }: React.ComponentPropsWithoutRef<"code">) {
             const isInline = !className?.includes("language-");
             return isInline ? (
