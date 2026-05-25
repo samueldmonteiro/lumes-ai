@@ -6,10 +6,10 @@ export declare class ChatController extends BaseController {
     constructor(chatService: ChatService);
     ask(body: ChatRequestDto): Promise<import("./base.controller").ApiResponse<import("@/services/chat.service").ChatResponse>>;
     getHistory(limit?: number): Promise<import("./base.controller").ApiResponse<{
-        answer: string;
         id: number;
-        question: string;
-        similarity: number | null;
         createdAt: Date;
+        question: string;
+        answer: string;
+        similarity: number | null;
     }[]>>;
 }

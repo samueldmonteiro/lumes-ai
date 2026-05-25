@@ -8,3 +8,4 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma };
 export type KnowledgeChunk = Prisma.KnowledgeChunkModel;
 export type ChatLog = Prisma.ChatLogModel;
+export type User = Prisma.UserModel;

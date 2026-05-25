@@ -18,6 +18,7 @@ const chat_service_1 = require("../../services/chat.service");
 const base_controller_1 = require("./base.controller");
 const chat_dto_1 = require("../dtos/chat.dto");
 const swagger_1 = require("@nestjs/swagger");
+const jwt_auth_guard_1 = require("../guards/jwt-auth.guard");
 let ChatController = class ChatController extends base_controller_1.BaseController {
     chatService;
     constructor(chatService) {
@@ -52,6 +53,8 @@ __decorate([
 ], ChatController.prototype, "getHistory", null);
 exports.ChatController = ChatController = __decorate([
     (0, swagger_1.ApiTags)('Chat'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('chat'),
     __metadata("design:paramtypes", [chat_service_1.ChatService])
 ], ChatController);

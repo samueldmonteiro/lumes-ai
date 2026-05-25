@@ -15,15 +15,17 @@ const common_1 = require("@nestjs/common");
 const chunker_service_1 = require("./chunker.service");
 const extractors_1 = require("../lib/extractors");
 const client_1 = require("../generated/prisma/client");
-const prisma_1 = require("../lib/prisma");
-const embedding_provider_1 = require("../ai/embedding-providers/embedding-provider");
+const prisma_service_1 = require("./prisma.service");
+const embedding_provider_1 = require("../providers/ai/embedding/embedding.provider");
 let IngestService = IngestService_1 = class IngestService {
     chunker;
     embeddingProvider;
+    prismaService;
     logger = new common_1.Logger(IngestService_1.name);
-    constructor(chunker, embeddingProvider) {
+    constructor(chunker, embeddingProvider, prismaService) {
         this.chunker = chunker;
         this.embeddingProvider = embeddingProvider;
+        this.prismaService = prismaService;
     }
     async ingestText(raw, source, category) {
         this.logger.log(`📝 Ingerindo texto: ${source}`);
@@ -37,7 +39,7 @@ let IngestService = IngestService_1 = class IngestService {
         const chunks = this.chunker.split(text, chunkSize, overlap);
         this.logger.log(`   ${chunks.length} chunks gerados`);
         try {
-            const deleted = await prisma_1.prisma.knowledgeChunk.deleteMany({
+            const deleted = await this.prismaService.knowledgeChunk.deleteMany({
                 where: { source },
             });
             if (deleted.count > 0) {
@@ -55,7 +57,7 @@ let IngestService = IngestService_1 = class IngestService {
                 const vectorStr = this.embeddingProvider.formatVectorForPg(embedding);
                 const vectorLiteral = client_1.Prisma.raw(`'${vectorStr}'::vector`);
                 const metadataLiteral = client_1.Prisma.raw(`'${JSON.stringify({ chunkIndex: chunk.index })}'::jsonb`);
-                await prisma_1.prisma.$executeRaw(client_1.Prisma.sql `
+                await this.prismaService.$executeRaw(client_1.Prisma.sql `
             INSERT INTO "knowledge_chunks" ("content", "embedding", "category", "source", "metadata", "updatedAt")
             VALUES (
               ${chunk.content},
@@ -90,6 +92,7 @@ exports.IngestService = IngestService;
 exports.IngestService = IngestService = IngestService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [chunker_service_1.ChunkerService,
-        embedding_provider_1.EmbeddingProvider])
+        embedding_provider_1.EmbeddingProvider,
+        prisma_service_1.PrismaService])
 ], IngestService);
 //# sourceMappingURL=ingest.service.js.map

@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const ingest_service_1 = require("../../services/ingest.service");
 const base_controller_1 = require("./base.controller");
 const ingest_dto_1 = require("../dtos/ingest.dto");
+const jwt_auth_guard_1 = require("../guards/jwt-auth.guard");
 let IngestController = class IngestController extends base_controller_1.BaseController {
     ingestService;
     constructor(ingestService) {
@@ -36,6 +37,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], IngestController.prototype, "ingestText", null);
 exports.IngestController = IngestController = __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('ingests'),
     __metadata("design:paramtypes", [ingest_service_1.IngestService])
 ], IngestController);

@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const jwt_1 = require("@nestjs/jwt");
 const app_controller_1 = require("./http/controllers/app.controller");
 const ingest_controller_1 = require("./http/controllers/ingest.controller");
 const ingest_service_1 = require("./services/ingest.service");
@@ -16,26 +17,37 @@ const search_service_1 = require("./services/search.service");
 const prompt_service_1 = require("./services/prompt.service");
 const chat_controller_1 = require("./http/controllers/chat.controller");
 const chat_service_1 = require("./services/chat.service");
-const ai_provider_1 = require("./ai/providers/ai.provider");
-const gemini_provider_1 = require("./ai/providers/gemini.provider");
-const embedding_provider_1 = require("./ai/embedding-providers/embedding-provider");
-const ollama_embedding_provider_1 = require("./ai/embedding-providers/ollama.embedding-provider");
+const gemini_provider_1 = require("./providers/ai/LLM/gemini.provider");
+const prisma_service_1 = require("./services/prisma.service");
+const embedding_provider_1 = require("./providers/ai/embedding/embedding.provider");
+const ollama_embedding_provider_1 = require("./providers/ai/embedding/ollama-embedding.provider");
+const llm_provider_1 = require("./providers/ai/LLM/llm.provider");
+const auth_service_1 = require("./services/auth.service");
+const auth_controller_1 = require("./http/controllers/auth.controller");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
-        controllers: [app_controller_1.AppController, ingest_controller_1.IngestController, chat_controller_1.ChatController],
+        imports: [
+            jwt_1.JwtModule.register({
+                global: true,
+                secret: process.env.JWT_SECRET || process.env.JWT_TOKEN || 'fallback-secret',
+                signOptions: { expiresIn: '24h' },
+            }),
+        ],
+        controllers: [app_controller_1.AppController, ingest_controller_1.IngestController, chat_controller_1.ChatController, auth_controller_1.AuthController],
         providers: [
+            prisma_service_1.PrismaService,
             ingest_service_1.IngestService,
             chunker_service_1.ChunkerService,
             search_service_1.SearchService,
             prompt_service_1.PromptService,
             chat_service_1.ChatService,
+            auth_service_1.AuthService,
             gemini_provider_1.GeminiProvider,
             {
-                provide: ai_provider_1.AIProvider,
+                provide: llm_provider_1.LLMProvider,
                 useClass: gemini_provider_1.GeminiProvider,
             },
             {

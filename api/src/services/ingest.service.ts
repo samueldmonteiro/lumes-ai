@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ChunkerService } from './chunker.service';
 import { extractFromText } from '@/lib/extractors';
 import { Prisma } from '@/generated/prisma/client';
-import { prisma } from '@/lib/prisma';
-import { EmbeddingProvider } from '@/ai/embedding-providers/embedding-provider';
+import { PrismaService } from './prisma.service';
+import { EmbeddingProvider } from '@/providers/ai/embedding/embedding.provider';
 
 export interface IngestResult {
   ok: boolean;
@@ -20,7 +20,7 @@ export class IngestService {
   constructor(
     private readonly chunker: ChunkerService,
     private readonly embeddingProvider: EmbeddingProvider,
-
+    private readonly prismaService: PrismaService,
   ) { }
 
   async ingestText(
@@ -48,7 +48,7 @@ export class IngestService {
 
     // Previne dados duplicados no banco caso o mesmo arquivo seja reprocessado
     try {
-      const deleted = await prisma.knowledgeChunk.deleteMany({
+      const deleted = await this.prismaService.knowledgeChunk.deleteMany({
         where: { source },
       });
       if (deleted.count > 0) {
@@ -78,7 +78,7 @@ export class IngestService {
         const vectorLiteral = Prisma.raw(`'${vectorStr}'::vector`);
         const metadataLiteral = Prisma.raw(`'${JSON.stringify({ chunkIndex: chunk.index })}'::jsonb`);
 
-        await prisma.$executeRaw(
+        await this.prismaService.$executeRaw(
           Prisma.sql`
             INSERT INTO "knowledge_chunks" ("content", "embedding", "category", "source", "metadata", "updatedAt")
             VALUES (

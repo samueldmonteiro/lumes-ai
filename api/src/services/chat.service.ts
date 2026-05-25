@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { SearchService } from './search.service';
 import { PromptService } from './prompt.service';
-import { prisma } from '@/lib/prisma';
-import { AIProvider } from '@/ai/providers/ai.provider';
+import { PrismaService } from './prisma.service';
+import { LLMProvider } from '@/providers/ai/LLM/llm.provider';
 
 export interface ChatResponse {
   answer: string;
@@ -18,7 +18,8 @@ export class ChatService {
   constructor(
     private search: SearchService,
     private prompt: PromptService,
-    private aiProvider: AIProvider,
+    private aiProvider: LLMProvider,
+    private prismaService: PrismaService,
   ) { }
 
   async ask(question: string): Promise<ChatResponse> {
@@ -68,7 +69,7 @@ export class ChatService {
 
   // Histórico de perguntas e respostas
   async getHistory(limit = 20) {
-    return prisma.chatLog.findMany({
+    return this.prismaService.chatLog.findMany({
       orderBy: { createdAt: 'desc' },
       take: limit,
       select: {
@@ -87,7 +88,7 @@ export class ChatService {
     sources: object[],
     similarity: number,
   ) {
-    await prisma.chatLog.create({
+    await this.prismaService.chatLog.create({
       data: { question, answer, sources, similarity },
     });
   }

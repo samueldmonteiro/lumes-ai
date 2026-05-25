@@ -14,17 +14,19 @@ exports.ChatService = void 0;
 const common_1 = require("@nestjs/common");
 const search_service_1 = require("./search.service");
 const prompt_service_1 = require("./prompt.service");
-const prisma_1 = require("../lib/prisma");
-const ai_provider_1 = require("../ai/providers/ai.provider");
+const prisma_service_1 = require("./prisma.service");
+const llm_provider_1 = require("../providers/ai/LLM/llm.provider");
 let ChatService = ChatService_1 = class ChatService {
     search;
     prompt;
     aiProvider;
+    prismaService;
     logger = new common_1.Logger(ChatService_1.name);
-    constructor(search, prompt, aiProvider) {
+    constructor(search, prompt, aiProvider, prismaService) {
         this.search = search;
         this.prompt = prompt;
         this.aiProvider = aiProvider;
+        this.prismaService = prismaService;
     }
     async ask(question) {
         this.logger.log(`💬 Pergunta: "${question}"`);
@@ -54,7 +56,7 @@ let ChatService = ChatService_1 = class ChatService {
         };
     }
     async getHistory(limit = 20) {
-        return prisma_1.prisma.chatLog.findMany({
+        return this.prismaService.chatLog.findMany({
             orderBy: { createdAt: 'desc' },
             take: limit,
             select: {
@@ -67,7 +69,7 @@ let ChatService = ChatService_1 = class ChatService {
         });
     }
     async saveLog(question, answer, sources, similarity) {
-        await prisma_1.prisma.chatLog.create({
+        await this.prismaService.chatLog.create({
             data: { question, answer, sources, similarity },
         });
     }
@@ -77,6 +79,7 @@ exports.ChatService = ChatService = ChatService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [search_service_1.SearchService,
         prompt_service_1.PromptService,
-        ai_provider_1.AIProvider])
+        llm_provider_1.LLMProvider,
+        prisma_service_1.PrismaService])
 ], ChatService);
 //# sourceMappingURL=chat.service.js.map

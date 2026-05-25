@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import { Injectable, Logger } from '@nestjs/common';
 import { Prisma } from '@/generated/prisma/client';
-import { prisma } from '@/lib/prisma';
-import { EmbeddingProvider } from '@/ai/embedding-providers/embedding-provider';
+import { PrismaService } from './prisma.service';
+import { EmbeddingProvider } from '@/providers/ai/embedding/embedding.provider';
 
 export interface SearchResult {
   id: number;
@@ -20,6 +20,7 @@ export class SearchService {
 
   constructor(
     private embeddingProvider: EmbeddingProvider,
+    private prismaService: PrismaService,
   ) {
     this.topK = parseInt(process.env.SEARCH_TOP_K || '4');
     this.minSimilarity = parseFloat(process.env.SEARCH_MIN_SIMILARITY || '0.5');
@@ -44,7 +45,7 @@ export class SearchService {
     const limitRaw = Prisma.raw(String(limit));
 
     // DEBUG: mostra as similaridades brutas antes de aplicar o filtro
-    const debugRows = await prisma.$queryRaw<{ id: number; source: string; similarity: number }[]>(
+    const debugRows = await this.prismaService.$queryRaw<{ id: number; source: string; similarity: number }[]>(
       Prisma.sql`
         SELECT id, source, 1 - (embedding <=> ${vectorLiteral}) AS similarity
         FROM knowledge_chunks
@@ -60,7 +61,7 @@ export class SearchService {
     // 2. Busca no PostgreSQL os chunks mais próximos pelo vetor
     //    <=> é o operador de distância cosine do pgvector
     //    1 - distância = similaridade (quanto maior, mais parecido)
-    const rows = await prisma.$queryRaw<SearchResult[]>(
+    const rows = await this.prismaService.$queryRaw<SearchResult[]>(
       Prisma.sql`
         SELECT
           id,

@@ -8,7 +8,7 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE "knowledge_chunks" (
   "id"        SERIAL PRIMARY KEY,
   "content"   TEXT NOT NULL,
-  "embedding" VECTOR(384),        -- dimensão do nomic-embed-text
+  "embedding" public.VECTOR(768),
   "category"  TEXT NOT NULL DEFAULT 'geral',
   "source"    TEXT NOT NULL DEFAULT 'manual',
   "metadata"  JSONB NOT NULL DEFAULT '{}',
@@ -20,7 +20,7 @@ CREATE TABLE "knowledge_chunks" (
 -- ivfflat é o índice padrão do pgvector, lists=100 é bom para até ~100k chunks
 CREATE INDEX knowledge_chunks_embedding_idx
   ON "knowledge_chunks"
-  USING ivfflat ("embedding" vector_cosine_ops)
+  USING ivfflat ("embedding" public.vector_cosine_ops)
   WITH (lists = 100);
 
 -- Tabela de logs de chat

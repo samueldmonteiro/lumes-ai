@@ -30,6 +30,7 @@ async function bootstrap() {
         .setDescription('API de atendimento social')
         .setVersion('1.0')
         .addTag('Ação Social')
+        .addBearerAuth()
         .build();
     const documentFactory = () => swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, documentFactory);

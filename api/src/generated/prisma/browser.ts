@@ -27,3 +27,8 @@ export type KnowledgeChunk = Prisma.KnowledgeChunkModel
  * 
  */
 export type ChatLog = Prisma.ChatLogModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
