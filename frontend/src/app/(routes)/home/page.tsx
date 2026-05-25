@@ -51,10 +51,23 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="relative min-h-screen w-full flex justify-center items-center bg-[#09090f] overflow-x-hidden">
+    <div className="relative min-h-screen w-full flex justify-center items-center bg-[#07040D] overflow-x-hidden">
       
+      {/* Dot Pattern Overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-20"
+        style={{
+          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+
+      {/* Decorative Glowing Orbs */}
+      <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-fuchsia-600/10 rounded-full blur-[100px] pointer-events-none" />
+
       {/* Main Container: Mobile-first 430px max-width wrapper on desktop */}
-      <div className="relative z-10 w-full max-w-[430px] min-h-screen flex flex-col justify-between py-6 px-5 bg-[#09090f] text-white sm:border-x sm:border-zinc-900/60 sm:shadow-[0_0_50px_rgba(0,0,0,0.85)]">
+      <div className="relative z-10 w-full max-w-[430px] min-h-screen flex flex-col justify-between py-6 px-5 text-white sm:border-x sm:border-zinc-900/60 sm:shadow-[0_0_50px_rgba(0,0,0,0.85)]">
         
         {/* Top bar */}
         <header className="flex items-center justify-between w-full flex-shrink-0">
@@ -69,6 +82,7 @@ export default function HomePage() {
           {/* Right Side: Entrar Button - Roxo/Gradiente Premium */}
           <button 
             type="button"
+            onClick={() => router.push("/login")}
             className="px-5 py-2 text-xs font-bold text-white rounded-full bg-gradient-to-r from-[#6366f1] via-[#8b5cf6] to-[#a855f7] shadow-md transition-transform duration-300 hover:scale-[1.03] active:scale-[0.97]"
           >
             Entrar

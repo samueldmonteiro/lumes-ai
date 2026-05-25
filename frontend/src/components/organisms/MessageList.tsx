@@ -33,18 +33,13 @@ export function MessageList({
   handleScroll,
 }: MessageListProps) {
   return (
-    <div className="flex-1 relative overflow-hidden flex flex-col min-h-0 w-full max-w-3xl mx-auto px-4 md:px-6 mt-3 z-10">
+    <div className="flex-1 relative overflow-hidden flex flex-col min-h-0 w-full px-5 z-10">
       
       {/* Scrollable conversation stream box */}
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className={cn(
-          "flex-1 rounded-2xl border overflow-y-auto scrollbar-thin transition-colors duration-500 relative scroll-smooth",
-          isDarkTheme
-            ? "border-zinc-800/70 bg-[#0E0A1A]/40 scrollbar-thumb-zinc-800/80"
-            : "border-zinc-200 bg-white shadow-sm scrollbar-thumb-zinc-200"
-        )}
+        className="flex-1 overflow-y-auto scrollbar-thin scroll-smooth"
       >
         <div className="flex flex-col gap-5 p-4 sm:p-5 min-h-full">
           <AnimatePresence mode="popLayout" initial={false}>
