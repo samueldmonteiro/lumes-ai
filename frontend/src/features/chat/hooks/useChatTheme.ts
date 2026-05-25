@@ -1,26 +1,16 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Theme, UseChatThemeReturn } from "@/types/chat";
 
 export function useChatTheme(): UseChatThemeReturn {
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  // Sync theme from localStorage on mount
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("lumes_theme") as Theme | null;
-    if (savedTheme === "light") {
-      setTimeout(() => {
-        setTheme("light");
-        document.documentElement.classList.remove("dark");
-      }, 0);
-    } else {
-      setTimeout(() => {
-        setTheme("dark");
-        document.documentElement.classList.add("dark");
-      }, 0);
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("lumes_theme") as Theme | null;
+      return saved === "light" ? "light" : "dark";
     }
-  }, []);
+    return "dark";
+  });
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {

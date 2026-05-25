@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useCallback } from "react";
-import { Plus, Mic, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +11,7 @@ interface ChatInputProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
   isDarkTheme: boolean;
+  className?: string;
 }
 
 export function ChatInput({
@@ -19,6 +20,7 @@ export function ChatInput({
   handleSubmit,
   isLoading,
   isDarkTheme,
+  className,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -47,32 +49,16 @@ export function ChatInput({
   }, [input, isLoading]);
 
   return (
-    <div className="py-3 pb-5 sm:pb-6 w-full max-w-3xl mx-auto px-4 md:px-6 flex-shrink-0 relative z-25">
+    <div className={cn("w-full flex-shrink-0 relative z-25 px-4 pb-4 pt-2", className)}>
       <form ref={formRef} onSubmit={handleSubmit} className="w-full">
         <div
           className={cn(
-            "flex items-end gap-2 p-1.5 pl-3 rounded-[28px] border transition-all duration-300 relative",
+            "flex items-end gap-2 p-1.5 pl-5 rounded-[20px] border transition-all duration-300 relative",
             isDarkTheme
               ? "bg-[#0E0A1A]/95 border-zinc-800/80 focus-within:border-violet-500/50 focus-within:shadow-[0_0_20px_rgba(139,92,246,0.22)]"
               : "bg-white border-zinc-200/90 shadow-[0_4px_24px_rgba(0,0,0,0.06)] focus-within:border-violet-400/60 focus-within:shadow-[0_4px_24px_rgba(139,92,246,0.12)]"
           )}
         >
-          {/* Action button: Plus */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="button"
-            className={cn(
-              "p-2 rounded-full mb-1 transition-colors duration-200",
-              isDarkTheme
-                ? "text-zinc-500 hover:bg-zinc-800/40 hover:text-white"
-                : "text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
-            )}
-            title="Adicionar anexo"
-          >
-            <Plus className="w-5 h-5 stroke-[2.2]" />
-          </motion.button>
-
           {/* Dynamic Auto-Resizing Input Field */}
           <textarea
             ref={textareaRef}
@@ -87,22 +73,6 @@ export function ChatInput({
               isDarkTheme ? "text-white" : "text-zinc-800"
             )}
           />
-
-          {/* Voice Input Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="button"
-            className={cn(
-              "p-2 rounded-full mb-1 transition-colors duration-200",
-              isDarkTheme
-                ? "text-zinc-500 hover:bg-zinc-800/40 hover:text-white"
-                : "text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
-            )}
-            title="Mensagem de voz"
-          >
-            <Mic className="w-5 h-5 stroke-[2]" />
-          </motion.button>
 
           {/* Submission Button */}
           <motion.button

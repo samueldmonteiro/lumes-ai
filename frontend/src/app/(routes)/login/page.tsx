@@ -6,9 +6,12 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ChevronRight, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
+import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { isDark } = useChatTheme();
   const [step, setStep] = useState<1 | 2>(1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,10 +46,10 @@ export default function LoginPage() {
     try {
       // Simulate API Login (as requested, only frontend)
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      
+
       // Save splash status just in case
       localStorage.setItem("lumes_seen_splash", "true");
-      
+
       // Redirect to home upon successful login simulation
       router.push("/home");
     } catch {
@@ -57,24 +60,69 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-[#07040D] text-white min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist">
+    <div
+      className={cn(
+        "min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist transition-colors duration-500",
+        isDark ? "bg-[#07040D] text-white" : "bg-[#F4F4F6] text-zinc-900"
+      )}
+    >
       {/* Light Pattern Overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-20"
+        className={cn(
+          "absolute inset-0 pointer-events-none",
+          isDark ? "opacity-20" : "opacity-10"
+        )}
         style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)",
+          backgroundImage: isDark
+            ? "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)"
+            : "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.08) 1px, transparent 0)",
           backgroundSize: "24px 24px",
         }}
       />
 
       {/* Decorative Glowing Orbs */}
-      <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-fuchsia-600/10 rounded-full blur-[100px] pointer-events-none" />
+      <div
+        className={cn(
+          "absolute top-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] pointer-events-none",
+          isDark ? "bg-violet-600/10" : "bg-violet-300/15"
+        )}
+      />
+      <div
+        className={cn(
+          "absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full blur-[100px] pointer-events-none",
+          isDark ? "bg-fuchsia-600/10" : "bg-fuchsia-300/10"
+        )}
+      />
+
+      {/* Floating Back to Home button at Top-Left */}
+      <div className="absolute top-5 left-5 z-50">
+        <Link href="/home">
+          <motion.button
+            whileHover={{ scale: 1.05, x: -3 }}
+            whileTap={{ scale: 0.95 }}
+            className={cn(
+              "flex items-center gap-2 px-3.5 py-2 rounded-full border transition-colors text-xs font-semibold cursor-pointer duration-300 shadow-sm",
+              isDark
+                ? "border-zinc-800 bg-zinc-950/40 hover:bg-zinc-800/40 text-zinc-400 hover:text-white"
+                : "border-zinc-200 bg-white/70 hover:bg-zinc-100 text-zinc-500 hover:text-zinc-800"
+            )}
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Voltar para o Início</span>
+          </motion.button>
+        </Link>
+      </div>
 
       <main className="w-full max-w-[420px] z-10 flex flex-col items-center">
         {/* Core Card Container */}
-        <div className="w-full bg-[#120D1F]/50 rounded-3xl p-6 md:p-8 shadow-2xl border border-zinc-800/60 backdrop-blur-xl flex flex-col transition-all duration-300">
-          
+        <div
+          className={cn(
+            "w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300 border",
+            isDark
+              ? "bg-[#120D1F]/50 border-zinc-800/60"
+              : "bg-white/80 border-zinc-200/80 shadow-lg"
+          )}
+        >
           {/* Brand Logo Header */}
           <div className="flex flex-col items-center mb-6">
             <motion.div
@@ -94,19 +142,31 @@ export default function LoginPage() {
                 sizes="96px"
               />
             </motion.div>
-            
+
             <div className="flex items-center gap-2 uppercase font-extrabold tracking-[0.2em] text-xl mt-2 select-none">
-              <span className="text-white">Lumes</span>
+              <span className={cn(isDark ? "text-white" : "text-zinc-800")}>
+                Lumes
+              </span>
               <span className="text-violet-400">AI</span>
             </div>
           </div>
 
           {/* Heading */}
           <div className="flex flex-col items-center text-center mb-6">
-            <h2 className="text-2xl font-black text-white leading-tight uppercase tracking-wider">
+            <h2
+              className={cn(
+                "text-2xl font-black leading-tight uppercase tracking-wider",
+                isDark ? "text-white" : "text-zinc-800"
+              )}
+            >
               {step === 1 ? "Olá!" : "Senha"}
             </h2>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p
+              className={cn(
+                "text-xs mt-1",
+                isDark ? "text-zinc-400" : "text-zinc-500"
+              )}
+            >
               {step === 1
                 ? "Acesse sua conta para continuar"
                 : "Insira sua senha de acesso"}
@@ -130,7 +190,10 @@ export default function LoginPage() {
                   <div className="flex flex-col gap-2">
                     <label
                       htmlFor="email"
-                      className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest"
+                      className={cn(
+                        "text-[10px] font-bold uppercase tracking-widest",
+                        isDark ? "text-zinc-400" : "text-zinc-500"
+                      )}
                     >
                       E-mail
                     </label>
@@ -146,7 +209,12 @@ export default function LoginPage() {
                           if (emailError) setEmailError("");
                           if (serverError) setServerError("");
                         }}
-                        className="w-full h-12 pl-12 pr-4 bg-zinc-950/70 border border-zinc-800/80 focus:border-violet-500/80 rounded-xl font-geist text-white placeholder-zinc-600 focus:ring-4 focus:ring-violet-500/10 outline-none transition-all duration-300"
+                        className={cn(
+                          "w-full h-12 pl-12 pr-4 border focus:border-violet-500/80 rounded-xl font-geist focus:ring-4 outline-none transition-all duration-300",
+                          isDark
+                            ? "bg-zinc-950/70 border-zinc-800/80 text-white placeholder-zinc-600 focus:ring-violet-500/10"
+                            : "bg-zinc-100/80 border-zinc-200 text-zinc-800 placeholder-zinc-400 focus:ring-violet-500/15"
+                        )}
                         required
                       />
                     </div>
@@ -180,12 +248,24 @@ export default function LoginPage() {
                   className="flex flex-col gap-5 w-full"
                 >
                   {/* Account Badge Indicator */}
-                  <div className="flex items-center justify-between p-3 bg-violet-950/20 rounded-xl border border-violet-500/10">
+                  <div
+                    className={cn(
+                      "flex items-center justify-between p-3 rounded-xl border",
+                      isDark
+                        ? "bg-violet-950/20 border-violet-500/10"
+                        : "bg-violet-50 border-violet-200/60"
+                    )}
+                  >
                     <div className="flex flex-col overflow-hidden">
                       <span className="text-[9px] uppercase font-bold text-violet-400 tracking-wider">
                         Acessando como
                       </span>
-                      <span className="text-xs font-semibold text-white truncate">
+                      <span
+                        className={cn(
+                          "text-xs font-semibold truncate",
+                          isDark ? "text-white" : "text-zinc-800"
+                        )}
+                      >
                         {email}
                       </span>
                     </div>
@@ -208,7 +288,10 @@ export default function LoginPage() {
                     <div className="flex justify-between items-center">
                       <label
                         htmlFor="password"
-                        className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest"
+                        className={cn(
+                          "text-[10px] font-bold uppercase tracking-widest",
+                          isDark ? "text-zinc-400" : "text-zinc-500"
+                        )}
                       >
                         Senha
                       </label>
@@ -235,7 +318,12 @@ export default function LoginPage() {
                           if (passwordError) setPasswordError("");
                           if (serverError) setServerError("");
                         }}
-                        className="w-full h-12 pl-12 pr-12 bg-zinc-950/70 border border-zinc-800/80 focus:border-violet-500/80 rounded-xl font-geist text-white placeholder-zinc-600 focus:ring-4 focus:ring-violet-500/10 outline-none transition-all duration-300"
+                        className={cn(
+                          "w-full h-12 pl-12 pr-12 border focus:border-violet-500/80 rounded-xl font-geist focus:ring-4 outline-none transition-all duration-300",
+                          isDark
+                            ? "bg-zinc-950/70 border-zinc-800/80 text-white placeholder-zinc-600 focus:ring-violet-500/10"
+                            : "bg-zinc-100/80 border-zinc-200 text-zinc-800 placeholder-zinc-400 focus:ring-violet-500/15"
+                        )}
                         required
                       />
                       <button
@@ -259,7 +347,14 @@ export default function LoginPage() {
 
                   {/* Server errors */}
                   {serverError && (
-                    <div className="p-3 bg-rose-950/30 border border-rose-500/20 rounded-xl animate-in fade-in">
+                    <div
+                      className={cn(
+                        "p-3 border rounded-xl animate-in fade-in",
+                        isDark
+                          ? "bg-rose-950/30 border-rose-500/20"
+                          : "bg-rose-50 border-rose-200"
+                      )}
+                    >
                       <p className="text-xs text-rose-400 font-medium text-center">
                         {serverError}
                       </p>
@@ -286,7 +381,12 @@ export default function LoginPage() {
 
         {/* Signup Footer Link */}
         <div className="text-center mt-6 z-10">
-          <p className="text-xs text-zinc-400 font-geist">
+          <p
+            className={cn(
+              "text-xs font-geist",
+              isDark ? "text-zinc-400" : "text-zinc-500"
+            )}
+          >
             Ainda não tem conta?{" "}
             <Link
               className="font-bold text-violet-400 hover:underline transition-all hover:text-violet-300"

@@ -1,85 +1,138 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { 
   PanelLeft, 
-  Plus, 
-  Mic, 
-  Send, 
   FileText, 
   SquarePen, 
   Coffee 
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { ChatInput } from "@/components/molecules/ChatInput";
+import { AppSidebar } from "@/components/organisms/AppSidebar";
+import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
 
 export default function HomePage() {
-  const [query, setQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [input, setInput] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
+  const { isDark, toggleTheme } = useChatTheme();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (query.trim()) {
-      router.push(`/chat?q=${encodeURIComponent(query.trim())}`);
+    if (input.trim()) {
+      router.push(`/chat?q=${encodeURIComponent(input.trim())}`);
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
   };
 
   const handleSuggestionClick = (text: string) => {
-    setQuery(text);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    setInput(text);
   };
+
+  const handleNewConversation = useCallback(() => {
+    setInput("");
+  }, []);
+
+  const handleCloseSidebar = useCallback(() => {
+    setIsSidebarOpen(false);
+  }, []);
 
   const suggestions = [
     {
       id: "suggestion-1",
-      icon: <FileText className="w-[18px] h-[18px] text-zinc-500" />,
+      icon: <FileText className={cn("w-[18px] h-[18px]", isDark ? "text-zinc-500" : "text-zinc-400")} />,
       text: "Melhores faculdades de direito em São Luis",
     },
     {
       id: "suggestion-2",
-      icon: <SquarePen className="w-[18px] h-[18px] text-zinc-500" />,
+      icon: <SquarePen className={cn("w-[18px] h-[18px]", isDark ? "text-zinc-500" : "text-zinc-400")} />,
       text: "Qual o valor da mensalidade de medicina em 2026?",
     },
     {
       id: "suggestion-3",
-      icon: <Coffee className="w-[18px] h-[18px] text-zinc-500" />,
+      icon: <Coffee className={cn("w-[18px] h-[18px]", isDark ? "text-zinc-500" : "text-zinc-400")} />,
       text: "Qual curso combina mais comigo?",
     },
   ];
 
   return (
-    <div className="relative min-h-screen w-full flex justify-center items-center bg-[#07040D] overflow-x-hidden">
+    <div
+      className={cn(
+        "relative min-h-screen w-full flex justify-center items-center overflow-hidden transition-colors duration-500",
+        isDark ? "bg-[#07040D]" : "bg-[#F4F4F6]"
+      )}
+    >
       
+      {/* Sidebar */}
+      <AppSidebar
+        isOpen={isSidebarOpen}
+        onClose={handleCloseSidebar}
+        isDarkTheme={isDark}
+        onToggleTheme={toggleTheme}
+        onNewConversation={handleNewConversation}
+      />
+
       {/* Dot Pattern Overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-20"
+        className={cn(
+          "absolute inset-0 pointer-events-none",
+          isDark ? "opacity-20" : "opacity-10"
+        )}
         style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)",
+          backgroundImage: isDark
+            ? "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)"
+            : "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.08) 1px, transparent 0)",
           backgroundSize: "24px 24px",
         }}
       />
 
       {/* Decorative Glowing Orbs */}
-      <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-fuchsia-600/10 rounded-full blur-[100px] pointer-events-none" />
+      {isDark && (
+        <>
+          <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-fuchsia-600/10 rounded-full blur-[100px] pointer-events-none" />
+        </>
+      )}
+      {!isDark && (
+        <>
+          <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-violet-300/15 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-fuchsia-300/10 rounded-full blur-[100px] pointer-events-none" />
+        </>
+      )}
 
-      {/* Main Container: Mobile-first 430px max-width wrapper on desktop */}
-      <div className="relative z-10 w-full max-w-[430px] min-h-screen flex flex-col justify-between py-6 px-5 text-white sm:border-x sm:border-zinc-900/60 sm:shadow-[0_0_50px_rgba(0,0,0,0.85)]">
+      {/* Main Container */}
+      <div
+        className={cn(
+          "relative z-10 w-full max-w-[430px] h-screen flex flex-col justify-between py-6 px-5 transition-colors duration-500",
+          isDark
+            ? "text-white sm:border-x sm:border-zinc-900/60 sm:shadow-[0_0_50px_rgba(0,0,0,0.85)]"
+            : "text-zinc-900 sm:border-x sm:border-zinc-200/60 sm:shadow-[0_0_50px_rgba(0,0,0,0.06)]"
+        )}
+      >
         
         {/* Top bar */}
         <header className="flex items-center justify-between w-full flex-shrink-0">
           {/* Left Side: Sidebar Toggle Icon */}
           <button 
             type="button"
-            className="p-2 -ml-2 rounded-xl text-zinc-400 hover:text-white transition-colors duration-200 active:scale-95"
+            onClick={() => setIsSidebarOpen(true)}
+            className={cn(
+              "p-2 -ml-2 rounded-xl transition-colors duration-200 active:scale-95 cursor-pointer",
+              isDark
+                ? "text-zinc-400 hover:text-white"
+                : "text-zinc-500 hover:text-zinc-800"
+            )}
           >
             <PanelLeft className="w-[22px] h-[22px] stroke-[1.8]" />
           </button>
 
-          {/* Right Side: Entrar Button - Roxo/Gradiente Premium */}
+          {/* Right Side: Entrar Button */}
           <button 
             type="button"
             onClick={() => router.push("/login")}
@@ -89,14 +142,17 @@ export default function HomePage() {
           </button>
         </header>
 
-        {/* Centro Vertical: Title & Subtitle centered in remaining space */}
+        {/* Centro Vertical: Title & Subtitle */}
         <div className="flex-1 flex flex-col justify-center items-center w-full my-auto">
           <div className="text-center select-none">
             <motion.h1 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className="text-4xl font-extrabold tracking-[0.25em] text-white uppercase font-geist"
+              className={cn(
+                "text-4xl font-extrabold tracking-[0.25em] uppercase font-geist",
+                isDark ? "text-white" : "text-zinc-800"
+              )}
             >
               LUMES AI
             </motion.h1>
@@ -104,24 +160,30 @@ export default function HomePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15, duration: 0.5 }}
-              className="text-base font-semibold text-[#8B5CF6] mt-2 tracking-wide"
+              className={cn(
+                "text-base font-semibold mt-2 tracking-wide",
+                isDark ? "text-[#8B5CF6]" : "text-violet-600"
+              )}
             >
               Olá! Boa tarde
             </motion.p>
           </div>
         </div>
 
-        {/* Bloco Inferior: Suggestions block stacked above input */}
+        {/* Bloco Inferior: Suggestions + Input */}
         <div className="w-full flex flex-col gap-5 flex-shrink-0 mt-auto">
           
           {/* Suggestions block */}
           <div className="w-full flex flex-col gap-3">
-            {/* Label in subtle gray */}
-            <h2 className="text-[10px] sm:text-xs font-semibold tracking-wider text-zinc-500 select-none uppercase px-1.5">
+            <h2
+              className={cn(
+                "text-[10px] sm:text-xs font-semibold tracking-wider select-none uppercase px-1.5",
+                isDark ? "text-zinc-500" : "text-zinc-400"
+              )}
+            >
               Sugestões para você
             </h2>
 
-            {/* 3 cards empilhados com fundo levemente diferente (#12121a) e borda sutil */}
             <div className="flex flex-col gap-2.5 w-full">
               {suggestions.map((sug, idx) => (
                 <motion.button
@@ -131,9 +193,14 @@ export default function HomePage() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + idx * 0.08, duration: 0.4 }}
-                  className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-zinc-800/60 bg-[#12121a] text-zinc-300 hover:bg-[#191925] hover:border-[#8b5cf6]/40 hover:text-white transition-all duration-300 active:scale-[0.98] text-left text-xs font-semibold"
+                  className={cn(
+                    "flex items-center gap-3.5 p-3.5 rounded-2xl border transition-all duration-300 active:scale-[0.98] text-left text-xs font-semibold",
+                    isDark
+                      ? "border-zinc-800/60 bg-[#12121a] text-zinc-300 hover:bg-[#191925] hover:border-[#8b5cf6]/40 hover:text-white"
+                      : "border-zinc-200/80 bg-white text-zinc-600 hover:bg-violet-50/60 hover:border-violet-300/50 hover:text-zinc-800 shadow-sm"
+                  )}
                 >
-                  <div className="p-1 rounded-lg flex items-center justify-center text-zinc-500">
+                  <div className="p-1 rounded-lg flex items-center justify-center">
                     {sug.icon}
                   </div>
                   <span className="flex-1 tracking-wide">{sug.text}</span>
@@ -142,49 +209,14 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Search Input fixed at the bottom (Pill/Rounded) */}
-          <form onSubmit={handleSubmit} className="w-full">
-            <div className="flex items-center gap-2 p-1.5 pl-3.5 rounded-full border border-zinc-800/80 bg-[#12121a] focus-within:border-violet-500/45 transition-all duration-300">
-              {/* Left Plus icon */}
-              <button
-                type="button"
-                className="p-2 rounded-full text-zinc-500 hover:text-zinc-300 transition-colors duration-200 active:scale-90"
-              >
-                <Plus className="w-[18px] h-[18px] stroke-[2.2]" />
-              </button>
-
-              {/* Main Search input */}
-              <input
-                ref={inputRef}
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Digite sua dúvida"
-                className="flex-1 text-sm bg-transparent outline-none border-none py-2 pr-2 text-white placeholder:text-zinc-500"
-              />
-
-              {/* Voice Mic icon */}
-              <button
-                type="button"
-                className="p-2 rounded-full text-zinc-500 hover:text-zinc-300 transition-colors duration-200 active:scale-90"
-              >
-                <Mic className="w-[18px] h-[18px] stroke-[2]" />
-              </button>
-
-              {/* Submit/Send button - White circle with dark paper-plane send icon */}
-              <button
-                type="submit"
-                disabled={!query.trim()}
-                className={`p-2.5 rounded-full transition-all duration-300 flex items-center justify-center bg-white text-[#09090f] hover:bg-zinc-100 ${
-                  query.trim() 
-                    ? "active:scale-90 hover:scale-105" 
-                    : "opacity-60 cursor-not-allowed"
-                }`}
-              >
-                <Send className="w-[14px] h-[14px] stroke-[2.5] translate-x-[0.5px] -translate-y-[0.5px]" />
-              </button>
-            </div>
-          </form>
+          <ChatInput
+            input={input}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+            isLoading={false}
+            isDarkTheme={isDark}
+            className="px-0"
+          />
           
         </div>
 

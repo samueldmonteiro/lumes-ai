@@ -53,8 +53,7 @@ export function MessageBubble({ message, isDarkTheme }: MessageBubbleProps) {
         )}
       </div>
 
-      {/* User Avatar on Right */}
-      {isUser && <Avatar role="user" className="mt-1" />}
+
     </motion.div>
   );
 }

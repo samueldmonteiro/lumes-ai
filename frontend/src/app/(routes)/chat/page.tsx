@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, Suspense } from "react";
+import { useEffect, useRef, useState, useCallback, Suspense } from "react";
 import { useChat } from "ai/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChatLayout } from "@/components/templates/ChatLayout";
 import { ChatHeader } from "@/components/organisms/ChatHeader";
+import { AppSidebar } from "@/components/organisms/AppSidebar";
 import { MessageList } from "@/components/organisms/MessageList";
 import { ChatInput } from "@/components/molecules/ChatInput";
 import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
@@ -15,10 +16,11 @@ function ChatContent() {
   const searchParams = useSearchParams();
 
   const [isClient, setIsClient] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const hasProcessedQuery = useRef(false);
 
   // Custom Hooks
-  const { theme, isDark, toggleTheme } = useChatTheme();
+  const { isDark, toggleTheme } = useChatTheme();
 
   // Vercel AI SDK Hook
   const {
@@ -72,10 +74,18 @@ function ChatContent() {
   }, [searchParams, router, messages.length, append]);
 
   // Reset conversation and redirect to home screen
-  const handleNewConversation = () => {
+  const handleNewConversation = useCallback(() => {
     setMessages([]);
     router.push("/home");
-  };
+  }, [setMessages, router]);
+
+  const handleToggleSidebar = useCallback(() => {
+    setIsSidebarOpen((prev) => !prev);
+  }, []);
+
+  const handleCloseSidebar = useCallback(() => {
+    setIsSidebarOpen(false);
+  }, []);
 
   // Safe frame to prevent hydration flicker mismatches
   if (!isClient) {
@@ -84,11 +94,19 @@ function ChatContent() {
 
   return (
     <ChatLayout isDarkTheme={isDark}>
+      {/* Sidebar */}
+      <AppSidebar
+        isOpen={isSidebarOpen}
+        onClose={handleCloseSidebar}
+        isDarkTheme={isDark}
+        onToggleTheme={toggleTheme}
+        onNewConversation={handleNewConversation}
+      />
+
       {/* Header */}
       <ChatHeader
-        theme={theme}
-        toggleTheme={toggleTheme}
         onNewConversation={handleNewConversation}
+        onToggleSidebar={handleToggleSidebar}
         isDarkTheme={isDark}
       />
 

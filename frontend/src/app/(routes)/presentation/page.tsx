@@ -185,18 +185,18 @@ export default function PresentationPage() {
           }}
           className="relative mb-2"
         >
-          {/* Logo Glow Effect */}
+          {/* Logo Glow Effect - Elegant Pale Violet & White Silhouette Halo */}
           <motion.div
             animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.5, 0.8, 0.5],
+              scale: [1, 1.08, 1],
+              opacity: [0.25, 0.45, 0.25],
             }}
             transition={{
-              duration: 2,
+              duration: 3,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-500 via-purple-500 to-fuchsia-500 blur-3xl opacity-60"
+            className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/30 via-violet-300/20 to-transparent blur-3xl"
           />
 
           {/* Logo Image */}

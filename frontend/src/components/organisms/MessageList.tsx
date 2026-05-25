@@ -33,7 +33,7 @@ export function MessageList({
   handleScroll,
 }: MessageListProps) {
   return (
-    <div className="flex-1 relative overflow-hidden flex flex-col min-h-0 w-full px-5 z-10">
+    <div className="flex-1 relative overflow-hidden flex flex-col min-h-0 w-full px-4 z-10">
       
       {/* Scrollable conversation stream box */}
       <div
@@ -41,7 +41,7 @@ export function MessageList({
         onScroll={handleScroll}
         className="flex-1 overflow-y-auto scrollbar-thin scroll-smooth"
       >
-        <div className="flex flex-col gap-5 p-4 sm:p-5 min-h-full">
+        <div className="flex flex-col gap-5 py-4 min-h-full">
           <AnimatePresence mode="popLayout" initial={false}>
             {messages.map((message, index) => {
               const isLast = index === messages.length - 1;

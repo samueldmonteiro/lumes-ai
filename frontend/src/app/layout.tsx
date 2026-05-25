@@ -40,8 +40,19 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${plusJakartaSans.variable} ${outfit.variable} ${jetbrainsMono.variable} ${geistSans.variable} h-full antialiased dark`}
+      className={`${plusJakartaSans.variable} ${outfit.variable} ${jetbrainsMono.variable} ${geistSans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            try {
+              var t = localStorage.getItem("lumes_theme");
+              if (t !== "light") document.documentElement.classList.add("dark");
+            } catch(e) {}
+          `
+        }} />
+      </head>
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>
   );
