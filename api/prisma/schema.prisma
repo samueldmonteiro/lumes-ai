@@ -10,26 +10,28 @@ datasource db {
 
 // Tabela principal — cada chunk de texto com seu vetor
 model KnowledgeChunk {
-  id        Int                     @id @default(autoincrement())
-  content   String                  // texto original do chunk
-  embedding Unsupported("vector(768)")?  // vetor gerado pelo nomic-embed-text
-  category  String                  // 'biblioteca', 'contatos', 'cursos', 'servicos', etc.
-  source    String                  // nome do arquivo ou origem
-  metadata  Json                    @default("{}")
-  createdAt DateTime                @default(now())
-  updatedAt DateTime                @updatedAt
+  id        Int                         @id @default(autoincrement())
+  content   String // texto original do chunk
+  embedding Unsupported("vector(768)")? // vetor gerado pelo nomic-embed-text
+  category  String // 'biblioteca', 'contatos', 'cursos', 'servicos', etc.
+  source    String // nome do arquivo ou origem
+  metadata  Json                        @default("{}")
+  createdAt DateTime                    @default(now())
+  updatedAt DateTime                    @updatedAt
 
   @@map("knowledge_chunks")
 }
 
 // Log de perguntas e respostas (útil para melhorar o sistema)
 model ChatLog {
-  id          Int      @id @default(autoincrement())
-  question    String
-  answer      String
-  sources     Json     @default("[]") // quais chunks foram usados
-  similarity  Float?   // similaridade média dos chunks encontrados
-  createdAt   DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  question   String
+  answer     String
+  sources    Json     @default("[]") // quais chunks foram usados
+  similarity Float? // similaridade média dos chunks encontrados
+  createdAt  DateTime @default(now())
+  userId     Int?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@map("chat_logs")
 }
@@ -39,8 +41,15 @@ model User {
   email     String   @unique
   password  String
   name      String
+  role      UserRole @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  chatLogs  ChatLog[]
 
   @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }

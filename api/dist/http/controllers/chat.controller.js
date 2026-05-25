@@ -19,36 +19,42 @@ const base_controller_1 = require("./base.controller");
 const chat_dto_1 = require("../dtos/chat.dto");
 const swagger_1 = require("@nestjs/swagger");
 const jwt_auth_guard_1 = require("../guards/jwt-auth.guard");
+const public_decorator_1 = require("../decorators/public.decorator");
+const current_user_decorator_1 = require("../decorators/current-user.decorator");
 let ChatController = class ChatController extends base_controller_1.BaseController {
     chatService;
     constructor(chatService) {
         super();
         this.chatService = chatService;
     }
-    async ask(body) {
-        const response = await this.chatService.ask(body.question);
+    async ask(body, user) {
+        const response = await this.chatService.ask(body.question, user ?? null);
         return this.success(response, 'Pergunta processada com sucesso');
     }
-    async getHistory(limit) {
-        const history = await this.chatService.getHistory(limit ? Number(limit) : undefined);
+    async getHistory(limit, user) {
+        const history = await this.chatService.getHistory(limit ? Number(limit) : undefined, user ?? null);
         return this.success(history, 'Histórico recuperado com sucesso');
     }
 };
 exports.ChatController = ChatController;
 __decorate([
     (0, common_1.Post)('ask'),
+    (0, public_decorator_1.Public)(),
     (0, swagger_1.ApiOperation)({ summary: 'Envia uma pergunta ao assistente virtual (RAG)' }),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [chat_dto_1.ChatRequestDto]),
+    __metadata("design:paramtypes", [chat_dto_1.ChatRequestDto, Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "ask", null);
 __decorate([
     (0, common_1.Get)('history'),
+    (0, public_decorator_1.Public)(),
     (0, swagger_1.ApiOperation)({ summary: 'Recupera o histórico de conversas' }),
     __param(0, (0, common_1.Query)('limit')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "getHistory", null);
 exports.ChatController = ChatController = __decorate([

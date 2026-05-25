@@ -28,12 +28,12 @@ let ChatService = ChatService_1 = class ChatService {
         this.aiProvider = aiProvider;
         this.prismaService = prismaService;
     }
-    async ask(question) {
+    async ask(question, user = null) {
         this.logger.log(`💬 Pergunta: "${question}"`);
         const chunks = await this.search.findSimilarChunks(question);
         if (chunks.length === 0) {
             const answer = 'Não encontrei informações sobre isso na minha base de dados. Tente reformular a pergunta ou entre em contato com a secretaria.';
-            await this.saveLog(question, answer, [], 0);
+            await this.saveLog(question, answer, [], 0, user);
             return { answer, sources: [], avgSimilarity: 0, chunksUsed: 0 };
         }
         const builtPrompt = this.prompt.build(question, chunks);
@@ -46,7 +46,7 @@ let ChatService = ChatService_1 = class ChatService {
             source: c.source,
             similarity: Math.round(Number(c.similarity) * 100) / 100,
         }));
-        await this.saveLog(question, answer, sources, avgSimilarity);
+        await this.saveLog(question, answer, sources, avgSimilarity, user);
         this.logger.log(`✅ Resposta gerada (${chunks.length} chunks, sim. média: ${avgSimilarity.toFixed(2)})`);
         return {
             answer,
@@ -55,8 +55,10 @@ let ChatService = ChatService_1 = class ChatService {
             chunksUsed: chunks.length,
         };
     }
-    async getHistory(limit = 20) {
+    async getHistory(limit = 20, user = null) {
+        const userId = user ? Number(user.sub) : null;
         return this.prismaService.chatLog.findMany({
+            where: { userId },
             orderBy: { createdAt: 'desc' },
             take: limit,
             select: {
@@ -68,9 +70,10 @@ let ChatService = ChatService_1 = class ChatService {
             },
         });
     }
-    async saveLog(question, answer, sources, similarity) {
+    async saveLog(question, answer, sources, similarity, user) {
+        const userId = user ? Number(user.sub) : null;
         await this.prismaService.chatLog.create({
-            data: { question, answer, sources, similarity },
+            data: { question, answer, sources, similarity, userId },
         });
     }
 };

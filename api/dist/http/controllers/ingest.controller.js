@@ -18,6 +18,9 @@ const ingest_service_1 = require("../../services/ingest.service");
 const base_controller_1 = require("./base.controller");
 const ingest_dto_1 = require("../dtos/ingest.dto");
 const jwt_auth_guard_1 = require("../guards/jwt-auth.guard");
+const roles_guard_1 = require("../guards/roles.guard");
+const roles_decorator_1 = require("../decorators/roles.decorator");
+const client_1 = require("../../generated/prisma/client");
 let IngestController = class IngestController extends base_controller_1.BaseController {
     ingestService;
     constructor(ingestService) {
@@ -37,7 +40,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], IngestController.prototype, "ingestText", null);
 exports.IngestController = IngestController = __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.UserRole.ADMIN),
     (0, common_1.Controller)('ingests'),
     __metadata("design:paramtypes", [ingest_service_1.IngestService])
 ], IngestController);

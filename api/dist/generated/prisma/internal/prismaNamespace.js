@@ -85,13 +85,15 @@ exports.ChatLogScalarFieldEnum = {
     answer: 'answer',
     sources: 'sources',
     similarity: 'similarity',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    userId: 'userId'
 };
 exports.UserScalarFieldEnum = {
     id: 'id',
     email: 'email',
     password: 'password',
     name: 'name',
+    role: 'role',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };

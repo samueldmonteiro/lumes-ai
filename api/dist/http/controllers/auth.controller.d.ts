@@ -1,4 +1,5 @@
 import { AuthService } from "../../services/auth.service";
+import { type JwtPayload } from "../../types/user.type";
 import { BaseController } from './base.controller';
 import { RegisterDto, LoginDto } from '../dtos';
 export declare class AuthController extends BaseController {
@@ -6,9 +7,10 @@ export declare class AuthController extends BaseController {
     constructor(authService: AuthService);
     register(body: RegisterDto): Promise<import("./base.controller").ApiResponse<{
         user: {
-            email: string;
-            name: string;
             id: number;
+            name: string;
+            email: string;
+            role: import("../../generated/prisma/enums").UserRole;
         };
         token: string;
     }>>;
@@ -18,7 +20,8 @@ export declare class AuthController extends BaseController {
             id: number;
             email: string;
             name: string;
+            role: import("../../generated/prisma/enums").UserRole;
         };
     }>>;
-    me(user: any): import("./base.controller").ApiResponse<any>;
+    me(user: JwtPayload): import("./base.controller").ApiResponse<JwtPayload>;
 }

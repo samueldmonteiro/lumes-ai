@@ -5,9 +5,12 @@ import { PrismaService } from '@/services/prisma.service';
 import { RegisterDto, LoginDto } from '@/http/dtos';
 import { EmailAlreadyExistsError, InvalidCredentialsError } from '@/exeptions';
 
+import { UserRole } from '@/generated/prisma/client';
+
 export interface JwtPayload {
-  sub: string;
+  sub: number;
   email: string;
+  role: UserRole;
 }
 
 @Injectable()
@@ -36,12 +39,13 @@ export class AuthService {
         password: hashedPassword,
         name: dto.name,
       },
-      select: { id: true, email: true, name: true },
+      select: { id: true, email: true, name: true, role: true },
     });
 
     const token = this.jwtService.sign({
       sub: user.id,
       email: user.email,
+      role: user.role,
     });
 
     return { user, token };
@@ -66,6 +70,7 @@ export class AuthService {
     const token = this.jwtService.sign({
       sub: user.id,
       email: user.email,
+      role: user.role,
     });
 
     return {
@@ -74,6 +79,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role,
       },
     };
   }

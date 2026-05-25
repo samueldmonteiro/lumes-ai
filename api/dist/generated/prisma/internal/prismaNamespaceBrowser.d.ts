@@ -40,6 +40,7 @@ export declare const ChatLogScalarFieldEnum: {
     readonly sources: "sources";
     readonly similarity: "similarity";
     readonly createdAt: "createdAt";
+    readonly userId: "userId";
 };
 export type ChatLogScalarFieldEnum = (typeof ChatLogScalarFieldEnum)[keyof typeof ChatLogScalarFieldEnum];
 export declare const UserScalarFieldEnum: {
@@ -47,6 +48,7 @@ export declare const UserScalarFieldEnum: {
     readonly email: "email";
     readonly password: "password";
     readonly name: "name";
+    readonly role: "role";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };

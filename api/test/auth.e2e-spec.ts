@@ -3,6 +3,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '@/app.module';
 import { PrismaService } from '@/services/prisma.service';
+import { GlobalExceptionFilter } from '@/http/filters/global-exception.filter';
 import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
 describe('Auth (e2e)', () => {
@@ -15,6 +16,7 @@ describe('Auth (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalFilters(new GlobalExceptionFilter());
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -112,13 +114,6 @@ describe('Auth (e2e)', () => {
 
       expect(response.body.ok).toBe(true);
       expect(response.body.data.email).toBe('e2e@example.com');
-    });
-
-    it('should return 401 when accessing chat without token', async () => {
-      await request(app.getHttpServer())
-        .post('/chat/ask')
-        .send({ question: 'hello' })
-        .expect(401);
     });
   });
 });

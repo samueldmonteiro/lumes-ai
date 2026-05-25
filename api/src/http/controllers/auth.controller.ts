@@ -1,6 +1,7 @@
 import { Controller, Post, Body, Get, UseGuards, HttpCode } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from '@/services/auth.service';
+import { type JwtPayload } from '@/types/user.type';
 import { BaseController } from './base.controller';
 import { RegisterDto, LoginDto } from '../dtos';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -32,7 +33,7 @@ export class AuthController extends BaseController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Retorna o perfil do usuário logado' })
-  me(@CurrentUser() user: any) {
+  me(@CurrentUser() user: JwtPayload) {
     return this.success(user, 'Perfil do usuário recuperado com sucesso');
   }
 }

@@ -26,19 +26,22 @@ let JwtAuthGuard = class JwtAuthGuard {
             context.getHandler(),
             context.getClass(),
         ]);
-        if (isPublic) {
-            return true;
-        }
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) {
+            if (isPublic) {
+                return true;
+            }
             throw new common_1.UnauthorizedException('Token de autenticação ausente.');
         }
         try {
             const payload = await this.jwtService.verifyAsync(token);
             request['user'] = payload;
         }
-        catch {
+        catch (err) {
+            if (isPublic) {
+                return true;
+            }
             throw new common_1.UnauthorizedException('Token de autenticação inválido ou expirado.');
         }
         return true;
