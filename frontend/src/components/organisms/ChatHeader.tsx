@@ -31,7 +31,7 @@ export function ChatHeader({
           whileTap={{ scale: 0.95 }}
           onClick={onToggleSidebar}
           className={cn(
-            "p-2 rounded-xl transition-all duration-300 active:scale-95 cursor-pointer flex items-center justify-center",
+            "p-2 rounded-xl transition-all duration-300 active:scale-95 cursor-pointer flex items-center justify-center lg:hidden",
             isDarkTheme
               ? "text-zinc-400 hover:bg-zinc-800/50 hover:text-white"
               : "text-zinc-600 hover:bg-zinc-200/50 hover:text-zinc-900"

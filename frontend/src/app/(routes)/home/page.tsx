@@ -6,7 +6,8 @@ import {
   PanelLeft, 
   FileText, 
   SquarePen, 
-  Coffee 
+  Coffee,
+  Calendar
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -59,17 +60,21 @@ export default function HomePage() {
       icon: <Coffee className={cn("w-[18px] h-[18px]", isDark ? "text-zinc-500" : "text-zinc-400")} />,
       text: "Qual curso combina mais comigo?",
     },
+    {
+      id: "suggestion-4",
+      icon: <Calendar className={cn("w-[18px] h-[18px]", isDark ? "text-zinc-500" : "text-zinc-400")} />,
+      text: "Cronograma de estudos para o ENEM",
+    },
   ];
 
   return (
     <div
       className={cn(
-        "relative min-h-screen w-full flex justify-center items-center overflow-hidden transition-colors duration-500",
+        "relative min-h-screen w-full flex overflow-hidden transition-colors duration-500",
         isDark ? "bg-[#07040D]" : "bg-[#F4F4F6]"
       )}
     >
-      
-      {/* Sidebar */}
+      {/* Sidebar (Auto-responsiva) */}
       <AppSidebar
         isOpen={isSidebarOpen}
         onClose={handleCloseSidebar}
@@ -106,24 +111,21 @@ export default function HomePage() {
         </>
       )}
 
-      {/* Main Container */}
+      {/* Main Content Area */}
       <div
         className={cn(
-          "relative z-10 w-full max-w-[430px] h-screen flex flex-col justify-between py-6 px-5 transition-colors duration-500",
-          isDark
-            ? "text-white sm:border-x sm:border-zinc-900/60 sm:shadow-[0_0_50px_rgba(0,0,0,0.85)]"
-            : "text-zinc-900 sm:border-x sm:border-zinc-200/60 sm:shadow-[0_0_50px_rgba(0,0,0,0.06)]"
+          "relative z-10 flex-1 h-screen flex flex-col justify-between py-6 px-5 sm:px-8 transition-colors duration-500",
+          isDark ? "text-white" : "text-zinc-900"
         )}
       >
-        
         {/* Top bar */}
         <header className="flex items-center justify-between w-full flex-shrink-0">
-          {/* Left Side: Sidebar Toggle Icon */}
+          {/* Left Side: Sidebar Toggle Icon (Mobile Only) */}
           <button 
             type="button"
             onClick={() => setIsSidebarOpen(true)}
             className={cn(
-              "p-2 -ml-2 rounded-xl transition-colors duration-200 active:scale-95 cursor-pointer",
+              "p-2 -ml-2 rounded-xl transition-colors duration-200 active:scale-95 cursor-pointer lg:hidden",
               isDark
                 ? "text-zinc-400 hover:text-white"
                 : "text-zinc-500 hover:text-zinc-800"
@@ -131,6 +133,9 @@ export default function HomePage() {
           >
             <PanelLeft className="w-[22px] h-[22px] stroke-[1.8]" />
           </button>
+
+          {/* Spacer to push Entrar to the right */}
+          <div className="hidden lg:block" />
 
           {/* Right Side: Entrar Button */}
           <button 
@@ -142,15 +147,16 @@ export default function HomePage() {
           </button>
         </header>
 
-        {/* Centro Vertical: Title & Subtitle */}
-        <div className="flex-1 flex flex-col justify-center items-center w-full my-auto">
-          <div className="text-center select-none">
+        {/* Central container focusing the content vertically and horizontally */}
+        <div className="flex-1 flex flex-col lg:justify-center items-center w-full max-w-[720px] mx-auto my-auto py-8">
+          {/* Title & Subtitle */}
+          <div className="flex-1 lg:flex-none flex flex-col justify-center items-center text-center select-none lg:mb-12">
             <motion.h1 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
               className={cn(
-                "text-4xl font-extrabold tracking-[0.25em] uppercase font-geist",
+                "text-4xl md:text-5xl font-extrabold tracking-[0.25em] uppercase font-geist",
                 isDark ? "text-white" : "text-zinc-800"
               )}
             >
@@ -161,63 +167,61 @@ export default function HomePage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15, duration: 0.5 }}
               className={cn(
-                "text-base font-semibold mt-2 tracking-wide",
+                "text-sm md:text-base font-semibold mt-2 tracking-wide",
                 isDark ? "text-[#8B5CF6]" : "text-violet-600"
               )}
             >
               Olá! Boa tarde
             </motion.p>
           </div>
-        </div>
 
-        {/* Bloco Inferior: Suggestions + Input */}
-        <div className="w-full flex flex-col gap-5 flex-shrink-0 mt-auto">
-          
-          {/* Suggestions block */}
-          <div className="w-full flex flex-col gap-3">
-            <h2
-              className={cn(
-                "text-[10px] sm:text-xs font-semibold tracking-wider select-none uppercase px-1.5",
-                isDark ? "text-zinc-500" : "text-zinc-400"
-              )}
-            >
-              Sugestões para você
-            </h2>
+          {/* Bottom block: suggestions and chat input */}
+          <div className="w-full flex flex-col gap-6 mt-auto lg:mt-0">
+            {/* Suggestions Block */}
+            <div className="w-full flex flex-col gap-3">
+              <h2
+                className={cn(
+                  "text-[10px] sm:text-xs font-semibold tracking-wider select-none uppercase px-1.5",
+                  isDark ? "text-zinc-500" : "text-zinc-400"
+                )}
+              >
+                Sugestões para você
+              </h2>
 
-            <div className="flex flex-col gap-2.5 w-full">
-              {suggestions.map((sug, idx) => (
-                <motion.button
-                  key={sug.id}
-                  type="button"
-                  onClick={() => handleSuggestionClick(sug.text)}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + idx * 0.08, duration: 0.4 }}
-                  className={cn(
-                    "flex items-center gap-3.5 p-3.5 rounded-2xl border transition-all duration-300 active:scale-[0.98] text-left text-xs font-semibold",
-                    isDark
-                      ? "border-zinc-800/60 bg-[#12121a] text-zinc-300 hover:bg-[#191925] hover:border-[#8b5cf6]/40 hover:text-white"
-                      : "border-zinc-200/80 bg-white text-zinc-600 hover:bg-violet-50/60 hover:border-violet-300/50 hover:text-zinc-800 shadow-sm"
-                  )}
-                >
-                  <div className="p-1 rounded-lg flex items-center justify-center">
-                    {sug.icon}
-                  </div>
-                  <span className="flex-1 tracking-wide">{sug.text}</span>
-                </motion.button>
-              ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 w-full">
+                {suggestions.map((sug, idx) => (
+                  <motion.button
+                    key={sug.id}
+                    type="button"
+                    onClick={() => handleSuggestionClick(sug.text)}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + idx * 0.08, duration: 0.4 }}
+                    className={cn(
+                      "flex items-center gap-3.5 p-3.5 rounded-2xl border transition-all duration-300 active:scale-[0.98] text-left text-xs font-semibold",
+                      isDark
+                        ? "border-zinc-800/60 bg-[#12121a] text-zinc-300 hover:bg-[#191925] hover:border-[#8b5cf6]/40 hover:text-white"
+                        : "border-zinc-200/80 bg-white text-zinc-600 hover:bg-violet-50/60 hover:border-violet-300/50 hover:text-zinc-800 shadow-sm"
+                    )}
+                  >
+                    <div className="p-1 rounded-lg flex items-center justify-center">
+                      {sug.icon}
+                    </div>
+                    <span className="flex-1 tracking-wide">{sug.text}</span>
+                  </motion.button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <ChatInput
-            input={input}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSubmit}
-            isLoading={false}
-            isDarkTheme={isDark}
-            className="px-0"
-          />
-          
+            <ChatInput
+              input={input}
+              handleInputChange={handleInputChange}
+              handleSubmit={handleSubmit}
+              isLoading={false}
+              isDarkTheme={isDark}
+              className="px-0"
+            />
+          </div>
         </div>
 
       </div>

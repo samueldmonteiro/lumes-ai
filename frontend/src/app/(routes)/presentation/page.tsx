@@ -15,17 +15,27 @@ export default function PresentationPage() {
     duration: number;
     delay: number;
   }[]>([]);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const handleComplete = useCallback(() => {
     localStorage.setItem("lumes_seen_splash", "true");
     router.push("/home");
   }, [router]);
 
-  // Generate floating particles after mount (client-side only to prevent hydration and purity errors)
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const { clientWidth, clientHeight } = document.documentElement;
+    const x = (e.clientX / clientWidth) - 0.5;
+    const y = (e.clientY / clientHeight) - 0.5;
+    setMousePos({ x, y });
+  }, []);
+
+  // Gera as particulas flutuantes no lado do cliente baseado no tamanho da tela
   useEffect(() => {
     const handle = requestAnimationFrame(() => {
+      const isDesktop = window.innerWidth >= 1024;
+      const count = isDesktop ? 60 : 40;
       setParticles(
-        Array.from({ length: 40 }, (_, i) => ({
+        Array.from({ length: count }, (_, i) => ({
           id: i,
           x: Math.random() * 100,
           y: Math.random() * 100,
@@ -38,7 +48,7 @@ export default function PresentationPage() {
     return () => cancelAnimationFrame(handle);
   }, []);
 
-  // Automatically trigger transition after 3.2 seconds
+  // Redireciona automaticamente apos 3.2 segundos
   useEffect(() => {
     const timer = setTimeout(() => {
       handleComplete();
@@ -50,42 +60,53 @@ export default function PresentationPage() {
   return (
     <div
       onClick={handleComplete}
+      onMouseMove={handleMouseMove}
       className="relative flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-br from-[#0a0515] via-[#07040D] to-[#120821] overflow-hidden cursor-pointer select-none"
     >
-      {/* Animated Gradient Orb - Top Left */}
+      {/* Container com efeito Parallax sutil */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
         animate={{
-          opacity: [0.2, 0.3, 0.2],
-          scale: [1, 1.2, 1],
-          x: [0, 50, 0],
-          y: [0, -30, 0],
+          x: mousePos.x * 50,
+          y: mousePos.y * 50,
         }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-purple-600 via-violet-500 to-indigo-600 blur-[100px] pointer-events-none z-0"
-      />
+        transition={{ type: "spring", stiffness: 40, damping: 20 }}
+        className="absolute inset-0 pointer-events-none z-0"
+      >
+        {/* Animated Gradient Orb - Top Left */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: [0.2, 0.3, 0.2],
+            scale: [1, 1.2, 1],
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-1/4 left-1/4 w-[400px] h-[400px] lg:w-[650px] lg:h-[650px] rounded-full bg-gradient-to-tr from-purple-600 via-violet-500 to-indigo-600 blur-[100px] lg:blur-[140px] pointer-events-none"
+        />
 
-      {/* Animated Gradient Orb - Bottom Right */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{
-          opacity: [0.15, 0.25, 0.15],
-          scale: [1, 1.3, 1],
-          x: [0, -50, 0],
-          y: [0, 30, 0],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full bg-gradient-to-bl from-fuchsia-600 via-purple-500 to-violet-600 blur-[90px] pointer-events-none z-0"
-      />
+        {/* Animated Gradient Orb - Bottom Right */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: [0.15, 0.25, 0.15],
+            scale: [1, 1.3, 1],
+            x: [0, -50, 0],
+            y: [0, 30, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+          className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] lg:w-[550px] lg:h-[550px] rounded-full bg-gradient-to-bl from-fuchsia-600 via-purple-500 to-violet-600 blur-[90px] lg:blur-[120px] pointer-events-none"
+        />
+      </motion.div>
 
       {/* Floating Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
@@ -201,7 +222,7 @@ export default function PresentationPage() {
 
           {/* Logo Image */}
           <motion.div
-            className="relative w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] md:w-[300px] md:h-[300px]"
+            className="relative w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] md:w-[300px] md:h-[300px] lg:w-[380px] lg:h-[380px]"
             whileHover={{ scale: 1.05, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -211,7 +232,7 @@ export default function PresentationPage() {
               fill
               priority
               className="object-contain drop-shadow-2xl"
-              sizes="(max-width: 640px) 180px, (max-width: 768px) 240px, 300px"
+              sizes="(max-width: 640px) 180px, (max-width: 768px) 240px, (max-width: 1024px) 300px, 380px"
             />
           </motion.div>
         </motion.div>
@@ -223,14 +244,14 @@ export default function PresentationPage() {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="flex items-baseline gap-3 sm:gap-4 font-geist font-extrabold uppercase"
         >
-          <h1 className="text-3xl sm:text-5xl md:text-6xl bg-gradient-to-b from-white via-zinc-100 to-violet-300 bg-clip-text text-transparent leading-none tracking-[0.25em] mr-[-0.25em]">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-b from-white via-zinc-100 to-violet-300 bg-clip-text text-transparent leading-none tracking-[0.25em] mr-[-0.25em]">
             LUMES
           </h1>
           <motion.span
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2, type: "spring", stiffness: 200 }}
-            className="text-3xl sm:text-5xl md:text-6xl text-violet-400 font-extrabold tracking-[0.25em]"
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-violet-400 font-extrabold tracking-[0.25em]"
           >
             AI
           </motion.span>
