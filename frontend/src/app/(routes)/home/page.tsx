@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { 
   PanelLeft, 
@@ -21,20 +21,20 @@ export default function HomePage() {
   const router = useRouter();
   const { isDark, toggleTheme } = useChatTheme();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (input.trim()) {
       router.push(`/chat?q=${encodeURIComponent(input.trim())}`);
     }
-  };
+  }, [input, router]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
-  };
+  }, []);
 
-  const handleSuggestionClick = (text: string) => {
+  const handleSuggestionClick = useCallback((text: string) => {
     setInput(text);
-  };
+  }, []);
 
   const handleNewConversation = useCallback(() => {
     setInput("");
@@ -44,7 +44,7 @@ export default function HomePage() {
     setIsSidebarOpen(false);
   }, []);
 
-  const suggestions = [
+  const suggestions = useMemo(() => [
     {
       id: "suggestion-1",
       icon: <FileText className={cn("w-[18px] h-[18px]", isDark ? "text-zinc-500" : "text-zinc-400")} />,
@@ -65,10 +65,14 @@ export default function HomePage() {
       icon: <Calendar className={cn("w-[18px] h-[18px]", isDark ? "text-zinc-500" : "text-zinc-400")} />,
       text: "Cronograma de estudos para o ENEM",
     },
-  ];
+  ], [isDark]);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
       className={cn(
         "relative min-h-screen w-full flex overflow-hidden transition-colors duration-500",
         isDark ? "bg-[#07040D]" : "bg-[#F4F4F6]"
@@ -119,7 +123,7 @@ export default function HomePage() {
         )}
       >
         {/* Top bar */}
-        <header className="flex items-center justify-between w-full flex-shrink-0">
+        <header className="flex items-center justify-between w-full shrink-0">
           {/* Left Side: Sidebar Toggle Icon (Mobile Only) */}
           <button 
             type="button"
@@ -141,7 +145,7 @@ export default function HomePage() {
           <button 
             type="button"
             onClick={() => router.push("/login")}
-            className="px-5 py-2 text-xs font-bold text-white rounded-full bg-gradient-to-r from-[#6366f1] via-[#8b5cf6] to-[#a855f7] shadow-md transition-transform duration-300 hover:scale-[1.03] active:scale-[0.97]"
+            className="px-5 py-2 text-xs font-bold text-white rounded-full bg-linear-to-r from-[#6366f1] via-[#8b5cf6] to-[#a855f7] shadow-md transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-[0.97] cursor-pointer"
           >
             Entrar
           </button>
@@ -189,16 +193,23 @@ export default function HomePage() {
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 w-full">
-                {suggestions.map((sug, idx) => (
+                {suggestions.map((sug: { id: string; icon: React.JSX.Element; text: string; }, idx: number) => (
                   <motion.button
                     key={sug.id}
                     type="button"
                     onClick={() => handleSuggestionClick(sug.text)}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 + idx * 0.08, duration: 0.4 }}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileHover={{ scale: 1.015, y: -2 }}
+                    whileTap={{ scale: 0.985 }}
+                    transition={{ 
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 20,
+                      delay: 0.1 + idx * 0.05 
+                    }}
                     className={cn(
-                      "flex items-center gap-3.5 p-3.5 rounded-2xl border transition-all duration-300 active:scale-[0.98] text-left text-xs font-semibold",
+                      "flex items-center gap-3.5 p-3.5 rounded-2xl border transition-all duration-300 text-left text-xs font-semibold cursor-pointer",
                       isDark
                         ? "border-zinc-800/60 bg-[#12121a] text-zinc-300 hover:bg-[#191925] hover:border-[#8b5cf6]/40 hover:text-white"
                         : "border-zinc-200/80 bg-white text-zinc-600 hover:bg-violet-50/60 hover:border-violet-300/50 hover:text-zinc-800 shadow-sm"
@@ -225,6 +236,6 @@ export default function HomePage() {
         </div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }

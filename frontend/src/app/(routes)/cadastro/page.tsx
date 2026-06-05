@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,7 +34,7 @@ export default function RegisterPage() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isEmailValid = emailRegex.test(email);
 
-  const handleNextStep = (e: React.FormEvent) => {
+  const handleNextStep = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (step === 1) {
       if (name.trim().length < 3) {
@@ -51,15 +51,15 @@ export default function RegisterPage() {
       setEmailError("");
       setStep(3);
     }
-  };
+  }, [step, name, isEmailValid]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setServerError("");
     if (step === 2) setStep(1);
     if (step === 3) setStep(2);
-  };
+  }, [step]);
 
-  const handleFinalSubmit = (e: React.FormEvent) => {
+  const handleFinalSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (password.length < 6) {
       setPasswordError("A senha deve ter pelo menos 6 caracteres.");
@@ -75,9 +75,9 @@ export default function RegisterPage() {
     
     // Valid password & matching -> trigger Terms Dialogue
     setShowTerms(true);
-  };
+  }, [password, confirmPassword]);
 
-  const handleConfirmRegistration = async () => {
+  const handleConfirmRegistration = useCallback(async () => {
     if (!acceptedTerms || !isAdult) return;
     setIsLoading(true);
 
@@ -93,7 +93,7 @@ export default function RegisterPage() {
       setShowTerms(false);
       setIsLoading(false);
     }
-  };
+  }, [acceptedTerms, isAdult, router]);
 
   const inputClasses = cn(
     "w-full h-12 pl-12 pr-4 rounded-xl font-geist focus:border-violet-500/80 focus:ring-4 focus:ring-violet-500/10 outline-none transition-all duration-300",
@@ -115,10 +115,16 @@ export default function RegisterPage() {
   );
 
   return (
-    <div className={cn(
-      "min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist transition-colors duration-500",
-      isDark ? "bg-[#07040D] text-white" : "bg-[#F4F4F6] text-zinc-900"
-    )}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+      className={cn(
+        "min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist transition-colors duration-500",
+        isDark ? "bg-[#07040D] text-white" : "bg-[#F4F4F6] text-zinc-900"
+      )}
+    >
       {/* Light Pattern Overlay */}
       <div
         className={cn("absolute inset-0 pointer-events-none", isDark ? "opacity-20" : "opacity-10")}
@@ -140,12 +146,17 @@ export default function RegisterPage() {
 
       <main className="w-full max-w-[420px] z-10 flex flex-col items-center">
         {/* Core Card Container */}
-        <div className={cn(
-          "w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300",
-          isDark
-            ? "bg-[#120D1F]/50 border border-zinc-800/60"
-            : "bg-white/80 border border-zinc-200/80 shadow-lg"
-        )}>
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 25, delay: 0.1 }}
+          className={cn(
+            "w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300",
+            isDark
+              ? "bg-[#120D1F]/50 border border-zinc-800/60"
+              : "bg-white/80 border border-zinc-200/80 shadow-lg"
+          )}
+        >
           
           {/* Brand Logo Header */}
           <div className="flex flex-col items-center mb-6">
@@ -477,7 +488,7 @@ export default function RegisterPage() {
               )}
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         {/* Footer Login Link */}
         <div className="text-center mt-8 z-10">
@@ -659,6 +670,6 @@ export default function RegisterPage() {
           </div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }

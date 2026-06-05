@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,7 +24,7 @@ export default function LoginPage() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isEmailValid = emailRegex.test(email);
 
-  const handleNextStep = (e: React.FormEvent) => {
+  const handleNextStep = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!isEmailValid) {
       setEmailError("Por favor, insira um e-mail válido.");
@@ -32,9 +32,9 @@ export default function LoginPage() {
     }
     setEmailError("");
     setStep(2);
-  };
+  }, [isEmailValid]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (password.length < 6) {
       setPasswordError("A senha deve ter pelo menos 6 caracteres.");
@@ -57,10 +57,14 @@ export default function LoginPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [password, router]);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
       className={cn(
         "min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist transition-colors duration-500",
         isDark ? "bg-[#07040D] text-white" : "bg-[#F4F4F6] text-zinc-900"
@@ -115,7 +119,10 @@ export default function LoginPage() {
 
       <main className="w-full max-w-[420px] z-10 flex flex-col items-center">
         {/* Core Card Container */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 25, delay: 0.1 }}
           className={cn(
             "w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300 border",
             isDark
@@ -377,7 +384,7 @@ export default function LoginPage() {
               )}
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         {/* Signup Footer Link */}
         <div className="text-center mt-6 z-10">
@@ -397,6 +404,6 @@ export default function LoginPage() {
           </p>
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }

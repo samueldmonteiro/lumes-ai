@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React from "react";
 import { Avatar } from "@/components/atoms/Avatar";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import { ChatMessage } from "@/types/chat";
@@ -11,19 +11,11 @@ interface MessageBubbleProps {
   isDarkTheme: boolean;
 }
 
-export function MessageBubble({ message, isDarkTheme }: MessageBubbleProps) {
+export const MessageBubble = React.memo(function MessageBubble({ message, isDarkTheme }: MessageBubbleProps) {
   const isUser = message.role === "user";
 
   return (
-    <motion.div
-      layout="position"
-      initial={{ opacity: 0, y: 15, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        layout: { type: "spring", stiffness: 350, damping: 30 },
-        opacity: { duration: 0.25 },
-        y: { type: "spring", stiffness: 350, damping: 30 },
-      }}
+    <div
       className={cn(
         "flex w-full items-start gap-2.5 sm:gap-3.5 my-1.5",
         isUser ? "justify-end" : "justify-start"
@@ -37,7 +29,7 @@ export function MessageBubble({ message, isDarkTheme }: MessageBubbleProps) {
         className={cn(
           "max-w-[85%] sm:max-w-[75%] shadow-sm leading-relaxed text-sm md:text-[15px] transition-all duration-300 relative",
           isUser
-            ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm selection:bg-white/20 selection:text-white"
+            ? "bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm selection:bg-white/20 selection:text-white"
             : cn(
                 "p-4 rounded-2xl rounded-tl-sm w-full border border-zinc-200 bg-white text-zinc-800",
                 isDarkTheme
@@ -47,13 +39,11 @@ export function MessageBubble({ message, isDarkTheme }: MessageBubbleProps) {
         )}
       >
         {isUser ? (
-          <p className="whitespace-pre-wrap font-sans break-words">{message.content}</p>
+          <p className="whitespace-pre-wrap font-sans wrap-break-word">{message.content}</p>
         ) : (
           <MarkdownRenderer content={message.content} />
         )}
       </div>
-
-
-    </motion.div>
+    </div>
   );
-}
+});

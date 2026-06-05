@@ -47,16 +47,25 @@ export function MessageList({
               const isLast = index === messages.length - 1;
               const isAssistant = message.role === "assistant";
               return (
-                <div
+                <motion.div
                   key={message.id}
                   ref={isLast && isAssistant ? newestAssistantRef : undefined}
+                  layout="position"
+                  initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -12, scale: 0.98 }}
+                  transition={{
+                    layout: { type: "spring", stiffness: 350, damping: 30 },
+                    opacity: { duration: 0.2 },
+                    y: { type: "spring", stiffness: 350, damping: 30 },
+                  }}
                   className="w-full"
                 >
                   <MessageBubble
                     message={message}
                     isDarkTheme={isDarkTheme}
                   />
-                </div>
+                </motion.div>
               );
             })}
           </AnimatePresence>
