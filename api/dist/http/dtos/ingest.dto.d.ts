@@ -1,5 +1,8 @@
 export declare class IngestTextDto {
     text: string;
     source?: string;
-    category?: string;
+}
+export declare class IngestJsonDto {
+    data: Record<string, unknown>;
+    source?: string;
 }

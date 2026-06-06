@@ -92,9 +92,7 @@ describe('Auth (e2e)', () => {
 
   describe('/auth/me (GET) & Route Protection', () => {
     it('should return 401 when accessing protected route without token', async () => {
-      await request(app.getHttpServer())
-        .get('/auth/me')
-        .expect(401);
+      await request(app.getHttpServer()).get('/auth/me').expect(401);
     });
 
     it('should access /auth/me when authenticated', async () => {

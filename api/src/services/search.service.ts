@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma } from '@/generated/prisma/client';
-import { PrismaService } from './prisma.service';
+import { PrismaKnowledgeChunkRepository } from '@/repositories/prisma/prisma-knowledge-chunk.repository';
 import { EmbeddingProvider } from '@/providers/ai/embedding/embedding.provider';
 
 export interface SearchResult {
@@ -20,12 +19,11 @@ export class SearchService {
 
   constructor(
     private embeddingProvider: EmbeddingProvider,
-    private prismaService: PrismaService,
+    private knowledgeChunkRepo: PrismaKnowledgeChunkRepository,
   ) {
     this.topK = parseInt(process.env.SEARCH_TOP_K || '4');
     this.minSimilarity = parseFloat(process.env.SEARCH_MIN_SIMILARITY || '0.5');
   }
-
 
   async findSimilarChunks(
     question: string,
@@ -37,46 +35,31 @@ export class SearchService {
 
     const limit = topK ?? this.topK;
 
-    // O pgvector NÃO aceita o vetor via bind parameter ($1::vector) —
-    // o driver Prisma envia como text e o cast falha silenciosamente.
-    // Solução: injetar o literal do vetor diretamente na query com Prisma.raw()
-    const vectorLiteral = Prisma.raw(`'${vector}'::vector`);
-    const minSim = Prisma.raw(String(this.minSimilarity));
-    const limitRaw = Prisma.raw(String(limit));
-
     // DEBUG: mostra as similaridades brutas antes de aplicar o filtro
-    const debugRows = await this.prismaService.$queryRaw<{ id: number; source: string; similarity: number }[]>(
-      Prisma.sql`
-        SELECT id, source, 1 - (embedding <=> ${vectorLiteral}) AS similarity
-        FROM knowledge_chunks
-        ORDER BY embedding <=> ${vectorLiteral}
-        LIMIT 5
-      `,
+    const debugRows = await this.knowledgeChunkRepo.getTopKSimilarities(
+      vector,
+      5,
     );
     this.logger.debug(
       `📊 Top-5 similaridades brutas para "${question}":\n` +
-      debugRows.map(r => `  [${r.id}] ${r.source} → ${Number(r.similarity).toFixed(4)}`).join('\n'),
+        debugRows
+          .map(
+            (r) =>
+              `  [${r.id}] ${r.source} → ${Number(r.similarity).toFixed(4)}`,
+          )
+          .join('\n'),
     );
 
     // 2. Busca no PostgreSQL os chunks mais próximos pelo vetor
-    //    <=> é o operador de distância cosine do pgvector
-    //    1 - distância = similaridade (quanto maior, mais parecido)
-    const rows = await this.prismaService.$queryRaw<SearchResult[]>(
-      Prisma.sql`
-        SELECT
-          id,
-          content,
-          category,
-          source,
-          1 - (embedding <=> ${vectorLiteral}) AS similarity
-        FROM knowledge_chunks
-        WHERE 1 - (embedding <=> ${vectorLiteral}) > ${minSim}
-        ORDER BY embedding <=> ${vectorLiteral}
-        LIMIT ${limitRaw}
-      `,
+    const rows = await this.knowledgeChunkRepo.findSimilarChunks(
+      vector,
+      limit,
+      this.minSimilarity,
     );
 
-    this.logger.log(`🔍 "${question}" → ${rows.length} chunks encontrados (threshold: ${this.minSimilarity})`);
+    this.logger.log(
+      `🔍 "${question}" → ${rows.length} chunks encontrados (threshold: ${this.minSimilarity})`,
+    );
 
     return rows;
   }

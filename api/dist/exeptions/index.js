@@ -18,4 +18,5 @@ __exportStar(require("./domain.error"), exports);
 __exportStar(require("./email-already-exists.error"), exports);
 __exportStar(require("./invalid-credentials.error"), exports);
 __exportStar(require("./forbidden.error"), exports);
+__exportStar(require("./chat-session-not-found.error"), exports);
 //# sourceMappingURL=index.js.map

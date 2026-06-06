@@ -58,7 +58,7 @@ describe('Chat (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/chat/ask')
         .send({ question: 'Qual é o horário de atendimento?' })
-        .expect(200);
+        .expect(201);
 
       expect(response.body.ok).toBe(true);
       expect(response.body.data).toHaveProperty('answer');
@@ -76,7 +76,7 @@ describe('Chat (e2e)', () => {
         .post('/chat/ask')
         .set('Authorization', `Bearer ${authToken}`)
         .send({ question: 'Como faço para renovar um livro?' })
-        .expect(200);
+        .expect(201);
 
       expect(response.body.ok).toBe(true);
       expect(response.body.data).toHaveProperty('answer');
@@ -98,11 +98,15 @@ describe('Chat (e2e)', () => {
 
       expect(response.body.ok).toBe(true);
       expect(Array.isArray(response.body.data)).toBe(true);
-      
+
       // Deve conter apenas as perguntas anônimas
-      const anonymousQuestions = response.body.data.map((log: any) => log.question);
+      const anonymousQuestions = response.body.data.map(
+        (log: any) => log.question,
+      );
       expect(anonymousQuestions).toContain('Qual é o horário de atendimento?');
-      expect(anonymousQuestions).not.toContain('Como faço para renovar um livro?');
+      expect(anonymousQuestions).not.toContain(
+        'Como faço para renovar um livro?',
+      );
     });
 
     it('should retrieve user-scoped history when token is provided', async () => {
@@ -113,11 +117,107 @@ describe('Chat (e2e)', () => {
 
       expect(response.body.ok).toBe(true);
       expect(Array.isArray(response.body.data)).toBe(true);
-      
+
       // Deve conter apenas as perguntas do usuário
       const userQuestions = response.body.data.map((log: any) => log.question);
       expect(userQuestions).toContain('Como faço para renovar um livro?');
       expect(userQuestions).not.toContain('Qual é o horário de atendimento?');
+    });
+  });
+
+  describe('Chat Sessions (e2e)', () => {
+    let sessionId: string;
+
+    it('should allow asking a question and automatically create a ChatSession if authenticated', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/chat/ask')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ question: 'Quais os contatos da biblioteca?' })
+        .expect(201);
+
+      expect(response.body.ok).toBe(true);
+      expect(response.body.data).toHaveProperty('answer');
+      expect(response.body.data).toHaveProperty('sessionId');
+      expect(response.body.data.sessionId).toBeDefined();
+
+      sessionId = response.body.data.sessionId;
+
+      // Verificar se a sessão foi realmente criada no DB
+      const session = await prisma.chatSession.findUnique({
+        where: { id: sessionId },
+      });
+      expect(session).not.toBeNull();
+      expect(session?.title).toBe('Quais os contatos da biblioteca?');
+    });
+
+    it('should allow continuing a chat session by providing the sessionId', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/chat/ask')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          question: 'Qual o telefone deles?',
+          sessionId,
+        })
+        .expect(201);
+
+      expect(response.body.ok).toBe(true);
+      expect(response.body.data.sessionId).toBe(sessionId);
+
+      // Verificar se há dois logs associados à mesma sessão
+      const logs = await prisma.chatLog.findMany({
+        where: { sessionId },
+      });
+      expect(logs.length).toBe(2);
+    });
+
+    it('should list all sessions for the authenticated user', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/chat/sessions')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.ok).toBe(true);
+      expect(Array.isArray(response.body.data)).toBe(true);
+      expect(response.body.data.length).toBeGreaterThanOrEqual(1);
+      expect(response.body.data[0].id).toBe(sessionId);
+    });
+
+    it('should get details for a specific session', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/chat/sessions/${sessionId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.ok).toBe(true);
+      expect(response.body.data.id).toBe(sessionId);
+      expect(Array.isArray(response.body.data.chatLogs)).toBe(true);
+      expect(response.body.data.chatLogs.length).toBe(2);
+    });
+
+    it('should delete a chat session', async () => {
+      await request(app.getHttpServer())
+        .delete(`/chat/sessions/${sessionId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      // Verificar se a sessão foi excluída do DB
+      const session = await prisma.chatSession.findUnique({
+        where: { id: sessionId },
+      });
+      expect(session).toBeNull();
+
+      // Verificar se os logs da sessão foram excluídos em cascata
+      const logs = await prisma.chatLog.findMany({
+        where: { sessionId },
+      });
+      expect(logs.length).toBe(0);
+    });
+
+    it('should return 404 when retrieving a deleted or non-existent session', async () => {
+      await request(app.getHttpServer())
+        .get(`/chat/sessions/${sessionId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(404);
     });
   });
 });

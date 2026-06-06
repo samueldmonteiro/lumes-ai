@@ -36,6 +36,9 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get chatLog(): Prisma.ChatLogDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    get chatSession(): Prisma.ChatSessionDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
     get user(): Prisma.UserDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;

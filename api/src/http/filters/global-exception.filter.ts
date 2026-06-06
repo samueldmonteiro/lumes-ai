@@ -15,7 +15,7 @@ interface ErrorResponse {
   message: string | string[];
   path: string;
   timestamp: string;
-  ok: boolean
+  ok: boolean;
 }
 
 /**
@@ -51,7 +51,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
   // ---------------------------------------------------------------------------
 
-  private buildErrorResponse(exception: unknown, request: Request): ErrorResponse {
+  private buildErrorResponse(
+    exception: unknown,
+    request: Request,
+  ): ErrorResponse {
     const timestamp = new Date().toISOString();
     const path = request.url;
 
@@ -75,7 +78,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       const message =
         typeof body === 'string'
           ? body
-          : (body as Record<string, unknown>).message ?? exception.message;
+          : ((body as Record<string, unknown>).message ?? exception.message);
 
       return {
         code: status,

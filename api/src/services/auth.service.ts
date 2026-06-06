@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { PrismaService } from '@/services/prisma.service';
+import { PrismaUserRepository } from '@/repositories/prisma/prisma-user.repository';
 import { RegisterDto, LoginDto } from '@/http/dtos';
 import { EmailAlreadyExistsError, InvalidCredentialsError } from '@/exeptions';
 
@@ -18,14 +18,12 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly userRepo: PrismaUserRepository,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async register(dto: RegisterDto) {
-    const existingUser = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
+    const existingUser = await this.userRepo.findByEmail(dto.email);
 
     if (existingUser) {
       throw new EmailAlreadyExistsError();
@@ -33,13 +31,10 @@ export class AuthService {
 
     const hashedPassword = await argon2.hash(dto.password);
 
-    const user = await this.prisma.user.create({
-      data: {
-        email: dto.email,
-        password: hashedPassword,
-        name: dto.name,
-      },
-      select: { id: true, email: true, name: true, role: true },
+    const user = await this.userRepo.create({
+      email: dto.email,
+      password: hashedPassword,
+      name: dto.name,
     });
 
     const token = this.jwtService.sign({
@@ -52,10 +47,7 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-
-    });
+    const user = await this.userRepo.findByEmail(dto.email);
 
     if (!user) {
       throw new InvalidCredentialsError();
@@ -89,7 +81,9 @@ export class AuthService {
       const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
       return payload;
     } catch (error) {
-      this.logger.warn(`Token validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.logger.warn(
+        `Token validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
       return null;
     }
   }

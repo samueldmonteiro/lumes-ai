@@ -4,4 +4,5 @@ export * as $Enums from './enums.js';
 export * from './enums.js';
 export type KnowledgeChunk = Prisma.KnowledgeChunkModel;
 export type ChatLog = Prisma.ChatLogModel;
+export type ChatSession = Prisma.ChatSessionModel;
 export type User = Prisma.UserModel;

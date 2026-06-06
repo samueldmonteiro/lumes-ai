@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, MinLength, IsObject } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class IngestTextDto {
@@ -20,14 +20,24 @@ export class IngestTextDto {
   @IsString()
   @IsOptional()
     source?: string;
+}
+
+export class IngestJsonDto {
+  @ApiProperty({
+    description: 'Objeto JSON a ser achatado, transformado em texto e indexado como chunks',
+    example: { produto: 'Lumes AI', versao: '1.0', features: ['RAG', 'chat'] },
+  })
+  @IsObject({ message: 'O campo data deve ser um objeto JSON válido' })
+  @IsNotEmpty({ message: 'O campo data é obrigatório' })
+    data!: Record<string, unknown>;
 
   @ApiProperty({
-    description: 'Categoria para agrupar o conhecimento',
-    example: 'geral',
+    description: 'Origem do documento para rastreabilidade',
+    example: 'config-v1',
     required: false,
-    default: 'geral',
+    default: 'json-manual',
   })
   @IsString()
   @IsOptional()
-    category?: string;
+    source?: string;
 }

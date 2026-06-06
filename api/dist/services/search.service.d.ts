@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PrismaService } from './prisma.service';
+import { PrismaKnowledgeChunkRepository } from "../repositories/prisma/prisma-knowledge-chunk.repository";
 import { EmbeddingProvider } from "../providers/ai/embedding/embedding.provider";
 export interface SearchResult {
     id: number;
@@ -10,10 +10,10 @@ export interface SearchResult {
 }
 export declare class SearchService {
     private embeddingProvider;
-    private prismaService;
+    private knowledgeChunkRepo;
     private readonly logger;
     private topK;
     private minSimilarity;
-    constructor(embeddingProvider: EmbeddingProvider, prismaService: PrismaService);
+    constructor(embeddingProvider: EmbeddingProvider, knowledgeChunkRepo: PrismaKnowledgeChunkRepository);
     findSimilarChunks(question: string, topK?: number): Promise<SearchResult[]>;
 }

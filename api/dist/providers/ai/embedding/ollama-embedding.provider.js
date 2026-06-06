@@ -30,7 +30,7 @@ let OllamaEmbeddingProvider = class OllamaEmbeddingProvider {
         if (!res.ok) {
             throw new Error(`Erro ao gerar embedding: ${res.status} ${res.statusText}`);
         }
-        const data = await res.json();
+        const data = (await res.json());
         return data.embedding;
     }
     formatVectorForPg(embedding) {

@@ -35,11 +35,13 @@ export class JwtAuthGuard implements CanActivate {
     try {
       const payload = await this.jwtService.verifyAsync(token);
       request['user'] = payload;
-    } catch (err) {
+    } catch {
       if (isPublic) {
         return true;
       }
-      throw new UnauthorizedException('Token de autenticação inválido ou expirado.');
+      throw new UnauthorizedException(
+        'Token de autenticação inválido ou expirado.',
+      );
     }
 
     return true;

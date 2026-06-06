@@ -7,14 +7,10 @@ const unpdf_1 = require("unpdf");
 async function extractFromPDF(buffer) {
     const pdf = await (0, unpdf_1.getDocumentProxy)(new Uint8Array(buffer));
     const { text } = await (0, unpdf_1.extractText)(pdf, { mergePages: true });
-    return text
-        .replace(/\n{3,}/g, '\n\n')
-        .trim();
+    return text.replace(/\n{3,}/g, '\n\n').trim();
 }
 function extractFromText(raw) {
-    return raw
-        .replace(/\n{3,}/g, '\n\n')
-        .trim();
+    return raw.replace(/\n{3,}/g, '\n\n').trim();
 }
 function extractFromJSON(data) {
     function flatten(obj, prefix = '') {

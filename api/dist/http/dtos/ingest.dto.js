@@ -9,13 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IngestTextDto = void 0;
+exports.IngestJsonDto = exports.IngestTextDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 class IngestTextDto {
     text;
     source;
-    category;
 }
 exports.IngestTextDto = IngestTextDto;
 __decorate([
@@ -39,15 +38,29 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], IngestTextDto.prototype, "source", void 0);
+class IngestJsonDto {
+    data;
+    source;
+}
+exports.IngestJsonDto = IngestJsonDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Categoria para agrupar o conhecimento',
-        example: 'geral',
+        description: 'Objeto JSON a ser achatado, transformado em texto e indexado como chunks',
+        example: { produto: 'Lumes AI', versao: '1.0', features: ['RAG', 'chat'] },
+    }),
+    (0, class_validator_1.IsObject)({ message: 'O campo data deve ser um objeto JSON válido' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'O campo data é obrigatório' }),
+    __metadata("design:type", Object)
+], IngestJsonDto.prototype, "data", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Origem do documento para rastreabilidade',
+        example: 'config-v1',
         required: false,
-        default: 'geral',
+        default: 'json-manual',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], IngestTextDto.prototype, "category", void 0);
+], IngestJsonDto.prototype, "source", void 0);
 //# sourceMappingURL=ingest.dto.js.map

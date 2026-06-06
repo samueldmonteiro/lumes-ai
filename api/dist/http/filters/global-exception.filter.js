@@ -43,7 +43,7 @@ let GlobalExceptionFilter = GlobalExceptionFilter_1 = class GlobalExceptionFilte
             const body = exception.getResponse();
             const message = typeof body === 'string'
                 ? body
-                : body.message ?? exception.message;
+                : (body.message ?? exception.message);
             return {
                 code: status,
                 error: this.statusText(status),

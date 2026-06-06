@@ -10,16 +10,6 @@ async function main() {
       password: 'admin123',
       name: 'Admin',
     },
-    {
-      email: 'joao@lumes.ai',
-      password: '123456',
-      name: 'João Silva',
-    },
-    {
-      email: 'maria@lumes.ai',
-      password: '123456',
-      name: 'Maria Oliveira',
-    },
   ];
 
   for (const user of users) {
@@ -31,6 +21,7 @@ async function main() {
         email: user.email,
         password: hashedPassword,
         name: user.name,
+        role: 'ADMIN',
       },
     });
   }

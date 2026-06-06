@@ -9,10 +9,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PromptService = void 0;
 const common_1 = require("@nestjs/common");
 let PromptService = class PromptService {
-    build(question, chunks) {
+    buildCondensationPrompt(history, newQuestion) {
+        const historyText = history
+            .map((m) => `${m.role === 'user' ? 'Usuário' : 'Assistente'}: ${m.content}`)
+            .join('\n');
+        return `Dada a conversa anterior e uma nova pergunta do usuário, gere uma única pergunta ou frase de busca autossuficiente e otimizada (em português). 
+Esta pergunta de busca deve conter todo o contexto necessário da conversa anterior para que possamos buscar em uma base de dados vetorial.
+Não responda à pergunta, apenas reescreva-a de forma clara e objetiva.
+
+=== HISTÓRICO DE CONVERSA ===
+${historyText}
+=== FIM DO HISTÓRICO ===
+
+Nova pergunta do usuário: ${newQuestion}
+
+Busca otimizada:`;
+    }
+    build(question, chunks, history = []) {
         const context = chunks
             .map((c, i) => `[${i + 1}] Categoria: ${c.category} | Fonte: ${c.source}\n${c.content}`)
             .join('\n\n---\n\n');
+        let historyText = '';
+        if (history.length > 0) {
+            historyText = '=== HISTÓRICO DA CONVERSA ===\n' + history
+                .map((m) => `${m.role === 'user' ? 'Usuário' : 'Assistente'}: ${m.content}`)
+                .join('\n') + '\n=== FIM DO HISTÓRICO ===\n\n';
+        }
         return `Você é um assistente virtual da faculdade. Responda de forma clara, objetiva e em português.
 
 REGRAS IMPORTANTES:
@@ -25,7 +47,7 @@ REGRAS IMPORTANTES:
 ${context}
 === FIM DO CONTEXTO ===
 
-Pergunta do aluno: ${question}
+${historyText}Pergunta do aluno: ${question}
 
 Resposta:`;
     }

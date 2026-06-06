@@ -159,6 +159,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export declare const ModelName: {
     readonly KnowledgeChunk: "KnowledgeChunk";
     readonly ChatLog: "ChatLog";
+    readonly ChatSession: "ChatSession";
     readonly User: "User";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -172,7 +173,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "knowledgeChunk" | "chatLog" | "user";
+        modelProps: "knowledgeChunk" | "chatLog" | "chatSession" | "user";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -324,6 +325,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        ChatSession: {
+            payload: Prisma.$ChatSessionPayload<ExtArgs>;
+            fields: Prisma.ChatSessionFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ChatSessionFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ChatSessionFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>;
+                };
+                findFirst: {
+                    args: Prisma.ChatSessionFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ChatSessionFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>;
+                };
+                findMany: {
+                    args: Prisma.ChatSessionFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>[];
+                };
+                create: {
+                    args: Prisma.ChatSessionCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>;
+                };
+                createMany: {
+                    args: Prisma.ChatSessionCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ChatSessionCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>[];
+                };
+                delete: {
+                    args: Prisma.ChatSessionDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>;
+                };
+                update: {
+                    args: Prisma.ChatSessionUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ChatSessionDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ChatSessionUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ChatSessionUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>[];
+                };
+                upsert: {
+                    args: Prisma.ChatSessionUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatSessionPayload>;
+                };
+                aggregate: {
+                    args: Prisma.ChatSessionAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateChatSession>;
+                };
+                groupBy: {
+                    args: Prisma.ChatSessionGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ChatSessionGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ChatSessionCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ChatSessionCountAggregateOutputType> | number;
+                };
+            };
+        };
         User: {
             payload: Prisma.$UserPayload<ExtArgs>;
             fields: Prisma.UserFieldRefs;
@@ -432,7 +507,6 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export declare const KnowledgeChunkScalarFieldEnum: {
     readonly id: "id";
     readonly content: "content";
-    readonly category: "category";
     readonly source: "source";
     readonly metadata: "metadata";
     readonly createdAt: "createdAt";
@@ -447,8 +521,17 @@ export declare const ChatLogScalarFieldEnum: {
     readonly similarity: "similarity";
     readonly createdAt: "createdAt";
     readonly userId: "userId";
+    readonly sessionId: "sessionId";
 };
 export type ChatLogScalarFieldEnum = (typeof ChatLogScalarFieldEnum)[keyof typeof ChatLogScalarFieldEnum];
+export declare const ChatSessionScalarFieldEnum: {
+    readonly id: "id";
+    readonly title: "title";
+    readonly userId: "userId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ChatSessionScalarFieldEnum = (typeof ChatSessionScalarFieldEnum)[keyof typeof ChatSessionScalarFieldEnum];
 export declare const UserScalarFieldEnum: {
     readonly id: "id";
     readonly email: "email";
@@ -523,6 +606,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
     knowledgeChunk?: Prisma.KnowledgeChunkOmit;
     chatLog?: Prisma.ChatLogOmit;
+    chatSession?: Prisma.ChatSessionOmit;
     user?: Prisma.UserOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';

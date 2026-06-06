@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineExtension = exports.NullsOrder = exports.JsonNullValueFilter = exports.QueryMode = exports.JsonNullValueInput = exports.SortOrder = exports.UserScalarFieldEnum = exports.ChatLogScalarFieldEnum = exports.KnowledgeChunkScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
+exports.defineExtension = exports.NullsOrder = exports.JsonNullValueFilter = exports.QueryMode = exports.JsonNullValueInput = exports.SortOrder = exports.UserScalarFieldEnum = exports.ChatSessionScalarFieldEnum = exports.ChatLogScalarFieldEnum = exports.KnowledgeChunkScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 exports.PrismaClientKnownRequestError = runtime.PrismaClientKnownRequestError;
 exports.PrismaClientUnknownRequestError = runtime.PrismaClientUnknownRequestError;
@@ -62,6 +62,7 @@ exports.AnyNull = runtime.AnyNull;
 exports.ModelName = {
     KnowledgeChunk: 'KnowledgeChunk',
     ChatLog: 'ChatLog',
+    ChatSession: 'ChatSession',
     User: 'User'
 };
 exports.TransactionIsolationLevel = runtime.makeStrictEnum({
@@ -73,7 +74,6 @@ exports.TransactionIsolationLevel = runtime.makeStrictEnum({
 exports.KnowledgeChunkScalarFieldEnum = {
     id: 'id',
     content: 'content',
-    category: 'category',
     source: 'source',
     metadata: 'metadata',
     createdAt: 'createdAt',
@@ -86,7 +86,15 @@ exports.ChatLogScalarFieldEnum = {
     sources: 'sources',
     similarity: 'similarity',
     createdAt: 'createdAt',
-    userId: 'userId'
+    userId: 'userId',
+    sessionId: 'sessionId'
+};
+exports.ChatSessionScalarFieldEnum = {
+    id: 'id',
+    title: 'title',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.UserScalarFieldEnum = {
     id: 'id',

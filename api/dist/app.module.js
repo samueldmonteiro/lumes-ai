@@ -20,10 +20,14 @@ const chat_service_1 = require("./services/chat.service");
 const gemini_provider_1 = require("./providers/ai/LLM/gemini.provider");
 const prisma_service_1 = require("./services/prisma.service");
 const embedding_provider_1 = require("./providers/ai/embedding/embedding.provider");
-const ollama_embedding_provider_1 = require("./providers/ai/embedding/ollama-embedding.provider");
+const gemini_embedding_provider_1 = require("./providers/ai/embedding/gemini-embedding.provider");
 const llm_provider_1 = require("./providers/ai/LLM/llm.provider");
 const auth_service_1 = require("./services/auth.service");
 const auth_controller_1 = require("./http/controllers/auth.controller");
+const prisma_user_repository_1 = require("./repositories/prisma/prisma-user.repository");
+const prisma_chat_log_repository_1 = require("./repositories/prisma/prisma-chat-log.repository");
+const prisma_knowledge_chunk_repository_1 = require("./repositories/prisma/prisma-knowledge-chunk.repository");
+const prisma_chat_session_repository_1 = require("./repositories/prisma/prisma-chat-session.repository");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,9 +40,18 @@ exports.AppModule = AppModule = __decorate([
                 signOptions: { expiresIn: '24h' },
             }),
         ],
-        controllers: [app_controller_1.AppController, ingest_controller_1.IngestController, chat_controller_1.ChatController, auth_controller_1.AuthController],
+        controllers: [
+            app_controller_1.AppController,
+            ingest_controller_1.IngestController,
+            chat_controller_1.ChatController,
+            auth_controller_1.AuthController,
+        ],
         providers: [
             prisma_service_1.PrismaService,
+            prisma_user_repository_1.PrismaUserRepository,
+            prisma_chat_log_repository_1.PrismaChatLogRepository,
+            prisma_knowledge_chunk_repository_1.PrismaKnowledgeChunkRepository,
+            prisma_chat_session_repository_1.PrismaChatSessionRepository,
             ingest_service_1.IngestService,
             chunker_service_1.ChunkerService,
             search_service_1.SearchService,
@@ -52,7 +65,7 @@ exports.AppModule = AppModule = __decorate([
             },
             {
                 provide: embedding_provider_1.EmbeddingProvider,
-                useClass: ollama_embedding_provider_1.OllamaEmbeddingProvider,
+                useClass: gemini_embedding_provider_1.GeminiEmbeddingProvider,
             },
         ],
     })

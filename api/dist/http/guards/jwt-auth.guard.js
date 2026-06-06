@@ -38,7 +38,7 @@ let JwtAuthGuard = class JwtAuthGuard {
             const payload = await this.jwtService.verifyAsync(token);
             request['user'] = payload;
         }
-        catch (err) {
+        catch {
             if (isPublic) {
                 return true;
             }

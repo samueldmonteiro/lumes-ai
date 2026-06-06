@@ -9,12 +9,15 @@ export class AppController extends BaseController {
 
   @Get()
   getHello() {
-    return this.success({
-      name: 'Lumes AI API',
-      version: '1.0.0',
-      author: 'Lumes',
-      description: 'Lumes AI API',
-      docs: '/docs',
-    }, 'Lumes AI API OFICIAL');
+    return this.success(
+      {
+        name: 'Lumes AI API',
+        version: '1.0.0',
+        author: 'Lumes',
+        description: 'Lumes AI API',
+        docs: '/docs',
+      },
+      'Lumes AI API OFICIAL',
+    );
   }
 }

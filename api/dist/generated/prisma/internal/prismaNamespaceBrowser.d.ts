@@ -13,6 +13,7 @@ export declare const AnyNull: import("@prisma/client/runtime/client").AnyNullCla
 export declare const ModelName: {
     readonly KnowledgeChunk: "KnowledgeChunk";
     readonly ChatLog: "ChatLog";
+    readonly ChatSession: "ChatSession";
     readonly User: "User";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -26,7 +27,6 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export declare const KnowledgeChunkScalarFieldEnum: {
     readonly id: "id";
     readonly content: "content";
-    readonly category: "category";
     readonly source: "source";
     readonly metadata: "metadata";
     readonly createdAt: "createdAt";
@@ -41,8 +41,17 @@ export declare const ChatLogScalarFieldEnum: {
     readonly similarity: "similarity";
     readonly createdAt: "createdAt";
     readonly userId: "userId";
+    readonly sessionId: "sessionId";
 };
 export type ChatLogScalarFieldEnum = (typeof ChatLogScalarFieldEnum)[keyof typeof ChatLogScalarFieldEnum];
+export declare const ChatSessionScalarFieldEnum: {
+    readonly id: "id";
+    readonly title: "title";
+    readonly userId: "userId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ChatSessionScalarFieldEnum = (typeof ChatSessionScalarFieldEnum)[keyof typeof ChatSessionScalarFieldEnum];
 export declare const UserScalarFieldEnum: {
     readonly id: "id";
     readonly email: "email";

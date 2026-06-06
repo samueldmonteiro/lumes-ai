@@ -13,79 +13,60 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IngestService = void 0;
 const common_1 = require("@nestjs/common");
 const chunker_service_1 = require("./chunker.service");
-const extractors_1 = require("../lib/extractors");
-const client_1 = require("../generated/prisma/client");
-const prisma_service_1 = require("./prisma.service");
+const extractors_1 = require("../utils/extractors");
+const prisma_knowledge_chunk_repository_1 = require("../repositories/prisma/prisma-knowledge-chunk.repository");
 const embedding_provider_1 = require("../providers/ai/embedding/embedding.provider");
 let IngestService = IngestService_1 = class IngestService {
     chunker;
     embeddingProvider;
-    prismaService;
+    knowledgeChunkRepo;
     logger = new common_1.Logger(IngestService_1.name);
-    constructor(chunker, embeddingProvider, prismaService) {
+    constructor(chunker, embeddingProvider, knowledgeChunkRepo) {
         this.chunker = chunker;
         this.embeddingProvider = embeddingProvider;
-        this.prismaService = prismaService;
+        this.knowledgeChunkRepo = knowledgeChunkRepo;
     }
-    async ingestText(raw, source, category) {
+    async ingestText(raw, source) {
         this.logger.log(`📝 Ingerindo texto: ${source}`);
         const text = (0, extractors_1.extractFromText)(raw);
-        console.log('texto extraido', text);
-        const processed = await this.processText(text, source, category);
-        console.log('Processado', processed);
-        return processed;
+        return this.processText(text, source);
     }
-    async processText(text, source, category, chunkSize, overlap) {
+    async ingestPDF(buffer, source) {
+        this.logger.log(`📄 Ingerindo PDF: ${source}`);
+        const text = await (0, extractors_1.extractFromPDF)(buffer);
+        return this.processText(text, source);
+    }
+    async ingestJSON(data, source) {
+        this.logger.log(`🗂️  Ingerindo JSON: ${source}`);
+        const text = (0, extractors_1.extractFromJSON)(data);
+        return this.processText(text, source);
+    }
+    async processText(text, source, chunkSize, overlap) {
         const chunks = this.chunker.split(text, chunkSize, overlap);
-        this.logger.log(`   ${chunks.length} chunks gerados`);
-        try {
-            const deleted = await this.prismaService.knowledgeChunk.deleteMany({
-                where: { source },
-            });
-            if (deleted.count > 0) {
-                this.logger.log(`   🗑️ Limpou ${deleted.count} chunks antigos para a fonte: ${source}`);
-            }
-        }
-        catch (error) {
-            this.logger.warn(`   Aviso ao tentar limpar chunks antigos: ${error.message}`);
-        }
+        console.log(`${chunks.length} chunks gerados`);
+        await this.knowledgeChunkRepo.deleteManyBySource(source);
         let saved = 0;
-        console.log('Chunks gerados e prontos para embedding');
         for (const chunk of chunks) {
-            try {
-                const embedding = await this.embeddingProvider.generateEmbedding(chunk.content);
-                const vectorStr = this.embeddingProvider.formatVectorForPg(embedding);
-                const vectorLiteral = client_1.Prisma.raw(`'${vectorStr}'::vector`);
-                const metadataLiteral = client_1.Prisma.raw(`'${JSON.stringify({ chunkIndex: chunk.index })}'::jsonb`);
-                await this.prismaService.$executeRaw(client_1.Prisma.sql `
-            INSERT INTO "knowledge_chunks" ("content", "embedding", "category", "source", "metadata", "updatedAt")
-            VALUES (
-              ${chunk.content},
-              ${vectorLiteral},
-              ${category},
-              ${source},
-              ${metadataLiteral},
-              NOW()
-            )
-          `);
-                saved++;
-                await this.delay(80);
-            }
-            catch (err) {
-                this.logger.error(`Erro no chunk ${chunk.index}: ${err.message}`);
-            }
+            const embedding = await this.embeddingProvider.generateEmbedding(chunk.content);
+            const embeddingVector = this.embeddingProvider.formatVectorForPg(embedding);
+            await this.knowledgeChunkRepo.insertChunk({
+                content: chunk.content,
+                embeddingVector,
+                source,
+                metadata: { chunkIndex: chunk.index },
+            });
+            saved++;
+            await this.delay(80);
         }
-        this.logger.log(`   ✅ ${saved}/${chunks.length} chunks salvos`);
         return {
             ok: true,
             source,
-            category,
             chunksProcessed: chunks.length,
             chunksSaved: saved,
         };
     }
     delay(ms) {
-        return new Promise(r => setTimeout(r, ms));
+        return new Promise((r) => setTimeout(r, ms));
     }
 };
 exports.IngestService = IngestService;
@@ -93,6 +74,6 @@ exports.IngestService = IngestService = IngestService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [chunker_service_1.ChunkerService,
         embedding_provider_1.EmbeddingProvider,
-        prisma_service_1.PrismaService])
+        prisma_knowledge_chunk_repository_1.PrismaKnowledgeChunkRepository])
 ], IngestService);
 //# sourceMappingURL=ingest.service.js.map

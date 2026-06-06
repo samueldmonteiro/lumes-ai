@@ -28,12 +28,24 @@ let ChatController = class ChatController extends base_controller_1.BaseControll
         this.chatService = chatService;
     }
     async ask(body, user) {
-        const response = await this.chatService.ask(body.question, user ?? null);
+        const response = await this.chatService.ask(body.question, user ?? null, body.sessionId, body.history);
         return this.success(response, 'Pergunta processada com sucesso');
     }
     async getHistory(limit, user) {
         const history = await this.chatService.getHistory(limit ? Number(limit) : undefined, user ?? null);
         return this.success(history, 'Histórico recuperado com sucesso');
+    }
+    async getSessions(user, limit) {
+        const sessions = await this.chatService.getSessions(Number(user.sub), limit ? Number(limit) : undefined);
+        return this.success(sessions, 'Sessões recuperadas com sucesso');
+    }
+    async getSessionDetails(id, user) {
+        const session = await this.chatService.getSessionDetails(id, Number(user.sub));
+        return this.success(session, 'Detalhes da sessão recuperados com sucesso');
+    }
+    async deleteSession(id, user) {
+        await this.chatService.deleteSession(id, Number(user.sub));
+        return this.success(null, 'Sessão excluída com sucesso');
     }
 };
 exports.ChatController = ChatController;
@@ -50,13 +62,40 @@ __decorate([
 __decorate([
     (0, common_1.Get)('history'),
     (0, public_decorator_1.Public)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Recupera o histórico de conversas' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Recupera o histórico de conversas avulsas' }),
     __param(0, (0, common_1.Query)('limit')),
     __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "getHistory", null);
+__decorate([
+    (0, common_1.Get)('sessions'),
+    (0, swagger_1.ApiOperation)({ summary: 'Recupera a lista de sessões de chat do usuário logado' }),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getSessions", null);
+__decorate([
+    (0, common_1.Get)('sessions/:id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Recupera os detalhes de uma sessão de chat (com histórico de mensagens)' }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getSessionDetails", null);
+__decorate([
+    (0, common_1.Delete)('sessions/:id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Exclui uma sessão de chat' }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "deleteSession", null);
 exports.ChatController = ChatController = __decorate([
     (0, swagger_1.ApiTags)('Chat'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

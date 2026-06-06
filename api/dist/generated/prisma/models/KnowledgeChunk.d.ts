@@ -17,7 +17,6 @@ export type KnowledgeChunkSumAggregateOutputType = {
 export type KnowledgeChunkMinAggregateOutputType = {
     id: number | null;
     content: string | null;
-    category: string | null;
     source: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -25,7 +24,6 @@ export type KnowledgeChunkMinAggregateOutputType = {
 export type KnowledgeChunkMaxAggregateOutputType = {
     id: number | null;
     content: string | null;
-    category: string | null;
     source: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -33,7 +31,6 @@ export type KnowledgeChunkMaxAggregateOutputType = {
 export type KnowledgeChunkCountAggregateOutputType = {
     id: number;
     content: number;
-    category: number;
     source: number;
     metadata: number;
     createdAt: number;
@@ -49,7 +46,6 @@ export type KnowledgeChunkSumAggregateInputType = {
 export type KnowledgeChunkMinAggregateInputType = {
     id?: true;
     content?: true;
-    category?: true;
     source?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -57,7 +53,6 @@ export type KnowledgeChunkMinAggregateInputType = {
 export type KnowledgeChunkMaxAggregateInputType = {
     id?: true;
     content?: true;
-    category?: true;
     source?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -65,7 +60,6 @@ export type KnowledgeChunkMaxAggregateInputType = {
 export type KnowledgeChunkCountAggregateInputType = {
     id?: true;
     content?: true;
-    category?: true;
     source?: true;
     metadata?: true;
     createdAt?: true;
@@ -103,7 +97,6 @@ export type KnowledgeChunkGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 export type KnowledgeChunkGroupByOutputType = {
     id: number;
     content: string;
-    category: string;
     source: string;
     metadata: runtime.JsonValue;
     createdAt: Date;
@@ -123,7 +116,6 @@ export type KnowledgeChunkWhereInput = {
     NOT?: Prisma.KnowledgeChunkWhereInput | Prisma.KnowledgeChunkWhereInput[];
     id?: Prisma.IntFilter<"KnowledgeChunk"> | number;
     content?: Prisma.StringFilter<"KnowledgeChunk"> | string;
-    category?: Prisma.StringFilter<"KnowledgeChunk"> | string;
     source?: Prisma.StringFilter<"KnowledgeChunk"> | string;
     metadata?: Prisma.JsonFilter<"KnowledgeChunk">;
     createdAt?: Prisma.DateTimeFilter<"KnowledgeChunk"> | Date | string;
@@ -132,7 +124,6 @@ export type KnowledgeChunkWhereInput = {
 export type KnowledgeChunkOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
     content?: Prisma.SortOrder;
-    category?: Prisma.SortOrder;
     source?: Prisma.SortOrder;
     metadata?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -144,7 +135,6 @@ export type KnowledgeChunkWhereUniqueInput = Prisma.AtLeast<{
     OR?: Prisma.KnowledgeChunkWhereInput[];
     NOT?: Prisma.KnowledgeChunkWhereInput | Prisma.KnowledgeChunkWhereInput[];
     content?: Prisma.StringFilter<"KnowledgeChunk"> | string;
-    category?: Prisma.StringFilter<"KnowledgeChunk"> | string;
     source?: Prisma.StringFilter<"KnowledgeChunk"> | string;
     metadata?: Prisma.JsonFilter<"KnowledgeChunk">;
     createdAt?: Prisma.DateTimeFilter<"KnowledgeChunk"> | Date | string;
@@ -153,7 +143,6 @@ export type KnowledgeChunkWhereUniqueInput = Prisma.AtLeast<{
 export type KnowledgeChunkOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     content?: Prisma.SortOrder;
-    category?: Prisma.SortOrder;
     source?: Prisma.SortOrder;
     metadata?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -170,7 +159,6 @@ export type KnowledgeChunkScalarWhereWithAggregatesInput = {
     NOT?: Prisma.KnowledgeChunkScalarWhereWithAggregatesInput | Prisma.KnowledgeChunkScalarWhereWithAggregatesInput[];
     id?: Prisma.IntWithAggregatesFilter<"KnowledgeChunk"> | number;
     content?: Prisma.StringWithAggregatesFilter<"KnowledgeChunk"> | string;
-    category?: Prisma.StringWithAggregatesFilter<"KnowledgeChunk"> | string;
     source?: Prisma.StringWithAggregatesFilter<"KnowledgeChunk"> | string;
     metadata?: Prisma.JsonWithAggregatesFilter<"KnowledgeChunk">;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"KnowledgeChunk"> | Date | string;
@@ -178,7 +166,6 @@ export type KnowledgeChunkScalarWhereWithAggregatesInput = {
 };
 export type KnowledgeChunkCreateInput = {
     content: string;
-    category: string;
     source: string;
     metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     createdAt?: Date | string;
@@ -187,7 +174,6 @@ export type KnowledgeChunkCreateInput = {
 export type KnowledgeChunkUncheckedCreateInput = {
     id?: number;
     content: string;
-    category: string;
     source: string;
     metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     createdAt?: Date | string;
@@ -195,7 +181,6 @@ export type KnowledgeChunkUncheckedCreateInput = {
 };
 export type KnowledgeChunkUpdateInput = {
     content?: Prisma.StringFieldUpdateOperationsInput | string;
-    category?: Prisma.StringFieldUpdateOperationsInput | string;
     source?: Prisma.StringFieldUpdateOperationsInput | string;
     metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -204,7 +189,6 @@ export type KnowledgeChunkUpdateInput = {
 export type KnowledgeChunkUncheckedUpdateInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     content?: Prisma.StringFieldUpdateOperationsInput | string;
-    category?: Prisma.StringFieldUpdateOperationsInput | string;
     source?: Prisma.StringFieldUpdateOperationsInput | string;
     metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -213,7 +197,6 @@ export type KnowledgeChunkUncheckedUpdateInput = {
 export type KnowledgeChunkCreateManyInput = {
     id?: number;
     content: string;
-    category: string;
     source: string;
     metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     createdAt?: Date | string;
@@ -221,7 +204,6 @@ export type KnowledgeChunkCreateManyInput = {
 };
 export type KnowledgeChunkUpdateManyMutationInput = {
     content?: Prisma.StringFieldUpdateOperationsInput | string;
-    category?: Prisma.StringFieldUpdateOperationsInput | string;
     source?: Prisma.StringFieldUpdateOperationsInput | string;
     metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -230,7 +212,6 @@ export type KnowledgeChunkUpdateManyMutationInput = {
 export type KnowledgeChunkUncheckedUpdateManyInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     content?: Prisma.StringFieldUpdateOperationsInput | string;
-    category?: Prisma.StringFieldUpdateOperationsInput | string;
     source?: Prisma.StringFieldUpdateOperationsInput | string;
     metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -239,7 +220,6 @@ export type KnowledgeChunkUncheckedUpdateManyInput = {
 export type KnowledgeChunkCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     content?: Prisma.SortOrder;
-    category?: Prisma.SortOrder;
     source?: Prisma.SortOrder;
     metadata?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -251,7 +231,6 @@ export type KnowledgeChunkAvgOrderByAggregateInput = {
 export type KnowledgeChunkMaxOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     content?: Prisma.SortOrder;
-    category?: Prisma.SortOrder;
     source?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -259,7 +238,6 @@ export type KnowledgeChunkMaxOrderByAggregateInput = {
 export type KnowledgeChunkMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     content?: Prisma.SortOrder;
-    category?: Prisma.SortOrder;
     source?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -283,7 +261,6 @@ export type IntFieldUpdateOperationsInput = {
 export type KnowledgeChunkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     content?: boolean;
-    category?: boolean;
     source?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -292,7 +269,6 @@ export type KnowledgeChunkSelect<ExtArgs extends runtime.Types.Extensions.Intern
 export type KnowledgeChunkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     content?: boolean;
-    category?: boolean;
     source?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -301,7 +277,6 @@ export type KnowledgeChunkSelectCreateManyAndReturn<ExtArgs extends runtime.Type
 export type KnowledgeChunkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     content?: boolean;
-    category?: boolean;
     source?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -310,20 +285,18 @@ export type KnowledgeChunkSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
 export type KnowledgeChunkSelectScalar = {
     id?: boolean;
     content?: boolean;
-    category?: boolean;
     source?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type KnowledgeChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "content" | "category" | "source" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["knowledgeChunk"]>;
+export type KnowledgeChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "content" | "source" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["knowledgeChunk"]>;
 export type $KnowledgeChunkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     name: "KnowledgeChunk";
     objects: {};
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: number;
         content: string;
-        category: string;
         source: string;
         metadata: runtime.JsonValue;
         createdAt: Date;
@@ -387,7 +360,6 @@ export interface Prisma__KnowledgeChunkClient<T, Null = never, ExtArgs extends r
 export interface KnowledgeChunkFieldRefs {
     readonly id: Prisma.FieldRef<"KnowledgeChunk", 'Int'>;
     readonly content: Prisma.FieldRef<"KnowledgeChunk", 'String'>;
-    readonly category: Prisma.FieldRef<"KnowledgeChunk", 'String'>;
     readonly source: Prisma.FieldRef<"KnowledgeChunk", 'String'>;
     readonly metadata: Prisma.FieldRef<"KnowledgeChunk", 'Json'>;
     readonly createdAt: Prisma.FieldRef<"KnowledgeChunk", 'DateTime'>;

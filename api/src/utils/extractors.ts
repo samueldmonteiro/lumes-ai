@@ -4,15 +4,11 @@ export async function extractFromPDF(buffer: Buffer): Promise<string> {
   const pdf = await getDocumentProxy(new Uint8Array(buffer));
   const { text } = await extractText(pdf, { mergePages: true });
 
-  return text
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  return text.replace(/\n{3,}/g, '\n\n').trim();
 }
 
 export function extractFromText(raw: string): string {
-  return raw
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  return raw.replace(/\n{3,}/g, '\n\n').trim();
 }
 
 export function extractFromJSON(data: Record<string, unknown>): string {

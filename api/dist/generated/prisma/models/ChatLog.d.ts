@@ -25,6 +25,7 @@ export type ChatLogMinAggregateOutputType = {
     similarity: number | null;
     createdAt: Date | null;
     userId: number | null;
+    sessionId: string | null;
 };
 export type ChatLogMaxAggregateOutputType = {
     id: number | null;
@@ -33,6 +34,7 @@ export type ChatLogMaxAggregateOutputType = {
     similarity: number | null;
     createdAt: Date | null;
     userId: number | null;
+    sessionId: string | null;
 };
 export type ChatLogCountAggregateOutputType = {
     id: number;
@@ -42,6 +44,7 @@ export type ChatLogCountAggregateOutputType = {
     similarity: number;
     createdAt: number;
     userId: number;
+    sessionId: number;
     _all: number;
 };
 export type ChatLogAvgAggregateInputType = {
@@ -61,6 +64,7 @@ export type ChatLogMinAggregateInputType = {
     similarity?: true;
     createdAt?: true;
     userId?: true;
+    sessionId?: true;
 };
 export type ChatLogMaxAggregateInputType = {
     id?: true;
@@ -69,6 +73,7 @@ export type ChatLogMaxAggregateInputType = {
     similarity?: true;
     createdAt?: true;
     userId?: true;
+    sessionId?: true;
 };
 export type ChatLogCountAggregateInputType = {
     id?: true;
@@ -78,6 +83,7 @@ export type ChatLogCountAggregateInputType = {
     similarity?: true;
     createdAt?: true;
     userId?: true;
+    sessionId?: true;
     _all?: true;
 };
 export type ChatLogAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -116,6 +122,7 @@ export type ChatLogGroupByOutputType = {
     similarity: number | null;
     createdAt: Date;
     userId: number | null;
+    sessionId: string | null;
     _count: ChatLogCountAggregateOutputType | null;
     _avg: ChatLogAvgAggregateOutputType | null;
     _sum: ChatLogSumAggregateOutputType | null;
@@ -136,7 +143,9 @@ export type ChatLogWhereInput = {
     similarity?: Prisma.FloatNullableFilter<"ChatLog"> | number | null;
     createdAt?: Prisma.DateTimeFilter<"ChatLog"> | Date | string;
     userId?: Prisma.IntNullableFilter<"ChatLog"> | number | null;
+    sessionId?: Prisma.StringNullableFilter<"ChatLog"> | string | null;
     user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null;
+    session?: Prisma.XOR<Prisma.ChatSessionNullableScalarRelationFilter, Prisma.ChatSessionWhereInput> | null;
 };
 export type ChatLogOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -146,7 +155,9 @@ export type ChatLogOrderByWithRelationInput = {
     similarity?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     userId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    sessionId?: Prisma.SortOrderInput | Prisma.SortOrder;
     user?: Prisma.UserOrderByWithRelationInput;
+    session?: Prisma.ChatSessionOrderByWithRelationInput;
 };
 export type ChatLogWhereUniqueInput = Prisma.AtLeast<{
     id?: number;
@@ -159,7 +170,9 @@ export type ChatLogWhereUniqueInput = Prisma.AtLeast<{
     similarity?: Prisma.FloatNullableFilter<"ChatLog"> | number | null;
     createdAt?: Prisma.DateTimeFilter<"ChatLog"> | Date | string;
     userId?: Prisma.IntNullableFilter<"ChatLog"> | number | null;
+    sessionId?: Prisma.StringNullableFilter<"ChatLog"> | string | null;
     user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null;
+    session?: Prisma.XOR<Prisma.ChatSessionNullableScalarRelationFilter, Prisma.ChatSessionWhereInput> | null;
 }, "id">;
 export type ChatLogOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -169,6 +182,7 @@ export type ChatLogOrderByWithAggregationInput = {
     similarity?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     userId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    sessionId?: Prisma.SortOrderInput | Prisma.SortOrder;
     _count?: Prisma.ChatLogCountOrderByAggregateInput;
     _avg?: Prisma.ChatLogAvgOrderByAggregateInput;
     _max?: Prisma.ChatLogMaxOrderByAggregateInput;
@@ -186,6 +200,7 @@ export type ChatLogScalarWhereWithAggregatesInput = {
     similarity?: Prisma.FloatNullableWithAggregatesFilter<"ChatLog"> | number | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"ChatLog"> | Date | string;
     userId?: Prisma.IntNullableWithAggregatesFilter<"ChatLog"> | number | null;
+    sessionId?: Prisma.StringNullableWithAggregatesFilter<"ChatLog"> | string | null;
 };
 export type ChatLogCreateInput = {
     question: string;
@@ -194,6 +209,7 @@ export type ChatLogCreateInput = {
     similarity?: number | null;
     createdAt?: Date | string;
     user?: Prisma.UserCreateNestedOneWithoutChatLogsInput;
+    session?: Prisma.ChatSessionCreateNestedOneWithoutChatLogsInput;
 };
 export type ChatLogUncheckedCreateInput = {
     id?: number;
@@ -203,6 +219,7 @@ export type ChatLogUncheckedCreateInput = {
     similarity?: number | null;
     createdAt?: Date | string;
     userId?: number | null;
+    sessionId?: string | null;
 };
 export type ChatLogUpdateInput = {
     question?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -211,6 +228,7 @@ export type ChatLogUpdateInput = {
     similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     user?: Prisma.UserUpdateOneWithoutChatLogsNestedInput;
+    session?: Prisma.ChatSessionUpdateOneWithoutChatLogsNestedInput;
 };
 export type ChatLogUncheckedUpdateInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -220,6 +238,7 @@ export type ChatLogUncheckedUpdateInput = {
     similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 export type ChatLogCreateManyInput = {
     id?: number;
@@ -229,6 +248,7 @@ export type ChatLogCreateManyInput = {
     similarity?: number | null;
     createdAt?: Date | string;
     userId?: number | null;
+    sessionId?: string | null;
 };
 export type ChatLogUpdateManyMutationInput = {
     question?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -245,6 +265,7 @@ export type ChatLogUncheckedUpdateManyInput = {
     similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 export type ChatLogCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -254,6 +275,7 @@ export type ChatLogCountOrderByAggregateInput = {
     similarity?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
+    sessionId?: Prisma.SortOrder;
 };
 export type ChatLogAvgOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -267,6 +289,7 @@ export type ChatLogMaxOrderByAggregateInput = {
     similarity?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
+    sessionId?: Prisma.SortOrder;
 };
 export type ChatLogMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -275,6 +298,7 @@ export type ChatLogMinOrderByAggregateInput = {
     similarity?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
+    sessionId?: Prisma.SortOrder;
 };
 export type ChatLogSumOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -302,6 +326,47 @@ export type NullableIntFieldUpdateOperationsInput = {
     decrement?: number;
     multiply?: number;
     divide?: number;
+};
+export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null;
+};
+export type ChatLogCreateNestedManyWithoutSessionInput = {
+    create?: Prisma.XOR<Prisma.ChatLogCreateWithoutSessionInput, Prisma.ChatLogUncheckedCreateWithoutSessionInput> | Prisma.ChatLogCreateWithoutSessionInput[] | Prisma.ChatLogUncheckedCreateWithoutSessionInput[];
+    connectOrCreate?: Prisma.ChatLogCreateOrConnectWithoutSessionInput | Prisma.ChatLogCreateOrConnectWithoutSessionInput[];
+    createMany?: Prisma.ChatLogCreateManySessionInputEnvelope;
+    connect?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+};
+export type ChatLogUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: Prisma.XOR<Prisma.ChatLogCreateWithoutSessionInput, Prisma.ChatLogUncheckedCreateWithoutSessionInput> | Prisma.ChatLogCreateWithoutSessionInput[] | Prisma.ChatLogUncheckedCreateWithoutSessionInput[];
+    connectOrCreate?: Prisma.ChatLogCreateOrConnectWithoutSessionInput | Prisma.ChatLogCreateOrConnectWithoutSessionInput[];
+    createMany?: Prisma.ChatLogCreateManySessionInputEnvelope;
+    connect?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+};
+export type ChatLogUpdateManyWithoutSessionNestedInput = {
+    create?: Prisma.XOR<Prisma.ChatLogCreateWithoutSessionInput, Prisma.ChatLogUncheckedCreateWithoutSessionInput> | Prisma.ChatLogCreateWithoutSessionInput[] | Prisma.ChatLogUncheckedCreateWithoutSessionInput[];
+    connectOrCreate?: Prisma.ChatLogCreateOrConnectWithoutSessionInput | Prisma.ChatLogCreateOrConnectWithoutSessionInput[];
+    upsert?: Prisma.ChatLogUpsertWithWhereUniqueWithoutSessionInput | Prisma.ChatLogUpsertWithWhereUniqueWithoutSessionInput[];
+    createMany?: Prisma.ChatLogCreateManySessionInputEnvelope;
+    set?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+    disconnect?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+    delete?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+    connect?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+    update?: Prisma.ChatLogUpdateWithWhereUniqueWithoutSessionInput | Prisma.ChatLogUpdateWithWhereUniqueWithoutSessionInput[];
+    updateMany?: Prisma.ChatLogUpdateManyWithWhereWithoutSessionInput | Prisma.ChatLogUpdateManyWithWhereWithoutSessionInput[];
+    deleteMany?: Prisma.ChatLogScalarWhereInput | Prisma.ChatLogScalarWhereInput[];
+};
+export type ChatLogUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: Prisma.XOR<Prisma.ChatLogCreateWithoutSessionInput, Prisma.ChatLogUncheckedCreateWithoutSessionInput> | Prisma.ChatLogCreateWithoutSessionInput[] | Prisma.ChatLogUncheckedCreateWithoutSessionInput[];
+    connectOrCreate?: Prisma.ChatLogCreateOrConnectWithoutSessionInput | Prisma.ChatLogCreateOrConnectWithoutSessionInput[];
+    upsert?: Prisma.ChatLogUpsertWithWhereUniqueWithoutSessionInput | Prisma.ChatLogUpsertWithWhereUniqueWithoutSessionInput[];
+    createMany?: Prisma.ChatLogCreateManySessionInputEnvelope;
+    set?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+    disconnect?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+    delete?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+    connect?: Prisma.ChatLogWhereUniqueInput | Prisma.ChatLogWhereUniqueInput[];
+    update?: Prisma.ChatLogUpdateWithWhereUniqueWithoutSessionInput | Prisma.ChatLogUpdateWithWhereUniqueWithoutSessionInput[];
+    updateMany?: Prisma.ChatLogUpdateManyWithWhereWithoutSessionInput | Prisma.ChatLogUpdateManyWithWhereWithoutSessionInput[];
+    deleteMany?: Prisma.ChatLogScalarWhereInput | Prisma.ChatLogScalarWhereInput[];
 };
 export type ChatLogCreateNestedManyWithoutUserInput = {
     create?: Prisma.XOR<Prisma.ChatLogCreateWithoutUserInput, Prisma.ChatLogUncheckedCreateWithoutUserInput> | Prisma.ChatLogCreateWithoutUserInput[] | Prisma.ChatLogUncheckedCreateWithoutUserInput[];
@@ -341,12 +406,64 @@ export type ChatLogUncheckedUpdateManyWithoutUserNestedInput = {
     updateMany?: Prisma.ChatLogUpdateManyWithWhereWithoutUserInput | Prisma.ChatLogUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: Prisma.ChatLogScalarWhereInput | Prisma.ChatLogScalarWhereInput[];
 };
+export type ChatLogCreateWithoutSessionInput = {
+    question: string;
+    answer: string;
+    sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    similarity?: number | null;
+    createdAt?: Date | string;
+    user?: Prisma.UserCreateNestedOneWithoutChatLogsInput;
+};
+export type ChatLogUncheckedCreateWithoutSessionInput = {
+    id?: number;
+    question: string;
+    answer: string;
+    sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    similarity?: number | null;
+    createdAt?: Date | string;
+    userId?: number | null;
+};
+export type ChatLogCreateOrConnectWithoutSessionInput = {
+    where: Prisma.ChatLogWhereUniqueInput;
+    create: Prisma.XOR<Prisma.ChatLogCreateWithoutSessionInput, Prisma.ChatLogUncheckedCreateWithoutSessionInput>;
+};
+export type ChatLogCreateManySessionInputEnvelope = {
+    data: Prisma.ChatLogCreateManySessionInput | Prisma.ChatLogCreateManySessionInput[];
+    skipDuplicates?: boolean;
+};
+export type ChatLogUpsertWithWhereUniqueWithoutSessionInput = {
+    where: Prisma.ChatLogWhereUniqueInput;
+    update: Prisma.XOR<Prisma.ChatLogUpdateWithoutSessionInput, Prisma.ChatLogUncheckedUpdateWithoutSessionInput>;
+    create: Prisma.XOR<Prisma.ChatLogCreateWithoutSessionInput, Prisma.ChatLogUncheckedCreateWithoutSessionInput>;
+};
+export type ChatLogUpdateWithWhereUniqueWithoutSessionInput = {
+    where: Prisma.ChatLogWhereUniqueInput;
+    data: Prisma.XOR<Prisma.ChatLogUpdateWithoutSessionInput, Prisma.ChatLogUncheckedUpdateWithoutSessionInput>;
+};
+export type ChatLogUpdateManyWithWhereWithoutSessionInput = {
+    where: Prisma.ChatLogScalarWhereInput;
+    data: Prisma.XOR<Prisma.ChatLogUpdateManyMutationInput, Prisma.ChatLogUncheckedUpdateManyWithoutSessionInput>;
+};
+export type ChatLogScalarWhereInput = {
+    AND?: Prisma.ChatLogScalarWhereInput | Prisma.ChatLogScalarWhereInput[];
+    OR?: Prisma.ChatLogScalarWhereInput[];
+    NOT?: Prisma.ChatLogScalarWhereInput | Prisma.ChatLogScalarWhereInput[];
+    id?: Prisma.IntFilter<"ChatLog"> | number;
+    question?: Prisma.StringFilter<"ChatLog"> | string;
+    answer?: Prisma.StringFilter<"ChatLog"> | string;
+    sources?: Prisma.JsonFilter<"ChatLog">;
+    similarity?: Prisma.FloatNullableFilter<"ChatLog"> | number | null;
+    createdAt?: Prisma.DateTimeFilter<"ChatLog"> | Date | string;
+    userId?: Prisma.IntNullableFilter<"ChatLog"> | number | null;
+    sessionId?: Prisma.StringNullableFilter<"ChatLog"> | string | null;
+};
 export type ChatLogCreateWithoutUserInput = {
     question: string;
     answer: string;
     sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     similarity?: number | null;
     createdAt?: Date | string;
+    session?: Prisma.ChatSessionCreateNestedOneWithoutChatLogsInput;
 };
 export type ChatLogUncheckedCreateWithoutUserInput = {
     id?: number;
@@ -355,6 +472,7 @@ export type ChatLogUncheckedCreateWithoutUserInput = {
     sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     similarity?: number | null;
     createdAt?: Date | string;
+    sessionId?: string | null;
 };
 export type ChatLogCreateOrConnectWithoutUserInput = {
     where: Prisma.ChatLogWhereUniqueInput;
@@ -377,17 +495,40 @@ export type ChatLogUpdateManyWithWhereWithoutUserInput = {
     where: Prisma.ChatLogScalarWhereInput;
     data: Prisma.XOR<Prisma.ChatLogUpdateManyMutationInput, Prisma.ChatLogUncheckedUpdateManyWithoutUserInput>;
 };
-export type ChatLogScalarWhereInput = {
-    AND?: Prisma.ChatLogScalarWhereInput | Prisma.ChatLogScalarWhereInput[];
-    OR?: Prisma.ChatLogScalarWhereInput[];
-    NOT?: Prisma.ChatLogScalarWhereInput | Prisma.ChatLogScalarWhereInput[];
-    id?: Prisma.IntFilter<"ChatLog"> | number;
-    question?: Prisma.StringFilter<"ChatLog"> | string;
-    answer?: Prisma.StringFilter<"ChatLog"> | string;
-    sources?: Prisma.JsonFilter<"ChatLog">;
-    similarity?: Prisma.FloatNullableFilter<"ChatLog"> | number | null;
-    createdAt?: Prisma.DateTimeFilter<"ChatLog"> | Date | string;
-    userId?: Prisma.IntNullableFilter<"ChatLog"> | number | null;
+export type ChatLogCreateManySessionInput = {
+    id?: number;
+    question: string;
+    answer: string;
+    sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    similarity?: number | null;
+    createdAt?: Date | string;
+    userId?: number | null;
+};
+export type ChatLogUpdateWithoutSessionInput = {
+    question?: Prisma.StringFieldUpdateOperationsInput | string;
+    answer?: Prisma.StringFieldUpdateOperationsInput | string;
+    sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: Prisma.UserUpdateOneWithoutChatLogsNestedInput;
+};
+export type ChatLogUncheckedUpdateWithoutSessionInput = {
+    id?: Prisma.IntFieldUpdateOperationsInput | number;
+    question?: Prisma.StringFieldUpdateOperationsInput | string;
+    answer?: Prisma.StringFieldUpdateOperationsInput | string;
+    sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+};
+export type ChatLogUncheckedUpdateManyWithoutSessionInput = {
+    id?: Prisma.IntFieldUpdateOperationsInput | number;
+    question?: Prisma.StringFieldUpdateOperationsInput | string;
+    answer?: Prisma.StringFieldUpdateOperationsInput | string;
+    sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 };
 export type ChatLogCreateManyUserInput = {
     id?: number;
@@ -396,6 +537,7 @@ export type ChatLogCreateManyUserInput = {
     sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     similarity?: number | null;
     createdAt?: Date | string;
+    sessionId?: string | null;
 };
 export type ChatLogUpdateWithoutUserInput = {
     question?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -403,6 +545,7 @@ export type ChatLogUpdateWithoutUserInput = {
     sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    session?: Prisma.ChatSessionUpdateOneWithoutChatLogsNestedInput;
 };
 export type ChatLogUncheckedUpdateWithoutUserInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -411,6 +554,7 @@ export type ChatLogUncheckedUpdateWithoutUserInput = {
     sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 export type ChatLogUncheckedUpdateManyWithoutUserInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -419,6 +563,7 @@ export type ChatLogUncheckedUpdateManyWithoutUserInput = {
     sources?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
     similarity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 export type ChatLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -428,7 +573,9 @@ export type ChatLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     similarity?: boolean;
     createdAt?: boolean;
     userId?: boolean;
+    sessionId?: boolean;
     user?: boolean | Prisma.ChatLog$userArgs<ExtArgs>;
+    session?: boolean | Prisma.ChatLog$sessionArgs<ExtArgs>;
 }, ExtArgs["result"]["chatLog"]>;
 export type ChatLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -438,7 +585,9 @@ export type ChatLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
     similarity?: boolean;
     createdAt?: boolean;
     userId?: boolean;
+    sessionId?: boolean;
     user?: boolean | Prisma.ChatLog$userArgs<ExtArgs>;
+    session?: boolean | Prisma.ChatLog$sessionArgs<ExtArgs>;
 }, ExtArgs["result"]["chatLog"]>;
 export type ChatLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -448,7 +597,9 @@ export type ChatLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
     similarity?: boolean;
     createdAt?: boolean;
     userId?: boolean;
+    sessionId?: boolean;
     user?: boolean | Prisma.ChatLog$userArgs<ExtArgs>;
+    session?: boolean | Prisma.ChatLog$sessionArgs<ExtArgs>;
 }, ExtArgs["result"]["chatLog"]>;
 export type ChatLogSelectScalar = {
     id?: boolean;
@@ -458,21 +609,26 @@ export type ChatLogSelectScalar = {
     similarity?: boolean;
     createdAt?: boolean;
     userId?: boolean;
+    sessionId?: boolean;
 };
-export type ChatLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "question" | "answer" | "sources" | "similarity" | "createdAt" | "userId", ExtArgs["result"]["chatLog"]>;
+export type ChatLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "question" | "answer" | "sources" | "similarity" | "createdAt" | "userId" | "sessionId", ExtArgs["result"]["chatLog"]>;
 export type ChatLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     user?: boolean | Prisma.ChatLog$userArgs<ExtArgs>;
+    session?: boolean | Prisma.ChatLog$sessionArgs<ExtArgs>;
 };
 export type ChatLogIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     user?: boolean | Prisma.ChatLog$userArgs<ExtArgs>;
+    session?: boolean | Prisma.ChatLog$sessionArgs<ExtArgs>;
 };
 export type ChatLogIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     user?: boolean | Prisma.ChatLog$userArgs<ExtArgs>;
+    session?: boolean | Prisma.ChatLog$sessionArgs<ExtArgs>;
 };
 export type $ChatLogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     name: "ChatLog";
     objects: {
         user: Prisma.$UserPayload<ExtArgs> | null;
+        session: Prisma.$ChatSessionPayload<ExtArgs> | null;
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: number;
@@ -482,6 +638,7 @@ export type $ChatLogPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
         similarity: number | null;
         createdAt: Date;
         userId: number | null;
+        sessionId: string | null;
     }, ExtArgs["result"]["chatLog"]>;
     composites: {};
 };
@@ -535,6 +692,7 @@ export interface ChatLogDelegate<ExtArgs extends runtime.Types.Extensions.Intern
 export interface Prisma__ChatLogClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     user<T extends Prisma.ChatLog$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChatLog$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    session<T extends Prisma.ChatLog$sessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChatLog$sessionArgs<ExtArgs>>): Prisma.Prisma__ChatSessionClient<runtime.Types.Result.GetResult<Prisma.$ChatSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
@@ -547,6 +705,7 @@ export interface ChatLogFieldRefs {
     readonly similarity: Prisma.FieldRef<"ChatLog", 'Float'>;
     readonly createdAt: Prisma.FieldRef<"ChatLog", 'DateTime'>;
     readonly userId: Prisma.FieldRef<"ChatLog", 'Int'>;
+    readonly sessionId: Prisma.FieldRef<"ChatLog", 'String'>;
 }
 export type ChatLogFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.ChatLogSelect<ExtArgs> | null;
@@ -653,6 +812,12 @@ export type ChatLog$userArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
     omit?: Prisma.UserOmit<ExtArgs> | null;
     include?: Prisma.UserInclude<ExtArgs> | null;
     where?: Prisma.UserWhereInput;
+};
+export type ChatLog$sessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.ChatSessionSelect<ExtArgs> | null;
+    omit?: Prisma.ChatSessionOmit<ExtArgs> | null;
+    include?: Prisma.ChatSessionInclude<ExtArgs> | null;
+    where?: Prisma.ChatSessionWhereInput;
 };
 export type ChatLogDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.ChatLogSelect<ExtArgs> | null;

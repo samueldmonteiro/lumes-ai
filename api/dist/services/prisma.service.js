@@ -17,6 +17,7 @@ const adapter_pg_1 = require("@prisma/adapter-pg");
 const client_1 = require("../generated/prisma/client");
 let PrismaService = PrismaService_1 = class PrismaService extends client_1.PrismaClient {
     logger = new common_1.Logger(PrismaService_1.name);
+    schema;
     constructor() {
         const connectionString = process.env.DATABASE_URL;
         if (!connectionString) {
@@ -27,8 +28,9 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
         const adapter = new adapter_pg_1.PrismaPg({ connectionString: connectionString || '' }, { schema: schema });
         super({
             adapter,
-            log: process.env.NODE_ENV == 'development' ? ['query'] : undefined,
+            log: process.env.NODE_ENV == 'development' ? ['error'] : undefined,
         });
+        this.schema = schema;
     }
     async onModuleInit() {
         await this.$connect();

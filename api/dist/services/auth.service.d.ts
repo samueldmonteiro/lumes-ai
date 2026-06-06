@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from "./prisma.service";
+import { PrismaUserRepository } from "../repositories/prisma/prisma-user.repository";
 import { RegisterDto, LoginDto } from "../http/dtos";
 import { UserRole } from "../generated/prisma/client";
 export interface JwtPayload {
@@ -8,14 +8,14 @@ export interface JwtPayload {
     role: UserRole;
 }
 export declare class AuthService {
-    private readonly prisma;
+    private readonly userRepo;
     private readonly jwtService;
     private readonly logger;
-    constructor(prisma: PrismaService, jwtService: JwtService);
+    constructor(userRepo: PrismaUserRepository, jwtService: JwtService);
     register(dto: RegisterDto): Promise<{
         user: {
-            id: number;
             name: string;
+            id: number;
             email: string;
             role: UserRole;
         };

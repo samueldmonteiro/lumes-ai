@@ -12,8 +12,7 @@ datasource db {
 model KnowledgeChunk {
   id        Int                         @id @default(autoincrement())
   content   String // texto original do chunk
-  embedding Unsupported("vector(768)")? // vetor gerado pelo nomic-embed-text
-  category  String // 'biblioteca', 'contatos', 'cursos', 'servicos', etc.
+  embedding Unsupported("vector(3072)")? // vetor gerado pelo gemini-embedding-2
   source    String // nome do arquivo ou origem
   metadata  Json                        @default("{}")
   createdAt DateTime                    @default(now())
@@ -24,27 +23,42 @@ model KnowledgeChunk {
 
 // Log de perguntas e respostas (útil para melhorar o sistema)
 model ChatLog {
-  id         Int      @id @default(autoincrement())
+  id         Int          @id @default(autoincrement())
   question   String
   answer     String
-  sources    Json     @default("[]") // quais chunks foram usados
+  sources    Json         @default("[]") // quais chunks foram usados
   similarity Float? // similaridade média dos chunks encontrados
-  createdAt  DateTime @default(now())
+  createdAt  DateTime     @default(now())
   userId     Int?
-  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  sessionId  String?
+  session    ChatSession? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@map("chat_logs")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String
-  role      UserRole @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model ChatSession {
+  id        String    @id @default(uuid())
+  title     String    // Ex: "Dúvida sobre horário"
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   chatLogs  ChatLog[]
+
+  @@map("chat_sessions")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  name         String
+  role         UserRole      @default(USER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  chatLogs     ChatLog[]
+  chatSessions ChatSession[]
 
   @@map("users")
 }

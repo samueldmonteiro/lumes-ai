@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   KnowledgeChunk: 'KnowledgeChunk',
   ChatLog: 'ChatLog',
+  ChatSession: 'ChatSession',
   User: 'User'
 } as const
 
@@ -75,7 +76,6 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const KnowledgeChunkScalarFieldEnum = {
   id: 'id',
   content: 'content',
-  category: 'category',
   source: 'source',
   metadata: 'metadata',
   createdAt: 'createdAt',
@@ -92,10 +92,22 @@ export const ChatLogScalarFieldEnum = {
   sources: 'sources',
   similarity: 'similarity',
   createdAt: 'createdAt',
-  userId: 'userId'
+  userId: 'userId',
+  sessionId: 'sessionId'
 } as const
 
 export type ChatLogScalarFieldEnum = (typeof ChatLogScalarFieldEnum)[keyof typeof ChatLogScalarFieldEnum]
+
+
+export const ChatSessionScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatSessionScalarFieldEnum = (typeof ChatSessionScalarFieldEnum)[keyof typeof ChatSessionScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
