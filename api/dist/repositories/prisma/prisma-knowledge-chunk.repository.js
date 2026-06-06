@@ -53,7 +53,6 @@ let PrismaKnowledgeChunkRepository = class PrismaKnowledgeChunkRepository {
         SELECT
           id,
           content,
-          category,
           source,
           1 - (embedding <=> ${vectorLiteral}) AS similarity
         FROM ${table}

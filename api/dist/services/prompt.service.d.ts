@@ -6,4 +6,6 @@ export interface ChatMessage {
 export declare class PromptService {
     buildCondensationPrompt(history: ChatMessage[], newQuestion: string): string;
     build(question: string, chunks: SearchResult[], history?: ChatMessage[]): string;
+    buildIntentClassificationPrompt(question: string): string;
+    buildCasualPrompt(question: string, history?: ChatMessage[]): string;
 }

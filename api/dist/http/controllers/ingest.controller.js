@@ -53,7 +53,9 @@ let IngestController = class IngestController extends base_controller_1.BaseCont
 exports.IngestController = IngestController;
 __decorate([
     (0, common_1.Post)('text'),
-    (0, swagger_1.ApiOperation)({ summary: 'Ingere um texto bruto, transformando-o em chunks vetorizados' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Ingere um texto bruto, transformando-o em chunks vetorizados',
+    }),
     (0, swagger_1.ApiCreatedResponse)({
         description: 'Texto ingerido com sucesso',
         schema: {
@@ -81,7 +83,9 @@ __decorate([
 ], IngestController.prototype, "ingestText", null);
 __decorate([
     (0, common_1.Post)('pdf'),
-    (0, swagger_1.ApiOperation)({ summary: 'Ingere um arquivo PDF, extraindo texto e gerando chunks vetorizados' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Ingere um arquivo PDF, extraindo texto e gerando chunks vetorizados',
+    }),
     (0, swagger_1.ApiCreatedResponse)({
         description: 'PDF ingerido com sucesso',
         schema: {
@@ -130,7 +134,9 @@ __decorate([
 ], IngestController.prototype, "ingestPDF", null);
 __decorate([
     (0, common_1.Post)('json'),
-    (0, swagger_1.ApiOperation)({ summary: 'Ingere um objeto JSON, achatando-o em texto e gerando chunks vetorizados' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Ingere um objeto JSON, achatando-o em texto e gerando chunks vetorizados',
+    }),
     (0, swagger_1.ApiCreatedResponse)({
         description: 'JSON ingerido com sucesso',
         schema: {

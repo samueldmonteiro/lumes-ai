@@ -46,7 +46,9 @@ export class IngestController extends BaseController {
   }
 
   @Post('text')
-  @ApiOperation({ summary: 'Ingere um texto bruto, transformando-o em chunks vetorizados' })
+  @ApiOperation({
+    summary: 'Ingere um texto bruto, transformando-o em chunks vetorizados',
+  })
   @ApiCreatedResponse({
     description: 'Texto ingerido com sucesso',
     schema: {
@@ -76,7 +78,10 @@ export class IngestController extends BaseController {
   }
 
   @Post('pdf')
-  @ApiOperation({ summary: 'Ingere um arquivo PDF, extraindo texto e gerando chunks vetorizados' })
+  @ApiOperation({
+    summary:
+      'Ingere um arquivo PDF, extraindo texto e gerando chunks vetorizados',
+  })
   @ApiCreatedResponse({
     description: 'PDF ingerido com sucesso',
     schema: {
@@ -130,15 +135,15 @@ export class IngestController extends BaseController {
       );
     }
     const finalSource = source ?? `pdf-${randomUUID()}`;
-    const result = await this.ingestService.ingestPDF(
-      file.buffer,
-      finalSource,
-    );
+    const result = await this.ingestService.ingestPDF(file.buffer, finalSource);
     return this.created(result, 'PDF ingerido com sucesso!');
   }
 
   @Post('json')
-  @ApiOperation({ summary: 'Ingere um objeto JSON, achatando-o em texto e gerando chunks vetorizados' })
+  @ApiOperation({
+    summary:
+      'Ingere um objeto JSON, achatando-o em texto e gerando chunks vetorizados',
+  })
   @ApiCreatedResponse({
     description: 'JSON ingerido com sucesso',
     schema: {

@@ -28,5 +28,5 @@ export declare class PrismaChatLogRepository {
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
-    findMany(userId: number | null, limit: number): Promise<ChatLogEntry[]>;
+    findMany(userId: number, limit: number): Promise<ChatLogEntry[]>;
 }

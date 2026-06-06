@@ -8,7 +8,7 @@ export class RegisterDto {
   })
   @IsEmail({}, { message: 'O e-mail informado deve ser válido' })
   @IsNotEmpty({ message: 'O e-mail não pode estar vazio' })
-    email!: string;
+  email!: string;
 
   @ApiProperty({
     description: 'Senha de acesso',
@@ -18,7 +18,7 @@ export class RegisterDto {
   @IsString({ message: 'A senha deve ser um texto válido' })
   @IsNotEmpty({ message: 'A senha não pode estar vazia' })
   @MinLength(6, { message: 'A senha deve ter no mínimo 6 caracteres' })
-    password!: string;
+  password!: string;
 
   @ApiProperty({
     description: 'Nome completo do usuário',
@@ -26,5 +26,5 @@ export class RegisterDto {
   })
   @IsString({ message: 'O nome deve ser um texto válido' })
   @IsNotEmpty({ message: 'O nome não pode estar vazio' })
-    name!: string;
+  name!: string;
 }

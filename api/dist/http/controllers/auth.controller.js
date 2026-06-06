@@ -20,6 +20,7 @@ const base_controller_1 = require("./base.controller");
 const dtos_1 = require("../dtos");
 const jwt_auth_guard_1 = require("../guards/jwt-auth.guard");
 const current_user_decorator_1 = require("../decorators/current-user.decorator");
+const auth_dto_1 = require("../dtos/auth.dto");
 let AuthController = class AuthController extends base_controller_1.BaseController {
     authService;
     constructor(authService) {
@@ -42,6 +43,18 @@ exports.AuthController = AuthController;
 __decorate([
     (0, common_1.Post)('register'),
     (0, swagger_1.ApiOperation)({ summary: 'Registra um novo usuário' }),
+    (0, swagger_1.ApiCreatedResponse)({
+        description: 'Usuário registrado com sucesso. Retorna os dados do usuário e o token JWT.',
+        type: dtos_1.RegisterResponseDto,
+    }),
+    (0, swagger_1.ApiBadRequestResponse)({
+        description: 'Erros de validação nos dados enviados (e-mail inválido, senha muito curta, etc.).',
+        type: dtos_1.BadRequestResponseDto,
+    }),
+    (0, swagger_1.ApiConflictResponse)({
+        description: 'E-mail já cadastrado no sistema.',
+        type: auth_dto_1.ConflictResponseDto,
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [dtos_1.RegisterDto]),
@@ -51,6 +64,18 @@ __decorate([
     (0, common_1.Post)('login'),
     (0, common_1.HttpCode)(200),
     (0, swagger_1.ApiOperation)({ summary: 'Autentica um usuário e gera o token JWT' }),
+    (0, swagger_1.ApiOkResponse)({
+        description: 'Autenticação realizada com sucesso. Retorna o token JWT e os dados do usuário.',
+        type: dtos_1.LoginResponseDto,
+    }),
+    (0, swagger_1.ApiBadRequestResponse)({
+        description: 'Erros de validação nos dados enviados.',
+        type: dtos_1.BadRequestResponseDto,
+    }),
+    (0, swagger_1.ApiUnauthorizedResponse)({
+        description: 'E-mail ou senha inválidos.',
+        type: dtos_1.UnauthorizedResponseDto,
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [dtos_1.LoginDto]),
@@ -61,6 +86,14 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Retorna o perfil do usuário logado' }),
+    (0, swagger_1.ApiOkResponse)({
+        description: 'Perfil do usuário recuperado com sucesso.',
+        type: dtos_1.MeResponseDto,
+    }),
+    (0, swagger_1.ApiUnauthorizedResponse)({
+        description: 'Token JWT ausente ou inválido.',
+        type: dtos_1.UnauthorizedResponseDto,
+    }),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

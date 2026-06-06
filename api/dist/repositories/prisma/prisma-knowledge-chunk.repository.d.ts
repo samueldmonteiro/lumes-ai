@@ -2,7 +2,6 @@ import { PrismaService } from "../../services/prisma.service";
 export interface SearchResult {
     id: number;
     content: string;
-    category: string;
     source: string;
     similarity: number;
 }

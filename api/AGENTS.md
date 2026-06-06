@@ -10,6 +10,7 @@ API para um chatbot de IA com RAG (Retrieval-Augmented Generation), utilizando *
 
 - **Framework**: NestJS 11 + Express 5
 - **Linguagem**: TypeScript 5.9 (strict), target ES2023
+- **Node**: NodeJS v24.15.0
 - **ORM**: Prisma 7 (PostgreSQL + extensão pgvector)
 - **Validação**: `class-validator` + `class-transformer` (ativados via `ValidationPipe` global)
 - **Documentação de API**: Swagger (`@nestjs/swagger`) disponível na rota `/api`

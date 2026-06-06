@@ -24,9 +24,9 @@ export class PrismaChatLogRepository {
     return this.prisma.chatLog.create({ data });
   }
 
-  findMany(userId: number | null, limit: number): Promise<ChatLogEntry[]> {
+  findMany(userId: number, limit: number): Promise<ChatLogEntry[]> {
     return this.prisma.chatLog.findMany({
-      where: userId ? { userId } : { userId: null },
+      where: { userId },
       orderBy: { createdAt: 'desc' },
       take: limit,
       select: {

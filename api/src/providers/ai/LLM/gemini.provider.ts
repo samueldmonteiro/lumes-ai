@@ -20,9 +20,8 @@ export class GeminiProvider implements OnModuleInit, LLMProvider {
   }
 
   async onModuleInit(): Promise<void> {
-     
     const { GoogleGenAI } = await import('@google/genai');
-     
+
     this.ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
   }
 
@@ -36,7 +35,6 @@ export class GeminiProvider implements OnModuleInit, LLMProvider {
       }),
     });
 
-     
     return (response?.text as string) ?? '';
   }
 }

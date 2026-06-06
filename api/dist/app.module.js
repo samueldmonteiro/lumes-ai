@@ -24,6 +24,8 @@ const gemini_embedding_provider_1 = require("./providers/ai/embedding/gemini-emb
 const llm_provider_1 = require("./providers/ai/LLM/llm.provider");
 const auth_service_1 = require("./services/auth.service");
 const auth_controller_1 = require("./http/controllers/auth.controller");
+const user_service_1 = require("./services/user.service");
+const user_controller_1 = require("./http/controllers/user.controller");
 const prisma_user_repository_1 = require("./repositories/prisma/prisma-user.repository");
 const prisma_chat_log_repository_1 = require("./repositories/prisma/prisma-chat-log.repository");
 const prisma_knowledge_chunk_repository_1 = require("./repositories/prisma/prisma-knowledge-chunk.repository");
@@ -45,6 +47,7 @@ exports.AppModule = AppModule = __decorate([
             ingest_controller_1.IngestController,
             chat_controller_1.ChatController,
             auth_controller_1.AuthController,
+            user_controller_1.UserController,
         ],
         providers: [
             prisma_service_1.PrismaService,
@@ -58,6 +61,7 @@ exports.AppModule = AppModule = __decorate([
             prompt_service_1.PromptService,
             chat_service_1.ChatService,
             auth_service_1.AuthService,
+            user_service_1.UserService,
             gemini_provider_1.GeminiProvider,
             {
                 provide: llm_provider_1.LLMProvider,

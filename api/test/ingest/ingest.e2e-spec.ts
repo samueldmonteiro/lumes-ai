@@ -160,7 +160,9 @@ describe('IngestController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/ingests/text')
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({ text: 'Texto sem source explícita para testar UUID automático.' })
+        .send({
+          text: 'Texto sem source explícita para testar UUID automático.',
+        })
         .expect(201);
 
       expect(response.body.data.source).toMatch(/^manual-/);

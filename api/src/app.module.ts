@@ -15,6 +15,8 @@ import { GeminiEmbeddingProvider } from './providers/ai/embedding/gemini-embeddi
 import { LLMProvider } from './providers/ai/LLM/llm.provider';
 import { AuthService } from './services/auth.service';
 import { AuthController } from './http/controllers/auth.controller';
+import { UserService } from './services/user.service';
+import { UserController } from './http/controllers/user.controller';
 import { PrismaUserRepository } from './repositories/prisma/prisma-user.repository';
 import { PrismaChatLogRepository } from './repositories/prisma/prisma-chat-log.repository';
 import { PrismaKnowledgeChunkRepository } from './repositories/prisma/prisma-knowledge-chunk.repository';
@@ -34,6 +36,7 @@ import { PrismaChatSessionRepository } from './repositories/prisma/prisma-chat-s
     IngestController,
     ChatController,
     AuthController,
+    UserController,
   ],
   providers: [
     PrismaService,
@@ -47,6 +50,7 @@ import { PrismaChatSessionRepository } from './repositories/prisma/prisma-chat-s
     PromptService,
     ChatService,
     AuthService,
+    UserService,
     GeminiProvider,
     {
       provide: LLMProvider,

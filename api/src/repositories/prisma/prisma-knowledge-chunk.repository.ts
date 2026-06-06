@@ -5,7 +5,6 @@ import { PrismaService } from '@/services/prisma.service';
 export interface SearchResult {
   id: number;
   content: string;
-  category: string;
   source: string;
   similarity: number;
 }
@@ -70,7 +69,6 @@ export class PrismaKnowledgeChunkRepository {
         SELECT
           id,
           content,
-          category,
           source,
           1 - (embedding <=> ${vectorLiteral}) AS similarity
         FROM ${table}

@@ -6,7 +6,15 @@
  * substituído por um mock para não depender do Ollama/Gemini em CI.
  */
 import { Test, TestingModule } from '@nestjs/testing';
-import { describe, beforeAll, afterAll, beforeEach, it, expect, vi } from 'vitest';
+import {
+  describe,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  it,
+  expect,
+  vi,
+} from 'vitest';
 import { IngestService } from '@/services/ingest.service';
 import { ChunkerService } from '@/services/chunker.service';
 import { PrismaService } from '@/services/prisma.service';
@@ -108,11 +116,15 @@ describe('IngestService (integration)', () => {
         'Conteúdo original da base de conhecimento para teste de deduplicação.';
 
       await ingestService.ingestText(text, source);
-      const firstCount = await prisma.knowledgeChunk.count({ where: { source } });
+      const firstCount = await prisma.knowledgeChunk.count({
+        where: { source },
+      });
 
       // Segunda ingestão com mesmo source deve deletar e recriar
       await ingestService.ingestText(text, source);
-      const secondCount = await prisma.knowledgeChunk.count({ where: { source } });
+      const secondCount = await prisma.knowledgeChunk.count({
+        where: { source },
+      });
 
       expect(secondCount).toBe(firstCount);
     });
@@ -151,14 +163,24 @@ describe('IngestService (integration)', () => {
     });
 
     it('deve persistir chunks independentes por source diferente', async () => {
-      const dataA = { produto: 'A', descricao: 'Produto A com detalhes suficientes para chunking.' };
-      const dataB = { produto: 'B', descricao: 'Produto B com detalhes suficientes para chunking.' };
+      const dataA = {
+        produto: 'A',
+        descricao: 'Produto A com detalhes suficientes para chunking.',
+      };
+      const dataB = {
+        produto: 'B',
+        descricao: 'Produto B com detalhes suficientes para chunking.',
+      };
 
       await ingestService.ingestJSON(dataA, 'source-a');
       await ingestService.ingestJSON(dataB, 'source-b');
 
-      const countA = await prisma.knowledgeChunk.count({ where: { source: 'source-a' } });
-      const countB = await prisma.knowledgeChunk.count({ where: { source: 'source-b' } });
+      const countA = await prisma.knowledgeChunk.count({
+        where: { source: 'source-a' },
+      });
+      const countB = await prisma.knowledgeChunk.count({
+        where: { source: 'source-b' },
+      });
 
       expect(countA).toBeGreaterThan(0);
       expect(countB).toBeGreaterThan(0);

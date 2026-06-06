@@ -7,7 +7,6 @@ import { JwtPayload } from "../types/user.type";
 export interface ChatResponse {
     answer: string;
     sources: {
-        category: string;
         source: string;
         similarity: number;
     }[];
@@ -21,10 +20,9 @@ export declare class ChatService {
     private aiProvider;
     private chatLogRepo;
     private chatSessionRepo;
-    private readonly logger;
     constructor(search: SearchService, prompt: PromptService, aiProvider: LLMProvider, chatLogRepo: PrismaChatLogRepository, chatSessionRepo: PrismaChatSessionRepository);
     ask(question: string, user?: JwtPayload | null, sessionId?: string, payloadHistory?: ChatMessage[]): Promise<ChatResponse>;
-    getHistory(limit?: number, user?: JwtPayload | null): Promise<import("../repositories/prisma/prisma-chat-log.repository").ChatLogEntry[]>;
+    getHistory(limit: number | undefined, user: JwtPayload): Promise<import("../repositories/prisma/prisma-chat-log.repository").ChatLogEntry[]>;
     getSessions(userId: number, limit?: number): Promise<{
         id: string;
         createdAt: Date;

@@ -22,7 +22,7 @@ let PrismaChatLogRepository = class PrismaChatLogRepository {
     }
     findMany(userId, limit) {
         return this.prisma.chatLog.findMany({
-            where: userId ? { userId } : { userId: null },
+            where: { userId },
             orderBy: { createdAt: 'desc' },
             take: limit,
             select: {

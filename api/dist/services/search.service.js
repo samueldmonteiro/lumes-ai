@@ -8,17 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var SearchService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SearchService = void 0;
 require("dotenv/config");
 const common_1 = require("@nestjs/common");
 const prisma_knowledge_chunk_repository_1 = require("../repositories/prisma/prisma-knowledge-chunk.repository");
 const embedding_provider_1 = require("../providers/ai/embedding/embedding.provider");
-let SearchService = SearchService_1 = class SearchService {
+let SearchService = class SearchService {
     embeddingProvider;
     knowledgeChunkRepo;
-    logger = new common_1.Logger(SearchService_1.name);
     topK;
     minSimilarity;
     constructor(embeddingProvider, knowledgeChunkRepo) {
@@ -31,18 +29,12 @@ let SearchService = SearchService_1 = class SearchService {
         const embedding = await this.embeddingProvider.generateEmbedding(question);
         const vector = this.embeddingProvider.formatVectorForPg(embedding);
         const limit = topK ?? this.topK;
-        const debugRows = await this.knowledgeChunkRepo.getTopKSimilarities(vector, 5);
-        this.logger.debug(`📊 Top-5 similaridades brutas para "${question}":\n` +
-            debugRows
-                .map((r) => `  [${r.id}] ${r.source} → ${Number(r.similarity).toFixed(4)}`)
-                .join('\n'));
         const rows = await this.knowledgeChunkRepo.findSimilarChunks(vector, limit, this.minSimilarity);
-        this.logger.log(`🔍 "${question}" → ${rows.length} chunks encontrados (threshold: ${this.minSimilarity})`);
         return rows;
     }
 };
 exports.SearchService = SearchService;
-exports.SearchService = SearchService = SearchService_1 = __decorate([
+exports.SearchService = SearchService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [embedding_provider_1.EmbeddingProvider,
         prisma_knowledge_chunk_repository_1.PrismaKnowledgeChunkRepository])

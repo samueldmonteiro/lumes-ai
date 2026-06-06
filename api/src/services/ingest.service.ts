@@ -1,6 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ChunkerService } from './chunker.service';
-import { extractFromPDF, extractFromText, extractFromJSON } from '@/utils/extractors';
+import {
+  extractFromPDF,
+  extractFromText,
+  extractFromJSON,
+} from '@/utils/extractors';
 import { PrismaKnowledgeChunkRepository } from '@/repositories/prisma/prisma-knowledge-chunk.repository';
 import { EmbeddingProvider } from '@/providers/ai/embedding/embedding.provider';
 
@@ -19,7 +23,7 @@ export class IngestService {
     private readonly chunker: ChunkerService,
     private readonly embeddingProvider: EmbeddingProvider,
     private readonly knowledgeChunkRepo: PrismaKnowledgeChunkRepository,
-  ) { }
+  ) {}
 
   async ingestText(raw: string, source: string): Promise<IngestResult> {
     this.logger.log(`📝 Ingerindo texto: ${source}`);
@@ -58,7 +62,6 @@ export class IngestService {
 
     for (const chunk of chunks) {
       // O embedding é gerado a partir do conteúdo puro do chunk.
-      // IMPORTANTE: NÃO adicionar prefixos ("Documento:", "Categoria:") aqui,
       // pois a busca vetorial embeda apenas a pergunta do usuário.
       // Assimetria entre o texto da ingestão e o da busca derruba a similaridade cosseno.
       const embedding = await this.embeddingProvider.generateEmbedding(
