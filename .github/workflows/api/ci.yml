@@ -10,6 +10,9 @@ jobs:
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
 
     services:
       postgres:
@@ -40,6 +43,7 @@ jobs:
         with:
           node-version: 24
           cache: 'pnpm'
+          cache-dependency-path: api/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
