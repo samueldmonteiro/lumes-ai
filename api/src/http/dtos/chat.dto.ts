@@ -12,12 +12,12 @@ import { ApiProperty } from '@nestjs/swagger';
 export class ChatMessageDto {
   @ApiProperty({ example: 'user', enum: ['user', 'model'] })
   @IsString({ message: 'O papel deve ser um texto válido' })
-  role!: 'user' | 'model';
+    role!: 'user' | 'model';
 
   @ApiProperty({ example: 'Qual é o horário da biblioteca?' })
   @IsString({ message: 'O conteúdo deve ser um texto válido' })
   @IsNotEmpty({ message: 'O conteúdo não pode estar vazio' })
-  content!: string;
+    content!: string;
 }
 
 export class ChatRequestDto {
@@ -28,7 +28,7 @@ export class ChatRequestDto {
   @IsString({ message: 'A pergunta deve ser um texto válido' })
   @IsNotEmpty({ message: 'A pergunta não pode estar vazia' })
   @MinLength(3, { message: 'A pergunta é muito curta' })
-  question!: string;
+    question!: string;
 
   @ApiProperty({
     description:
@@ -38,7 +38,7 @@ export class ChatRequestDto {
   })
   @IsOptional()
   @IsString({ message: 'O ID da sessão deve ser um texto válido' })
-  sessionId?: string;
+    sessionId?: string;
 
   @ApiProperty({
     description: 'Histórico da conversa atual (usado para usuários deslogados)',
@@ -49,7 +49,7 @@ export class ChatRequestDto {
   @IsArray({ message: 'O histórico deve ser uma lista de mensagens' })
   @ValidateNested({ each: true })
   @Type(() => ChatMessageDto)
-  history?: ChatMessageDto[];
+    history?: ChatMessageDto[];
 }
 
 export class ChatResponseDto {
@@ -58,7 +58,7 @@ export class ChatResponseDto {
     example:
       'Os cursos disponíveis incluem Engenharia de Software, Ciência da Computação e Sistemas de Informação.',
   })
-  answer!: string;
+    answer!: string;
 
   @ApiProperty({
     description: 'Lista de fontes/documentos de onde a informação foi extraída',
@@ -71,114 +71,114 @@ export class ChatResponseDto {
       },
     },
   })
-  sources!: { source: string; similarity: number }[];
+    sources!: { source: string; similarity: number }[];
 
   @ApiProperty({
     description: 'Média de similaridade cosseno dos trechos encontrados',
     example: 0.85,
   })
-  avgSimilarity!: number;
+    avgSimilarity!: number;
 
   @ApiProperty({
     description:
       'Quantidade de trechos (chunks) de informação utilizados no contexto',
     example: 2,
   })
-  chunksUsed!: number;
+    chunksUsed!: number;
 
   @ApiProperty({
     description: 'ID da sessão de chat associada (se aplicável)',
     example: '123e4567-e89b-12d3-a456-426614174000',
     required: false,
   })
-  sessionId?: string;
+    sessionId?: string;
 }
 
 export class AskResponseDto {
   @ApiProperty({ example: 200 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: true })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'Pergunta processada com sucesso' })
-  message!: string;
+    message!: string;
 
   @ApiProperty({ type: ChatResponseDto })
-  data!: ChatResponseDto;
+    data!: ChatResponseDto;
 }
 
 export class ChatLogEntryDto {
   @ApiProperty({ example: 1 })
-  id!: number;
+    id!: number;
 
   @ApiProperty({ example: 'Quais são os cursos?' })
-  question!: string;
+    question!: string;
 
   @ApiProperty({ example: 'Os cursos são...' })
-  answer!: string;
+    answer!: string;
 
   @ApiProperty({ example: 0.82, nullable: true })
-  similarity!: number | null;
+    similarity!: number | null;
 
   @ApiProperty({ example: '2026-06-06T18:04:18.000Z' })
-  createdAt!: Date;
+    createdAt!: Date;
 }
 
 export class ChatHistoryResponseDto {
   @ApiProperty({ example: 200 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: true })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'Histórico recuperado com sucesso' })
-  message!: string;
+    message!: string;
 
   @ApiProperty({ type: [ChatLogEntryDto] })
-  data!: ChatLogEntryDto[];
+    data!: ChatLogEntryDto[];
 }
 
 export class ChatSessionDto {
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
-  id!: string;
+    id!: string;
 
   @ApiProperty({ example: 'Dúvida sobre horário' })
-  title!: string;
+    title!: string;
 
   @ApiProperty({ example: 1 })
-  userId!: number;
+    userId!: number;
 
   @ApiProperty({ example: '2026-06-06T18:04:18.000Z' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @ApiProperty({ example: '2026-06-06T18:04:18.000Z' })
-  updatedAt!: Date;
+    updatedAt!: Date;
 }
 
 export class ChatSessionsResponseDto {
   @ApiProperty({ example: 200 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: true })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'Sessões recuperadas com sucesso' })
-  message!: string;
+    message!: string;
 
   @ApiProperty({ type: [ChatSessionDto] })
-  data!: ChatSessionDto[];
+    data!: ChatSessionDto[];
 }
 
 export class ChatLogDetailDto {
   @ApiProperty({ example: 1 })
-  id!: number;
+    id!: number;
 
   @ApiProperty({ example: 'Quais são os cursos?' })
-  question!: string;
+    question!: string;
 
   @ApiProperty({ example: 'Os cursos são...' })
-  answer!: string;
+    answer!: string;
 
   @ApiProperty({
     type: 'array',
@@ -190,101 +190,101 @@ export class ChatLogDetailDto {
       },
     },
   })
-  sources!: any;
+    sources!: any;
 
   @ApiProperty({ example: 0.82, nullable: true })
-  similarity!: number | null;
+    similarity!: number | null;
 
   @ApiProperty({ example: '2026-06-06T18:04:18.000Z' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @ApiProperty({ example: 1 })
-  userId!: number;
+    userId!: number;
 
   @ApiProperty({
     example: '123e4567-e89b-12d3-a456-426614174000',
     nullable: true,
   })
-  sessionId!: string | null;
+    sessionId!: string | null;
 }
 
 export class ChatSessionDetailsDto {
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
-  id!: string;
+    id!: string;
 
   @ApiProperty({ example: 'Dúvida sobre horário' })
-  title!: string;
+    title!: string;
 
   @ApiProperty({ example: 1 })
-  userId!: number;
+    userId!: number;
 
   @ApiProperty({ example: '2026-06-06T18:04:18.000Z' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @ApiProperty({ example: '2026-06-06T18:04:18.000Z' })
-  updatedAt!: Date;
+    updatedAt!: Date;
 
   @ApiProperty({ type: [ChatLogDetailDto] })
-  chatLogs!: ChatLogDetailDto[];
+    chatLogs!: ChatLogDetailDto[];
 }
 
 export class ChatSessionDetailsResponseDto {
   @ApiProperty({ example: 200 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: true })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'Detalhes da sessão recuperados com sucesso' })
-  message!: string;
+    message!: string;
 
   @ApiProperty({ type: ChatSessionDetailsDto })
-  data!: ChatSessionDetailsDto;
+    data!: ChatSessionDetailsDto;
 }
 
 export class DeleteSessionResponseDto {
   @ApiProperty({ example: 200 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: true })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'Sessão excluída com sucesso' })
-  message!: string;
+    message!: string;
 
   @ApiProperty({ type: () => Object, nullable: true, example: null })
-  data!: any;
+    data!: any;
 }
 
 export class BadRequestResponseDto {
   @ApiProperty({ example: 400 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: false })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'A pergunta deve ser um texto válido' })
-  message!: string;
+    message!: string;
 }
 
 export class UnauthorizedResponseDto {
   @ApiProperty({ example: 401 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: false })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'Unauthorized' })
-  message!: string;
+    message!: string;
 }
 
 export class NotFoundResponseDto {
   @ApiProperty({ example: 404 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: false })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'Sessão de chat não encontrada.' })
-  message!: string;
+    message!: string;
 }

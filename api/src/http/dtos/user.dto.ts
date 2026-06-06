@@ -16,7 +16,7 @@ export class UpdateProfileDto {
   })
   @IsOptional()
   @IsEmail({}, { message: 'O e-mail informado deve ser válido' })
-  email?: string;
+    email?: string;
 
   @ApiPropertyOptional({
     description: 'Novo nome completo do usuário',
@@ -25,7 +25,7 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsString({ message: 'O nome deve ser um texto válido' })
   @IsNotEmpty({ message: 'O nome não pode estar vazio' })
-  name?: string;
+    name?: string;
 
   @ApiPropertyOptional({
     description: 'Nova senha de acesso (mínimo 6 caracteres)',
@@ -35,54 +35,54 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsString({ message: 'A senha deve ser um texto válido' })
   @MinLength(6, { message: 'A senha deve ter no mínimo 6 caracteres' })
-  password?: string;
+    password?: string;
 }
 
 // ─── Response DTOs (Swagger) ──────────────────────────────────────────────────
 
 export class UpdatedUserDto {
   @ApiProperty({ example: 1, description: 'ID do usuário' })
-  id!: number;
+    id!: number;
 
   @ApiProperty({
     example: 'novo@example.com',
     description: 'E-mail do usuário',
   })
-  email!: string;
+    email!: string;
 
   @ApiProperty({ example: 'Maria Oliveira', description: 'Nome completo' })
-  name!: string;
+    name!: string;
 
   @ApiProperty({
     example: 'USER',
     enum: ['USER', 'ADMIN'],
     description: 'Papel do usuário',
   })
-  role!: string;
+    role!: string;
 
   @ApiProperty({
     example: '2026-06-06T18:04:18.000Z',
     description: 'Data de criação',
   })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @ApiProperty({
     example: '2026-06-06T19:10:00.000Z',
     description: 'Data de atualização',
   })
-  updatedAt!: Date;
+    updatedAt!: Date;
 }
 
 export class UpdateProfileResponseDto {
   @ApiProperty({ example: 200 })
-  code!: number;
+    code!: number;
 
   @ApiProperty({ example: true })
-  ok!: boolean;
+    ok!: boolean;
 
   @ApiProperty({ example: 'Perfil atualizado com sucesso' })
-  message!: string;
+    message!: string;
 
   @ApiProperty({ type: UpdatedUserDto })
-  data!: UpdatedUserDto;
+    data!: UpdatedUserDto;
 }

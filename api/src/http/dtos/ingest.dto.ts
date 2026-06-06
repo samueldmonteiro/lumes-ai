@@ -15,7 +15,7 @@ export class IngestTextDto {
   @IsString({ message: 'O campo text deve ser uma string' })
   @IsNotEmpty({ message: 'O campo text é obrigatório' })
   @MinLength(10, { message: 'O texto deve ter pelo menos 10 caracteres' })
-  text!: string;
+    text!: string;
 
   @ApiProperty({
     description: 'Origem do documento para rastreabilidade',
@@ -25,7 +25,7 @@ export class IngestTextDto {
   })
   @IsString()
   @IsOptional()
-  source?: string;
+    source?: string;
 }
 
 export class IngestJsonDto {
@@ -36,7 +36,7 @@ export class IngestJsonDto {
   })
   @IsObject({ message: 'O campo data deve ser um objeto JSON válido' })
   @IsNotEmpty({ message: 'O campo data é obrigatório' })
-  data!: Record<string, unknown>;
+    data!: Record<string, unknown>;
 
   @ApiProperty({
     description: 'Origem do documento para rastreabilidade',
@@ -46,5 +46,5 @@ export class IngestJsonDto {
   })
   @IsString()
   @IsOptional()
-  source?: string;
+    source?: string;
 }
