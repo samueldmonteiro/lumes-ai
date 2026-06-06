@@ -10,20 +10,20 @@ export declare class PrismaUserRepository {
         name: string;
     }): import("../../generated/prisma/models").Prisma__UserClient<{
         id: number;
-        name: string;
         email: string;
-        role: import("@/generated/prisma/client").UserRole;
+        name: string;
+        role: import("../../generated/prisma/client").UserRole;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
     update(id: number, data: Partial<Pick<User, 'email' | 'name' | 'role' | 'password'>>): import("../../generated/prisma/models").Prisma__UserClient<{
-        createdAt: Date;
         id: number;
-        name: string;
+        createdAt: Date;
         updatedAt: Date;
         email: string;
         password: string;
-        role: import("@/generated/prisma/client").UserRole;
+        name: string;
+        role: import("../../generated/prisma/client").UserRole;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;

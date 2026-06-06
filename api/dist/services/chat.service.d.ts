@@ -24,31 +24,31 @@ export declare class ChatService {
     private readonly logger;
     constructor(search: SearchService, prompt: PromptService, aiProvider: LLMProvider, chatLogRepo: PrismaChatLogRepository, chatSessionRepo: PrismaChatSessionRepository);
     ask(question: string, user?: JwtPayload | null, sessionId?: string, payloadHistory?: ChatMessage[]): Promise<ChatResponse>;
-    getHistory(limit?: number, user?: JwtPayload | null): Promise<import("@/repositories/prisma/prisma-chat-log.repository").ChatLogEntry[]>;
+    getHistory(limit?: number, user?: JwtPayload | null): Promise<import("../repositories/prisma/prisma-chat-log.repository").ChatLogEntry[]>;
     getSessions(userId: number, limit?: number): Promise<{
         id: string;
-        title: string;
-        userId: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number;
+        title: string;
     }[]>;
     getSessionDetails(sessionId: string, userId: number): Promise<{
         chatLogs: {
             id: number;
-            userId: number | null;
             createdAt: Date;
             question: string;
             answer: string;
             sources: import("@prisma/client/runtime/client").JsonValue;
             similarity: number | null;
+            userId: number | null;
             sessionId: string | null;
         }[];
     } & {
         id: string;
-        title: string;
-        userId: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number;
+        title: string;
     }>;
     deleteSession(sessionId: string, userId: number): Promise<void>;
     private saveLog;

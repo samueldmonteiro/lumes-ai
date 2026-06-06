@@ -8,6 +8,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
+  ApiCreatedResponse,
+} from '@nestjs/swagger';
 import { IngestService } from '@/services/ingest.service';
 import { BaseController } from './base.controller';
 import { IngestTextDto, IngestJsonDto } from '../dtos/ingest.dto';
@@ -27,6 +35,8 @@ interface UploadedMulterFile {
   buffer: Buffer;
 }
 
+@ApiTags('Ingest')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
 @Controller('ingests')
@@ -36,6 +46,27 @@ export class IngestController extends BaseController {
   }
 
   @Post('text')
+  @ApiOperation({ summary: 'Ingere um texto bruto, transformando-o em chunks vetorizados' })
+  @ApiCreatedResponse({
+    description: 'Texto ingerido com sucesso',
+    schema: {
+      type: 'object',
+      properties: {
+        code: { type: 'number', example: 201 },
+        ok: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Texto ingerido com sucesso!' },
+        data: {
+          type: 'object',
+          properties: {
+            ok: { type: 'boolean', example: true },
+            source: { type: 'string', example: 'manual-uuid' },
+            chunksProcessed: { type: 'number', example: 5 },
+            chunksSaved: { type: 'number', example: 5 },
+          },
+        },
+      },
+    },
+  })
   async ingestText(@Body() body: IngestTextDto) {
     const result = await this.ingestService.ingestText(
       body.text,
@@ -45,6 +76,46 @@ export class IngestController extends BaseController {
   }
 
   @Post('pdf')
+  @ApiOperation({ summary: 'Ingere um arquivo PDF, extraindo texto e gerando chunks vetorizados' })
+  @ApiCreatedResponse({
+    description: 'PDF ingerido com sucesso',
+    schema: {
+      type: 'object',
+      properties: {
+        code: { type: 'number', example: 201 },
+        ok: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'PDF ingerido com sucesso!' },
+        data: {
+          type: 'object',
+          properties: {
+            ok: { type: 'boolean', example: true },
+            source: { type: 'string', example: 'pdf-uuid' },
+            chunksProcessed: { type: 'number', example: 5 },
+            chunksSaved: { type: 'number', example: 5 },
+          },
+        },
+      },
+    },
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Arquivo PDF e origem opcional',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Arquivo PDF (.pdf)',
+        },
+        source: {
+          type: 'string',
+          description: 'Origem do documento para rastreabilidade',
+        },
+      },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   async ingestPDF(
     @UploadedFile() file: UploadedMulterFile | undefined,
@@ -67,6 +138,27 @@ export class IngestController extends BaseController {
   }
 
   @Post('json')
+  @ApiOperation({ summary: 'Ingere um objeto JSON, achatando-o em texto e gerando chunks vetorizados' })
+  @ApiCreatedResponse({
+    description: 'JSON ingerido com sucesso',
+    schema: {
+      type: 'object',
+      properties: {
+        code: { type: 'number', example: 201 },
+        ok: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'JSON ingerido com sucesso!' },
+        data: {
+          type: 'object',
+          properties: {
+            ok: { type: 'boolean', example: true },
+            source: { type: 'string', example: 'json-uuid' },
+            chunksProcessed: { type: 'number', example: 5 },
+            chunksSaved: { type: 'number', example: 5 },
+          },
+        },
+      },
+    },
+  })
   async ingestJson(@Body() body: IngestJsonDto) {
     const result = await this.ingestService.ingestJSON(
       body.data,
