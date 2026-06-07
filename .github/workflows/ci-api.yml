@@ -51,6 +51,11 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm exec prisma generate
 
+      - name: Pre-create pgvector extension
+        run: echo "CREATE EXTENSION IF NOT EXISTS vector SCHEMA public;" | pnpm exec prisma db execute --stdin
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db?schema=public
+
       - name: Lint code
         run: pnpm run lint
 

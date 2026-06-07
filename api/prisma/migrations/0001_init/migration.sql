@@ -1,8 +1,8 @@
 -- prisma/migrations/0001_init/migration.sql
 -- Esta migration é aplicada via: npx prisma migrate dev
 
--- Habilita a extensão pgvector
-CREATE EXTENSION IF NOT EXISTS vector;
+-- Habilita a extensão pgvector no schema public
+CREATE EXTENSION IF NOT EXISTS vector SCHEMA public;
 
 -- Tabela de chunks de conhecimento
 CREATE TABLE "knowledge_chunks" (
