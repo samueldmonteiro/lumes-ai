@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Outfit, JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.css";
 import 'highlight.js/styles/github-dark.css';
+import { Toaster } from "@/components/ui/sonner";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -44,16 +45,23 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            try {
-              var t = localStorage.getItem("lumes_theme");
-              if (t !== "light") document.documentElement.classList.add("dark");
-            } catch(e) {}
-          `
-        }} />
+        <script
+          id="theme-init"
+          async
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var t = localStorage.getItem("lumes_theme");
+                if (t !== "light") document.documentElement.classList.add("dark");
+              } catch(e) {}
+            `,
+          }}
+        />
       </head>
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        {children}
+        <Toaster richColors closeButton />
+      </body>
     </html>
   );
 }
