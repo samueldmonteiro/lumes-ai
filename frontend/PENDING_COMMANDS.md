@@ -1,4 +1,4 @@
-## Pending Commands — Otimização de performance e transições suaves nas telas do frontend
+## Pending Commands — Reiniciar o servidor após correção do contexto do Dialog no menu administrativo
 
 ### Install
 ```bash
