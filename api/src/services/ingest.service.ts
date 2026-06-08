@@ -95,4 +95,56 @@ export class IngestService {
   private delay(ms: number) {
     return new Promise((r) => setTimeout(r, ms));
   }
+
+  async listDocuments() {
+    const groups = await this.knowledgeChunkRepo.listGroupedBySource();
+
+    return groups.map((group) => ({
+      id: group.source,
+      source: group.source,
+      type: this.inferTypeFromSource(group.source),
+      content: group.content ?? '',
+      chunks: group.chunks,
+      createdAt: group.createdAt.toISOString(),
+      updatedAt: group.updatedAt.toISOString(),
+    }));
+  }
+
+  async getStats() {
+    const [stats, groups] = await Promise.all([
+      this.knowledgeChunkRepo.countStats(),
+      this.knowledgeChunkRepo.listGroupedBySource(),
+    ]);
+
+    const documentsByType = { text: 0, json: 0, pdf: 0 };
+
+    for (const group of groups) {
+      const type = this.inferTypeFromSource(group.source);
+      if (type in documentsByType) {
+        documentsByType[type as keyof typeof documentsByType]++;
+      } else {
+        documentsByType.text++;
+      }
+    }
+
+    return {
+      totalDocs: stats.uniqueSources,
+      totalChunks: stats.totalChunks,
+      uniqueSources: stats.uniqueSources,
+      lastUpload: stats.lastUpload?.toISOString() ?? null,
+      documentsByType,
+    };
+  }
+
+  async deleteBySource(source: string) {
+    const count = await this.knowledgeChunkRepo.deleteManyBySource(source);
+    return { source, deletedChunks: count };
+  }
+
+  private inferTypeFromSource(source: string): string {
+    const lower = source.toLowerCase();
+    if (lower.startsWith('pdf-') || lower.endsWith('.pdf')) return 'pdf';
+    if (lower.startsWith('json-') || lower.endsWith('.json')) return 'json';
+    return 'text';
+  }
 }

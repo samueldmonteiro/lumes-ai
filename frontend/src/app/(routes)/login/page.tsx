@@ -50,7 +50,12 @@ export default function LoginPage() {
 
       if (result.success) {
         localStorage.setItem('lumes_seen_splash', 'true');
-        router.push('/home');
+        // Redireciona ADMIN para o painel administrativo
+        if (result.data?.role === 'ADMIN') {
+          router.push('/admin');
+        } else {
+          router.push('/home');
+        }
       } else {
         setServerError(result.message || 'Ocorreu um erro ao entrar. Verifique suas credenciais.');
       }

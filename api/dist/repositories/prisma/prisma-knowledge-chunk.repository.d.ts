@@ -23,4 +23,16 @@ export declare class PrismaKnowledgeChunkRepository {
         source: string;
         similarity: number;
     }[]>;
+    listGroupedBySource(): Promise<{
+        source: string;
+        chunks: number;
+        content: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
+    countStats(): Promise<{
+        totalChunks: number;
+        uniqueSources: number;
+        lastUpload: Date | null;
+    }>;
 }

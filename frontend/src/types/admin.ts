@@ -11,11 +11,23 @@ export interface AdminDocument {
   updatedAt: string;
 }
 
+// Resposta da API de ingestão — espelha IngestResult do backend
 export interface IngestResult {
   ok: boolean;
   source: string;
   chunksProcessed: number;
   chunksSaved: number;
+}
+
+// DTOs de request para ingestão — espelham IngestTextDto e IngestJsonDto do backend
+export interface IngestTextRequest {
+  text: string;
+  source?: string;
+}
+
+export interface IngestJsonRequest {
+  data: Record<string, unknown>;
+  source?: string;
 }
 
 export interface AdminStats {
@@ -26,4 +38,10 @@ export interface AdminStats {
   documentsByType: Record<DocumentType, number>;
 }
 
+// Resposta do endpoint de exclusão de documento
+export interface DeleteDocumentResult {
+  deletedCount: number;
+}
+
 export type IngestMode = 'text' | 'json' | 'pdf';
+

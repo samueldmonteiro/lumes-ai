@@ -10,6 +10,7 @@ import {
   LogOut,
   Sun,
   Moon,
+  Shield,
 } from 'lucide-react';
 import {
   Sheet,
@@ -268,61 +269,82 @@ export function AppSidebar({
               )}
             />
             {user ? (
-              <div className="flex items-center justify-between">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    router.push('/profile');
-                    onClose();
-                  }}
-                  className="flex items-center gap-2.5 flex-1 min-w-0 text-left cursor-pointer"
-                >
-                  <div
+              <div className="flex flex-col gap-2.5">
+                {user.role === 'ADMIN' && (
+                  <motion.button
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      router.push('/admin');
+                      onClose();
+                    }}
                     className={cn(
-                      'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
+                      'w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer text-xs font-bold border shadow-xs',
                       isDarkTheme
-                        ? 'bg-linear-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
-                        : 'bg-linear-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
+                        ? 'bg-zinc-800/80 border-zinc-700/50 text-violet-300 hover:bg-zinc-800 hover:border-violet-500/30 hover:text-violet-200'
+                        : 'bg-zinc-50 border-zinc-200 text-violet-700 hover:bg-zinc-100 hover:border-violet-300 hover:text-violet-800',
                     )}
                   >
-                    {userInitial}
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <span
+                    <Shield className="w-3.5 h-3.5" />
+                    Painel Administrador
+                  </motion.button>
+                )}
+                <div className="flex items-center justify-between">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      router.push('/profile');
+                      onClose();
+                    }}
+                    className="flex items-center gap-2.5 flex-1 min-w-0 text-left cursor-pointer"
+                  >
+                    <div
                       className={cn(
-                        'text-[13px] font-semibold leading-tight truncate max-w-[120px]',
-                        isDarkTheme ? 'text-zinc-200' : 'text-zinc-700',
+                        'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
+                        isDarkTheme
+                          ? 'bg-linear-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
+                          : 'bg-linear-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
                       )}
                     >
-                      {displayName}
-                    </span>
-                    <span
-                      className={cn(
-                        'text-[10px] leading-tight',
-                        isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
-                      )}
-                    >
-                      {user?.role === 'ADMIN' ? 'Administrador' : 'Conta pessoal'}
-                    </span>
-                  </div>
-                </motion.button>
+                      {userInitial}
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span
+                        className={cn(
+                          'text-[13px] font-semibold leading-tight truncate max-w-[120px]',
+                          isDarkTheme ? 'text-zinc-200' : 'text-zinc-700',
+                        )}
+                      >
+                        {displayName}
+                      </span>
+                      <span
+                        className={cn(
+                          'text-[10px] leading-tight',
+                          isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
+                        )}
+                      >
+                        {user?.role === 'ADMIN' ? 'Administrador' : 'Conta pessoal'}
+                      </span>
+                    </div>
+                  </motion.button>
 
-                {/* Botão de sair */}
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={handleLogout}
-                  className={cn(
-                    'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer',
-                    isDarkTheme
-                      ? 'text-zinc-500 hover:text-red-400 hover:bg-red-50/10'
-                      : 'text-zinc-400 hover:text-red-500 hover:bg-red-50',
-                  )}
-                  title="Sair"
-                >
-                  <LogOut className="w-4 h-4 stroke-[1.8]" />
-                </motion.button>
+                  {/* Botão de sair */}
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={handleLogout}
+                    className={cn(
+                      'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer',
+                      isDarkTheme
+                        ? 'text-zinc-500 hover:text-red-400 hover:bg-red-50/10'
+                        : 'text-zinc-400 hover:text-red-500 hover:bg-red-50',
+                    )}
+                    title="Sair"
+                  >
+                    <LogOut className="w-4 h-4 stroke-[1.8]" />
+                  </motion.button>
+                </div>
               </div>
             ) : (
               <motion.button

@@ -18,4 +18,29 @@ export declare class IngestService {
     ingestJSON(data: Record<string, unknown>, source: string): Promise<IngestResult>;
     private processText;
     private delay;
+    listDocuments(): Promise<{
+        id: string;
+        source: string;
+        type: string;
+        content: string;
+        chunks: number;
+        createdAt: string;
+        updatedAt: string;
+    }[]>;
+    getStats(): Promise<{
+        totalDocs: number;
+        totalChunks: number;
+        uniqueSources: number;
+        lastUpload: string | null;
+        documentsByType: {
+            text: number;
+            json: number;
+            pdf: number;
+        };
+    }>;
+    deleteBySource(source: string): Promise<{
+        source: string;
+        deletedChunks: number;
+    }>;
+    private inferTypeFromSource;
 }

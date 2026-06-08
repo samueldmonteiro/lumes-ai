@@ -97,4 +97,60 @@ export class PrismaKnowledgeChunkRepository {
       `,
     );
   }
+
+  async listGroupedBySource(): Promise<
+    {
+      source: string;
+      chunks: number;
+      content: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }[]
+  > {
+    const table = Prisma.raw(this.tbl('knowledge_chunks'));
+
+    return this.prisma.$queryRaw<
+      {
+        source: string;
+        chunks: number;
+        content: string;
+        createdAt: Date;
+        updatedAt: Date;
+      }[]
+    >(
+      Prisma.sql`
+        SELECT
+          kc."source",
+          COUNT(*)::int AS "chunks",
+          LEFT(MIN(CASE WHEN (kc."metadata"->>'chunkIndex')::int = 0 THEN kc."content" ELSE NULL END), 300) AS "content",
+          MIN(kc."createdAt") AS "createdAt",
+          MAX(kc."updatedAt") AS "updatedAt"
+        FROM ${table} kc
+        GROUP BY kc."source"
+        ORDER BY MAX(kc."updatedAt") DESC
+      `,
+    );
+  }
+
+  async countStats(): Promise<{
+    totalChunks: number;
+    uniqueSources: number;
+    lastUpload: Date | null;
+  }> {
+    const table = Prisma.raw(this.tbl('knowledge_chunks'));
+
+    const rows = await this.prisma.$queryRaw<
+      { totalChunks: number; uniqueSources: number; lastUpload: Date | null }[]
+    >(
+      Prisma.sql`
+        SELECT
+          COUNT(*)::int AS "totalChunks",
+          COUNT(DISTINCT "source")::int AS "uniqueSources",
+          MAX("createdAt") AS "lastUpload"
+        FROM ${table}
+      `,
+    );
+
+    return rows[0];
+  }
 }

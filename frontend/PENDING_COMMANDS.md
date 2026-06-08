@@ -1,4 +1,4 @@
-## Pending Commands — Reiniciar o servidor após correção do contexto do Dialog no menu administrativo
+## Pending Commands — Integração completa da tela de administração com a API de ingestão
 
 ### Install
 ```bash

@@ -68,6 +68,53 @@ let IngestService = IngestService_1 = class IngestService {
     delay(ms) {
         return new Promise((r) => setTimeout(r, ms));
     }
+    async listDocuments() {
+        const groups = await this.knowledgeChunkRepo.listGroupedBySource();
+        return groups.map((group) => ({
+            id: group.source,
+            source: group.source,
+            type: this.inferTypeFromSource(group.source),
+            content: group.content ?? '',
+            chunks: group.chunks,
+            createdAt: group.createdAt.toISOString(),
+            updatedAt: group.updatedAt.toISOString(),
+        }));
+    }
+    async getStats() {
+        const [stats, groups] = await Promise.all([
+            this.knowledgeChunkRepo.countStats(),
+            this.knowledgeChunkRepo.listGroupedBySource(),
+        ]);
+        const documentsByType = { text: 0, json: 0, pdf: 0 };
+        for (const group of groups) {
+            const type = this.inferTypeFromSource(group.source);
+            if (type in documentsByType) {
+                documentsByType[type]++;
+            }
+            else {
+                documentsByType.text++;
+            }
+        }
+        return {
+            totalDocs: stats.uniqueSources,
+            totalChunks: stats.totalChunks,
+            uniqueSources: stats.uniqueSources,
+            lastUpload: stats.lastUpload?.toISOString() ?? null,
+            documentsByType,
+        };
+    }
+    async deleteBySource(source) {
+        const count = await this.knowledgeChunkRepo.deleteManyBySource(source);
+        return { source, deletedChunks: count };
+    }
+    inferTypeFromSource(source) {
+        const lower = source.toLowerCase();
+        if (lower.startsWith('pdf-') || lower.endsWith('.pdf'))
+            return 'pdf';
+        if (lower.startsWith('json-') || lower.endsWith('.json'))
+            return 'json';
+        return 'text';
+    }
 };
 exports.IngestService = IngestService;
 exports.IngestService = IngestService = IngestService_1 = __decorate([
