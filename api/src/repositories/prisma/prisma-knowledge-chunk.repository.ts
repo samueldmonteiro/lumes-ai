@@ -106,7 +106,7 @@ export class PrismaKnowledgeChunkRepository {
       createdAt: Date;
       updatedAt: Date;
     }[]
-  > {
+    > {
     const table = Prisma.raw(this.tbl('knowledge_chunks'));
 
     return this.prisma.$queryRaw<
