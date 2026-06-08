@@ -7,11 +7,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ChevronRight, Eye, EyeOff, Lock, Mail, User, ShieldCheck, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
+import { useRegister } from "@/hooks/queries/use-auth";
 import { cn } from "@/lib/utils";
 
 export default function RegisterPage() {
   const router = useRouter();
   const { isDark } = useChatTheme();
+  const { register, isPending: isRegistering } = useRegister();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -80,20 +82,20 @@ export default function RegisterPage() {
   const handleConfirmRegistration = useCallback(async () => {
     if (!acceptedTerms || !isAdult) return;
     setIsLoading(true);
+    setServerError("");
 
-    try {
-      // Simulate API registration
-      await new Promise((resolve) => setTimeout(resolve, 1800));
-      
-      // Complete signup -> automatically log user in & redirect
-      localStorage.setItem("lumes_seen_splash", "true");
-      router.push("/home");
-    } catch {
-      setServerError("Não foi possível criar a conta. Tente novamente.");
+    const result = await register({ name, email, password });
+
+    if (!result.success) {
+      setServerError(result.message || "Não foi possível criar a conta. Tente novamente.");
       setShowTerms(false);
       setIsLoading(false);
+      return;
     }
-  }, [acceptedTerms, isAdult, router]);
+
+    localStorage.setItem("lumes_seen_splash", "true");
+    router.push("/home");
+  }, [acceptedTerms, isAdult, register, name, email, password, router]);
 
   const inputClasses = cn(
     "w-full h-12 pl-12 pr-4 rounded-xl font-geist focus:border-violet-500/80 focus:ring-4 focus:ring-violet-500/10 outline-none transition-all duration-300",

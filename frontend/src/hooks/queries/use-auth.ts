@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { loginAction, logoutAction, getCurrentUserAction } from '@/app/actions/auth';
-import type { User } from '@/types/user.type';
+import { loginAction, logoutAction, getCurrentUserAction, registerAction } from '@/app/actions/auth';
+import type { User, StoreUser } from '@/types/user.type';
 import type { ActionResponse } from '@/types/api.type';
 
 function getUserFromCookie(): User | null {
@@ -41,6 +41,21 @@ export function useLogin() {
   }, []);
 
   return { login, isPending };
+}
+
+export function useRegister() {
+  const [isPending, setIsPending] = useState(false);
+
+  const register = useCallback(async (data: StoreUser): Promise<ActionResponse<User>> => {
+    setIsPending(true);
+    try {
+      return await registerAction(data);
+    } finally {
+      setIsPending(false);
+    }
+  }, []);
+
+  return { register, isPending };
 }
 
 export function useLogout() {

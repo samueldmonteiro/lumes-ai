@@ -2,7 +2,8 @@
 
 import { cookies } from 'next/headers';
 import { authService } from '@/services/auth.service';
-import type { User } from '@/types/user.type';
+import { storeUser } from '@/services/user.service';
+import type { User, StoreUser } from '@/types/user.type';
 import type { ActionResponse } from '@/types/api.type';
 
 export async function loginAction(email: string, password: string): Promise<ActionResponse<User>> {
@@ -39,6 +40,37 @@ export async function logoutAction(): Promise<ActionResponse> {
   cookieStore.delete('token');
   cookieStore.delete('user');
   return { success: true };
+}
+
+export async function registerAction(data: StoreUser): Promise<ActionResponse<User>> {
+  try {
+    await storeUser(data);
+
+    const loginResponse = await authService.login(data.email, data.password);
+    const { token, user } = loginResponse.data;
+
+    const cookieStore = await cookies();
+
+    cookieStore.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    cookieStore.set('user', JSON.stringify(user), {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    return { success: true, data: user };
+  } catch {
+    return { success: false, message: 'Não foi possível criar a conta. Tente novamente.' };
+  }
 }
 
 export async function getCurrentUserAction(): Promise<User | null> {
