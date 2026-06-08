@@ -1,0 +1,59 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { loginAction, logoutAction, getCurrentUserAction } from '@/app/actions/auth';
+import type { User } from '@/types/user.type';
+import type { ActionResponse } from '@/types/api.type';
+
+function getUserFromCookie(): User | null {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(/(?:^|;\s*)user=([^;]*)/);
+  if (!match) return null;
+  try {
+    return JSON.parse(decodeURIComponent(match[1])) as User;
+  } catch {
+    return null;
+  }
+}
+
+export function useUser() {
+  const [user, setUser] = useState<User | null>(() => getUserFromCookie());
+
+  useEffect(() => {
+    getCurrentUserAction().then((serverUser) => {
+      if (serverUser) setUser(serverUser);
+    });
+  }, []);
+
+  return { user };
+}
+
+export function useLogin() {
+  const [isPending, setIsPending] = useState(false);
+
+  const login = useCallback(async (email: string, password: string): Promise<ActionResponse<User>> => {
+    setIsPending(true);
+    try {
+      return await loginAction(email, password);
+    } finally {
+      setIsPending(false);
+    }
+  }, []);
+
+  return { login, isPending };
+}
+
+export function useLogout() {
+  const [isPending, setIsPending] = useState(false);
+
+  const logout = useCallback(async (): Promise<ActionResponse> => {
+    setIsPending(true);
+    try {
+      return await logoutAction();
+    } finally {
+      setIsPending(false);
+    }
+  }, []);
+
+  return { logout, isPending };
+}

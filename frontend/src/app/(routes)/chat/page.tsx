@@ -1,16 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState, useCallback, Suspense } from "react";
-import { useChat } from "ai/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ChatLayout } from "@/components/templates/ChatLayout";
-import { ChatHeader } from "@/components/organisms/ChatHeader";
-import { AppSidebar } from "@/components/organisms/AppSidebar";
-import { MessageList } from "@/components/organisms/MessageList";
-import { ChatInput } from "@/components/molecules/ChatInput";
-import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
-import { useScrollToBottom } from "@/features/chat/hooks/useScrollToBottom";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState, useCallback, Suspense } from 'react';
+import { useChat } from 'ai/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ChatLayout } from '@/components/templates/ChatLayout';
+import { ChatHeader } from '@/components/organisms/ChatHeader';
+import { useUser } from '@/hooks/queries/use-auth';
+import { AppSidebar } from '@/components/organisms/AppSidebar';
+import { MessageList } from '@/components/organisms/MessageList';
+import { ChatInput } from '@/components/molecules/ChatInput';
+import { useChatTheme } from '@/features/chat/hooks/useChatTheme';
+import { useScrollToBottom } from '@/features/chat/hooks/useScrollToBottom';
+import { cn } from '@/lib/utils';
 
 function ChatContent() {
   const router = useRouter();
@@ -22,6 +23,7 @@ function ChatContent() {
 
   // Custom Hooks
   const { isDark, toggleTheme } = useChatTheme();
+  const { user } = useUser();
 
   // Vercel AI SDK Hook
   const {
@@ -52,32 +54,32 @@ function ChatContent() {
     }, 0);
 
     // Validate splash screen
-    const seenSplash = localStorage.getItem("lumes_seen_splash");
-    if (seenSplash !== "true") {
-      router.push("/presentation");
+    const seenSplash = localStorage.getItem('lumes_seen_splash');
+    if (seenSplash !== 'true') {
+      router.push('/presentation');
       return;
     }
 
     // Process home page query injection
-    const query = searchParams.get("q");
+    const query = searchParams.get('q');
     if (query && !hasProcessedQuery.current) {
       hasProcessedQuery.current = true;
       append({
-        role: "user",
+        role: 'user',
         content: decodeURIComponent(query),
       });
       // Replace URL to clean query and prevent re-submissions on refresh
-      router.replace("/chat");
+      router.replace('/chat');
     } else if (!query && messages.length === 0) {
       // Redirect to home if accessed directly without context
-      router.push("/home");
+      router.push('/home');
     }
   }, [searchParams, router, messages.length, append]);
 
   // Reset conversation and redirect to home screen
   const handleNewConversation = useCallback(() => {
     setMessages([]);
-    router.push("/home");
+    router.push('/home');
   }, [setMessages, router]);
 
   const handleToggleSidebar = useCallback(() => {
@@ -112,6 +114,7 @@ function ChatContent() {
             onNewConversation={handleNewConversation}
             onToggleSidebar={handleToggleSidebar}
             isDarkTheme={isDark}
+            user={user}
           />
 
           {/* Área de Mensagens + Input centralizados com max-w-4xl no desktop */}
@@ -145,14 +148,14 @@ function ChatContent() {
         <div className="hidden lg:block w-[320px] h-screen shrink-0 relative z-20">
           <aside
             className={cn(
-              "w-full h-full flex flex-col p-5 select-none border-l",
-              isDark ? "bg-[#0A0714] text-zinc-300 border-zinc-900/60" : "bg-white text-zinc-700 border-zinc-200/80"
+              'w-full h-full flex flex-col p-5 select-none border-l',
+              isDark ? 'bg-[#0A0714] text-zinc-300 border-zinc-900/60' : 'bg-white text-zinc-700 border-zinc-200/80',
             )}
           >
             <h3
               className={cn(
-                "text-xs font-bold tracking-[0.1em] uppercase mb-4",
-                isDark ? "text-zinc-500" : "text-zinc-400"
+                'text-xs font-bold tracking-[0.1em] uppercase mb-4',
+                isDark ? 'text-zinc-500' : 'text-zinc-400',
               )}
             >
               Painel de Contexto
@@ -161,8 +164,8 @@ function ChatContent() {
             {/* Status da IA */}
             <div
               className={cn(
-                "p-4 rounded-xl border mb-5 flex flex-col gap-3",
-                isDark ? "bg-[#110D20]/60 border-zinc-800/80" : "bg-zinc-50 border-zinc-200/60"
+                'p-4 rounded-xl border mb-5 flex flex-col gap-3',
+                isDark ? 'bg-[#110D20]/60 border-zinc-800/80' : 'bg-zinc-50 border-zinc-200/60',
               )}
             >
               <div className="flex items-center justify-between">
@@ -173,7 +176,7 @@ function ChatContent() {
                 </div>
               </div>
               <div className="flex flex-col gap-1">
-                <span className={cn("text-xs font-extrabold", isDark ? "text-white" : "text-zinc-900")}>
+                <span className={cn('text-xs font-extrabold', isDark ? 'text-white' : 'text-zinc-900')}>
                   Lumes Pro
                 </span>
                 <span className="text-[10px] text-zinc-500">Powered by Gemini 3.5 Flash</span>
@@ -193,7 +196,7 @@ function ChatContent() {
               </div>
             </div>
 
-            <div className={cn("h-[1px] w-full my-5", isDark ? "bg-zinc-800/60" : "bg-zinc-200/80")} />
+            <div className={cn('h-[1px] w-full my-5', isDark ? 'bg-zinc-800/60' : 'bg-zinc-200/80')} />
 
             {/* Dicas / Atalhos */}
             <div className="flex flex-col gap-3.5">

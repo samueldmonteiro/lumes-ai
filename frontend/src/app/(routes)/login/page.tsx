@@ -1,25 +1,27 @@
-"use client";
+'use client';
 
-import React, { useState, useCallback } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronRight, Eye, EyeOff, Lock, Mail } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
-import { cn } from "@/lib/utils";
+import React, { useState, useCallback } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, ChevronRight, Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useChatTheme } from '@/features/chat/hooks/useChatTheme';
+import { useLogin } from '@/hooks/queries/use-auth';
+import { cn } from '@/lib/utils';
 
 export default function LoginPage() {
   const router = useRouter();
   const { isDark } = useChatTheme();
   const [step, setStep] = useState<1 | 2>(1);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [serverError, setServerError] = useState("");
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [serverError, setServerError] = useState('');
+
+  const { login, isPending: isLoading } = useLogin();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isEmailValid = emailRegex.test(email);
@@ -27,37 +29,35 @@ export default function LoginPage() {
   const handleNextStep = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!isEmailValid) {
-      setEmailError("Por favor, insira um e-mail válido.");
+      setEmailError('Por favor, insira um e-mail válido.');
       return;
     }
-    setEmailError("");
+    setEmailError('');
     setStep(2);
   }, [isEmailValid]);
 
   const handleLogin = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (password.length < 6) {
-      setPasswordError("A senha deve ter pelo menos 6 caracteres.");
+      setPasswordError('A senha deve ter pelo menos 6 caracteres.');
       return;
     }
-    setPasswordError("");
-    setIsLoading(true);
+    setPasswordError('');
+    setServerError('');
 
     try {
-      // Simulate API Login (as requested, only frontend)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const result = await login(email, password);
 
-      // Save splash status just in case
-      localStorage.setItem("lumes_seen_splash", "true");
-
-      // Redirect to home upon successful login simulation
-      router.push("/home");
+      if (result.success) {
+        localStorage.setItem('lumes_seen_splash', 'true');
+        router.push('/home');
+      } else {
+        setServerError(result.message || 'Ocorreu um erro ao entrar. Verifique suas credenciais.');
+      }
     } catch {
-      setServerError("Ocorreu um erro ao entrar. Verifique suas credenciais.");
-    } finally {
-      setIsLoading(false);
+      setServerError('Ocorreu um erro inesperado. Tente novamente.');
     }
-  }, [password, router]);
+  }, [password, email, login, router]);
 
   return (
     <motion.div
@@ -66,35 +66,35 @@ export default function LoginPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
       className={cn(
-        "min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist transition-colors duration-500",
-        isDark ? "bg-[#07040D] text-white" : "bg-[#F4F4F6] text-zinc-900"
+        'min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist transition-colors duration-500',
+        isDark ? 'bg-[#07040D] text-white' : 'bg-[#F4F4F6] text-zinc-900',
       )}
     >
       {/* Light Pattern Overlay */}
       <div
         className={cn(
-          "absolute inset-0 pointer-events-none",
-          isDark ? "opacity-20" : "opacity-10"
+          'absolute inset-0 pointer-events-none',
+          isDark ? 'opacity-20' : 'opacity-10',
         )}
         style={{
           backgroundImage: isDark
-            ? "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)"
-            : "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.08) 1px, transparent 0)",
-          backgroundSize: "24px 24px",
+            ? 'radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)'
+            : 'radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.08) 1px, transparent 0)',
+          backgroundSize: '24px 24px',
         }}
       />
 
       {/* Decorative Glowing Orbs */}
       <div
         className={cn(
-          "absolute top-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] pointer-events-none",
-          isDark ? "bg-violet-600/10" : "bg-violet-300/15"
+          'absolute top-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] pointer-events-none',
+          isDark ? 'bg-violet-600/10' : 'bg-violet-300/15',
         )}
       />
       <div
         className={cn(
-          "absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full blur-[100px] pointer-events-none",
-          isDark ? "bg-fuchsia-600/10" : "bg-fuchsia-300/10"
+          'absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full blur-[100px] pointer-events-none',
+          isDark ? 'bg-fuchsia-600/10' : 'bg-fuchsia-300/10',
         )}
       />
 
@@ -105,10 +105,10 @@ export default function LoginPage() {
             whileHover={{ scale: 1.05, x: -3 }}
             whileTap={{ scale: 0.95 }}
             className={cn(
-              "flex items-center gap-2 px-3.5 py-2 rounded-full border transition-colors text-xs font-semibold cursor-pointer duration-300 shadow-sm",
+              'flex items-center gap-2 px-3.5 py-2 rounded-full border transition-colors text-xs font-semibold cursor-pointer duration-300 shadow-sm',
               isDark
-                ? "border-zinc-800 bg-zinc-950/40 hover:bg-zinc-800/40 text-zinc-400 hover:text-white"
-                : "border-zinc-200 bg-white/70 hover:bg-zinc-100 text-zinc-500 hover:text-zinc-800"
+                ? 'border-zinc-800 bg-zinc-950/40 hover:bg-zinc-800/40 text-zinc-400 hover:text-white'
+                : 'border-zinc-200 bg-white/70 hover:bg-zinc-100 text-zinc-500 hover:text-zinc-800',
             )}
           >
             <ArrowLeft className="w-4 h-4" />
@@ -122,12 +122,12 @@ export default function LoginPage() {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 25, delay: 0.1 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 25, delay: 0.1 }}
           className={cn(
-            "w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300 border",
+            'w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300 border',
             isDark
-              ? "bg-[#120D1F]/50 border-zinc-800/60"
-              : "bg-white/80 border-zinc-200/80 shadow-lg"
+              ? 'bg-[#120D1F]/50 border-zinc-800/60'
+              : 'bg-white/80 border-zinc-200/80 shadow-lg',
           )}
         >
           {/* Brand Logo Header */}
@@ -135,7 +135,7 @@ export default function LoginPage() {
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 150 }}
+              transition={{ type: 'spring', stiffness: 150 }}
               className="relative w-24 h-24 mb-1"
             >
               {/* Glow Behind Logo */}
@@ -151,7 +151,7 @@ export default function LoginPage() {
             </motion.div>
 
             <div className="flex items-center gap-2 uppercase font-extrabold tracking-[0.2em] text-xl mt-2 select-none">
-              <span className={cn(isDark ? "text-white" : "text-zinc-800")}>
+              <span className={cn(isDark ? 'text-white' : 'text-zinc-800')}>
                 Lumes
               </span>
               <span className="text-violet-400">AI</span>
@@ -162,21 +162,21 @@ export default function LoginPage() {
           <div className="flex flex-col items-center text-center mb-6">
             <h2
               className={cn(
-                "text-2xl font-black leading-tight uppercase tracking-wider",
-                isDark ? "text-white" : "text-zinc-800"
+                'text-2xl font-black leading-tight uppercase tracking-wider',
+                isDark ? 'text-white' : 'text-zinc-800',
               )}
             >
-              {step === 1 ? "Olá!" : "Senha"}
+              {step === 1 ? 'Olá!' : 'Senha'}
             </h2>
             <p
               className={cn(
-                "text-xs mt-1",
-                isDark ? "text-zinc-400" : "text-zinc-500"
+                'text-xs mt-1',
+                isDark ? 'text-zinc-400' : 'text-zinc-500',
               )}
             >
               {step === 1
-                ? "Acesse sua conta para continuar"
-                : "Insira sua senha de acesso"}
+                ? 'Acesse sua conta para continuar'
+                : 'Insira sua senha de acesso'}
             </p>
           </div>
 
@@ -198,8 +198,8 @@ export default function LoginPage() {
                     <label
                       htmlFor="email"
                       className={cn(
-                        "text-[10px] font-bold uppercase tracking-widest",
-                        isDark ? "text-zinc-400" : "text-zinc-500"
+                        'text-[10px] font-bold uppercase tracking-widest',
+                        isDark ? 'text-zinc-400' : 'text-zinc-500',
                       )}
                     >
                       E-mail
@@ -213,14 +213,14 @@ export default function LoginPage() {
                         value={email}
                         onChange={(e) => {
                           setEmail(e.target.value);
-                          if (emailError) setEmailError("");
-                          if (serverError) setServerError("");
+                          if (emailError) setEmailError('');
+                          if (serverError) setServerError('');
                         }}
                         className={cn(
-                          "w-full h-12 pl-12 pr-4 border focus:border-violet-500/80 rounded-xl font-geist focus:ring-4 outline-none transition-all duration-300",
+                          'w-full h-12 pl-12 pr-4 border focus:border-violet-500/80 rounded-xl font-geist focus:ring-4 outline-none transition-all duration-300',
                           isDark
-                            ? "bg-zinc-950/70 border-zinc-800/80 text-white placeholder-zinc-600 focus:ring-violet-500/10"
-                            : "bg-zinc-100/80 border-zinc-200 text-zinc-800 placeholder-zinc-400 focus:ring-violet-500/15"
+                            ? 'bg-zinc-950/70 border-zinc-800/80 text-white placeholder-zinc-600 focus:ring-violet-500/10'
+                            : 'bg-zinc-100/80 border-zinc-200 text-zinc-800 placeholder-zinc-400 focus:ring-violet-500/15',
                         )}
                         required
                       />
@@ -257,10 +257,10 @@ export default function LoginPage() {
                   {/* Account Badge Indicator */}
                   <div
                     className={cn(
-                      "flex items-center justify-between p-3 rounded-xl border",
+                      'flex items-center justify-between p-3 rounded-xl border',
                       isDark
-                        ? "bg-violet-950/20 border-violet-500/10"
-                        : "bg-violet-50 border-violet-200/60"
+                        ? 'bg-violet-950/20 border-violet-500/10'
+                        : 'bg-violet-50 border-violet-200/60',
                     )}
                   >
                     <div className="flex flex-col overflow-hidden">
@@ -269,8 +269,8 @@ export default function LoginPage() {
                       </span>
                       <span
                         className={cn(
-                          "text-xs font-semibold truncate",
-                          isDark ? "text-white" : "text-zinc-800"
+                          'text-xs font-semibold truncate',
+                          isDark ? 'text-white' : 'text-zinc-800',
                         )}
                       >
                         {email}
@@ -280,8 +280,8 @@ export default function LoginPage() {
                       type="button"
                       onClick={() => {
                         setStep(1);
-                        setPassword("");
-                        setPasswordError("");
+                        setPassword('');
+                        setPasswordError('');
                       }}
                       className="p-1.5 hover:bg-violet-500/10 rounded-lg text-violet-400 transition-colors cursor-pointer"
                       title="Alterar e-mail"
@@ -296,8 +296,8 @@ export default function LoginPage() {
                       <label
                         htmlFor="password"
                         className={cn(
-                          "text-[10px] font-bold uppercase tracking-widest",
-                          isDark ? "text-zinc-400" : "text-zinc-500"
+                          'text-[10px] font-bold uppercase tracking-widest',
+                          isDark ? 'text-zinc-400' : 'text-zinc-500',
                         )}
                       >
                         Senha
@@ -306,7 +306,7 @@ export default function LoginPage() {
                         href="#"
                         onClick={(e) => {
                           e.preventDefault();
-                          setServerError("Lógica de recuperação não integrada no frontend.");
+                          setServerError('Lógica de recuperação não integrada no frontend.');
                         }}
                         className="text-[10px] font-bold text-violet-400 hover:underline"
                       >
@@ -317,19 +317,19 @@ export default function LoginPage() {
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 group-focus-within:text-violet-400 transition-colors" />
                       <input
                         id="password"
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => {
                           setPassword(e.target.value);
-                          if (passwordError) setPasswordError("");
-                          if (serverError) setServerError("");
+                          if (passwordError) setPasswordError('');
+                          if (serverError) setServerError('');
                         }}
                         className={cn(
-                          "w-full h-12 pl-12 pr-12 border focus:border-violet-500/80 rounded-xl font-geist focus:ring-4 outline-none transition-all duration-300",
+                          'w-full h-12 pl-12 pr-12 border focus:border-violet-500/80 rounded-xl font-geist focus:ring-4 outline-none transition-all duration-300',
                           isDark
-                            ? "bg-zinc-950/70 border-zinc-800/80 text-white placeholder-zinc-600 focus:ring-violet-500/10"
-                            : "bg-zinc-100/80 border-zinc-200 text-zinc-800 placeholder-zinc-400 focus:ring-violet-500/15"
+                            ? 'bg-zinc-950/70 border-zinc-800/80 text-white placeholder-zinc-600 focus:ring-violet-500/10'
+                            : 'bg-zinc-100/80 border-zinc-200 text-zinc-800 placeholder-zinc-400 focus:ring-violet-500/15',
                         )}
                         required
                       />
@@ -356,10 +356,10 @@ export default function LoginPage() {
                   {serverError && (
                     <div
                       className={cn(
-                        "p-3 border rounded-xl animate-in fade-in",
+                        'p-3 border rounded-xl animate-in fade-in',
                         isDark
-                          ? "bg-rose-950/30 border-rose-500/20"
-                          : "bg-rose-50 border-rose-200"
+                          ? 'bg-rose-950/30 border-rose-500/20'
+                          : 'bg-rose-50 border-rose-200',
                       )}
                     >
                       <p className="text-xs text-rose-400 font-medium text-center">
@@ -377,7 +377,7 @@ export default function LoginPage() {
                     {isLoading ? (
                       <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : (
-                      "Entrar na conta"
+                      'Entrar na conta'
                     )}
                   </button>
                 </motion.form>
@@ -390,11 +390,11 @@ export default function LoginPage() {
         <div className="text-center mt-6 z-10">
           <p
             className={cn(
-              "text-xs font-geist",
-              isDark ? "text-zinc-400" : "text-zinc-500"
+              'text-xs font-geist',
+              isDark ? 'text-zinc-400' : 'text-zinc-500',
             )}
           >
-            Ainda não tem conta?{" "}
+            Ainda não tem conta?{' '}
             <Link
               className="font-bold text-violet-400 hover:underline transition-all hover:text-violet-300"
               href="/cadastro"

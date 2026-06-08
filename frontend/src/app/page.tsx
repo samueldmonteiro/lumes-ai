@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 function RootRouterContent() {
   const router = useRouter();
@@ -10,20 +10,20 @@ function RootRouterContent() {
 
   useEffect(() => {
     if (hasRedirected.current) return;
-    
-    const seenSplash = localStorage.getItem("lumes_seen_splash");
-    if (seenSplash !== "true") {
+
+    const seenSplash = localStorage.getItem('lumes_seen_splash');
+    if (seenSplash !== 'true') {
       hasRedirected.current = true;
-      router.replace("/presentation");
+      router.replace('/presentation');
       return;
     }
 
-    const query = searchParams.get("q");
+    const query = searchParams.get('q');
     hasRedirected.current = true;
     if (query) {
       router.replace(`/chat?q=${encodeURIComponent(query)}`);
     } else {
-      router.replace("/home");
+      router.replace('/home');
     }
   }, [router, searchParams]);
 
