@@ -49,7 +49,7 @@ export function AppSidebar({
   activeChatId,
 }: AppSidebarProps) {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLoading: isUserLoading } = useUser();
   const { logout } = useLogout();
 
   const displayName = user?.name ?? propUserName ?? 'Usuário';
@@ -260,78 +260,82 @@ export function AppSidebar({
 
       {/* ── Footer: User + Logout / Login ── */}
       <div className="flex-shrink-0 px-4 pb-4 pt-2">
-        <Separator
-          className={cn(
-            'mb-3',
-            isDarkTheme ? 'bg-zinc-800/60' : 'bg-zinc-200/80',
-          )}
-        />
-        {user ? (
-          <div className="flex items-center justify-between">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                router.push('/profile');
-                onClose();
-              }}
-              className="flex items-center gap-2.5 flex-1 min-w-0 text-left cursor-pointer"
-            >
-              <div
-                className={cn(
-                  'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
-                  isDarkTheme
-                    ? 'bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
-                    : 'bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
-                )}
-              >
-                {userInitial}
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span
-                  className={cn(
-                    'text-[13px] font-semibold leading-tight truncate max-w-[120px]',
-                    isDarkTheme ? 'text-zinc-200' : 'text-zinc-700',
-                  )}
-                >
-                  {displayName}
-                </span>
-                <span
-                  className={cn(
-                    'text-[10px] leading-tight',
-                    isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
-                  )}
-                >
-                  {user?.role === 'ADMIN' ? 'Administrador' : 'Conta pessoal'}
-                </span>
-              </div>
-            </motion.button>
-
-            {/* Logout */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleLogout}
+        {!isUserLoading && (
+          <>
+            <Separator
               className={cn(
-                'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer',
-                isDarkTheme
-                  ? 'text-zinc-500 hover:text-red-400 hover:bg-red-50/10'
-                  : 'text-zinc-400 hover:text-red-500 hover:bg-red-50',
+                'mb-3',
+                isDarkTheme ? 'bg-zinc-800/60' : 'bg-zinc-200/80',
               )}
-              title="Sair"
-            >
-              <LogOut className="w-4 h-4 stroke-[1.8]" />
-            </motion.button>
-          </div>
-        ) : (
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => router.push('/login')}
-            className="w-full py-2.5 text-xs font-bold text-white rounded-xl bg-linear-to-r from-[#6366f1] via-[#8b5cf6] to-[#a855f7] shadow-md transition-all duration-300 hover:shadow-lg active:scale-[0.97] cursor-pointer"
-          >
-            Entrar
-          </motion.button>
+            />
+            {user ? (
+              <div className="flex items-center justify-between">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    router.push('/profile');
+                    onClose();
+                  }}
+                  className="flex items-center gap-2.5 flex-1 min-w-0 text-left cursor-pointer"
+                >
+                  <div
+                    className={cn(
+                      'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
+                      isDarkTheme
+                        ? 'bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
+                        : 'bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
+                    )}
+                  >
+                    {userInitial}
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span
+                      className={cn(
+                        'text-[13px] font-semibold leading-tight truncate max-w-[120px]',
+                        isDarkTheme ? 'text-zinc-200' : 'text-zinc-700',
+                      )}
+                    >
+                      {displayName}
+                    </span>
+                    <span
+                      className={cn(
+                        'text-[10px] leading-tight',
+                        isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
+                      )}
+                    >
+                      {user?.role === 'ADMIN' ? 'Administrador' : 'Conta pessoal'}
+                    </span>
+                  </div>
+                </motion.button>
+
+                {/* Logout */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleLogout}
+                  className={cn(
+                    'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer',
+                    isDarkTheme
+                      ? 'text-zinc-500 hover:text-red-400 hover:bg-red-50/10'
+                      : 'text-zinc-400 hover:text-red-500 hover:bg-red-50',
+                  )}
+                  title="Sair"
+                >
+                  <LogOut className="w-4 h-4 stroke-[1.8]" />
+                </motion.button>
+              </div>
+            ) : (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => router.push('/login')}
+                className="w-full py-2.5 text-xs font-bold text-white rounded-xl bg-linear-to-r from-[#6366f1] via-[#8b5cf6] to-[#a855f7] shadow-md transition-all duration-300 hover:shadow-lg active:scale-[0.97] cursor-pointer"
+              >
+                Entrar
+              </motion.button>
+            )}
+          </>
         )}
       </div>
     </div>

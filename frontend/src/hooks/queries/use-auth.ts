@@ -17,15 +17,18 @@ function getUserFromCookie(): User | null {
 }
 
 export function useUser() {
-  const [user, setUser] = useState<User | null>(() => getUserFromCookie());
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const cookieUser = getUserFromCookie();
     getCurrentUserAction().then((serverUser) => {
-      if (serverUser) setUser(serverUser);
+      setUser(serverUser ?? cookieUser);
+      setIsLoading(false);
     });
   }, []);
 
-  return { user };
+  return { user, isLoading };
 }
 
 export function useLogin() {

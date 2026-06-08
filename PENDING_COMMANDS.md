@@ -1,4 +1,4 @@
-## Pending Commands — Corrigir erros de render e linter no front
+## Pending Commands — Correção de FOUC e fluxo de autenticação
 
 ### Install
 ```bash
@@ -7,5 +7,5 @@ none
 
 ### Run
 ```bash
-none
+pnpm dev
 ```

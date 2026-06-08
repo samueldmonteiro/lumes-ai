@@ -21,7 +21,7 @@ export default function HomePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
   const { isDark, toggleTheme } = useChatTheme();
-  const { user } = useUser();
+  const { user, isLoading: isUserLoading } = useUser();
 
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -140,7 +140,7 @@ export default function HomePage() {
           <div className="hidden lg:block" />
 
           {/* Right Side: Entrar Button */}
-          {!user && (
+          {!isUserLoading && !user && (
             <button
               type="button"
               onClick={() => router.push('/login')}

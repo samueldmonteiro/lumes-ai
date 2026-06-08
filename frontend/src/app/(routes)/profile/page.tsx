@@ -20,7 +20,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export default function ProfilePage() {
   const router = useRouter();
   const { isDark } = useChatTheme();
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const { updateProfile, isPending } = useUpdateProfile();
 
   const [name, setName] = useState('');
@@ -37,10 +37,10 @@ export default function ProfilePage() {
   }
 
   useEffect(() => {
-    if (user === null) {
+    if (!isLoading && user === null) {
       router.push('/login');
     }
-  }, [user, router]);
+  }, [user, isLoading, router]);
 
   const userInitial = useMemo(
     () => (user?.name ? user.name.charAt(0).toUpperCase() : '?'),
@@ -93,7 +93,7 @@ export default function ProfilePage() {
     [validate, name, email, password, user, updateProfile],
   );
 
-  if (!user) {
+  if (isLoading || !user) {
     return (
       <div className={cn(
         'min-h-screen flex items-center justify-center',
