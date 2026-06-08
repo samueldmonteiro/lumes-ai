@@ -17,12 +17,12 @@ export declare class PrismaChatLogRepository {
         userId: number | null;
         sessionId?: string | null;
     }): import("../../generated/prisma/models").Prisma__ChatLogClient<{
-        id: number;
-        createdAt: Date;
         question: string;
         answer: string;
         sources: import("@prisma/client/runtime/client").JsonValue;
         similarity: number | null;
+        createdAt: Date;
+        id: number;
         userId: number | null;
         sessionId: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {

@@ -1,4 +1,4 @@
-## Pending Commands — Otimização de performance e transições suaves nas telas do frontend
+## Pending Commands — Remover flash ao voltar para a home page
 
 ### Install
 ```bash
@@ -7,5 +7,5 @@ none
 
 ### Run
 ```bash
-pnpm dev
+none
 ```

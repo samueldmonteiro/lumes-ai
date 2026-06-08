@@ -10,6 +10,7 @@ import {
   LogOut,
   Sun,
   Moon,
+  User,
 } from "lucide-react";
 import {
   Sheet,
@@ -267,8 +268,15 @@ export function AppSidebar({
         />
         {user ? (
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              {/* User Avatar */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                router.push("/profile");
+                onClose();
+              }}
+              className="flex items-center gap-2.5 flex-1 min-w-0 text-left cursor-pointer"
+            >
               <div
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none",
@@ -279,10 +287,10 @@ export function AppSidebar({
               >
                 {userInitial}
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0">
                 <span
                   className={cn(
-                    "text-[13px] font-semibold leading-tight truncate max-w-[140px]",
+                    "text-[13px] font-semibold leading-tight truncate max-w-[120px]",
                     isDarkTheme ? "text-zinc-200" : "text-zinc-700"
                   )}
                 >
@@ -297,7 +305,7 @@ export function AppSidebar({
                   {user?.role === 'ADMIN' ? 'Administrador' : 'Conta pessoal'}
                 </span>
               </div>
-            </div>
+            </motion.button>
 
             {/* Logout */}
             <motion.button
