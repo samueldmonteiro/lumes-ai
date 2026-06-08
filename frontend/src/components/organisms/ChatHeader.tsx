@@ -35,9 +35,9 @@ export function ChatHeader({
         isDarkTheme ? 'border-zinc-800/60' : 'border-zinc-200',
       )}
     >
-      {/* Branding and sidebar control */}
+      {/* Marca e controle da sidebar */}
       <div className="flex items-center gap-3">
-        {/* Sidebar Trigger button */}
+        {/* Botão de abrir/fechar sidebar */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -53,7 +53,7 @@ export function ChatHeader({
           <PanelLeft className="w-[22px] h-[22px] stroke-[1.8]" />
         </motion.button>
 
-        {/* Brand logo & title side by side */}
+        {/* Logo e nome lado a lado */}
         <div className="flex items-center gap-2 select-none">
           <div className="relative w-[28px] h-[28px]">
             <Image
@@ -71,14 +71,14 @@ export function ChatHeader({
               isDarkTheme ? 'text-white' : 'text-zinc-800',
             )}
           >
-            LUMES <span className="text-violet-400">AI</span>
+            LUMES <span className="text-violet-500">AI</span>
           </span>
         </div>
       </div>
 
-      {/* Right controls */}
+      {/* Controles do lado direito */}
       <div className="flex items-center gap-3">
-        {/* User info / Login */}
+        {/* Informações do usuário / Login */}
         {user ? (
           <div className="flex items-center gap-2.5">
             <div
@@ -110,7 +110,7 @@ export function ChatHeader({
           </button>
         )}
 
-        {/* New Conversation button */}
+        {/* Botão de nova conversa */}
         <motion.button
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}

@@ -21,10 +21,10 @@ export const MessageBubble = React.memo(function MessageBubble({ message, isDark
         isUser ? 'justify-end' : 'justify-start',
       )}
     >
-      {/* AI Avatar on Left */}
+      {/* Avatar da IA à esquerda */}
       {!isUser && <Avatar role="assistant" className="mt-1" />}
 
-      {/* Message Content Bubble */}
+      {/* Bolha de conteúdo da mensagem */}
       <div
         className={cn(
           'max-w-[85%] sm:max-w-[75%] shadow-sm leading-relaxed text-sm md:text-[15px] transition-all duration-300 relative',

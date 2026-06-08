@@ -25,7 +25,7 @@ export default function PresentationPage() {
       onClick={handleComplete}
       className="relative flex flex-col items-center justify-center min-h-screen w-full bg-[#07040D] overflow-hidden cursor-pointer select-none"
     >
-      {/* Floating tech particles - System Palette (Violet) */}
+      {/* Partículas tecnológicas flutuantes — violeta */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {Array.from({ length: 20 }).map((_, i) => {
           const duration = 5 + (i * 0.25) % 5;
@@ -44,12 +44,12 @@ export default function PresentationPage() {
         })}
       </div>
 
-      {/* Subtle background glow */}
+      {/* Brilho de fundo sutil */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-violet-600/10 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="relative z-10 flex flex-col items-center gap-8">
         
-        {/* Logo Image */}
+        {/* Imagem da logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8, filter: 'blur(10px)' }}
           animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}

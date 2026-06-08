@@ -81,7 +81,7 @@ export function AppSidebar({
 
   const renderSidebarContent = (isStaticContent: boolean) => (
     <div className="w-full h-full flex flex-col bg-transparent">
-      {/* ── Header: Logo + Theme Toggle ── */}
+      {/* ── Cabeçalho: Logo + Alternador de tema ── */}
       <div className="flex items-center justify-between px-5 pt-5 pb-3 shrink-0">
         <div className="flex items-center gap-2.5 select-none">
           <div className="relative w-[30px] h-[30px]">
@@ -101,7 +101,7 @@ export function AppSidebar({
                 isDarkTheme ? 'text-white' : 'text-zinc-800',
               )}
             >
-              LUMES <span className="text-violet-400">AI</span>
+              LUMES <span className="text-violet-500">AI</span>
             </h2>
           ) : (
             <SheetTitle
@@ -110,12 +110,12 @@ export function AppSidebar({
                 isDarkTheme ? 'text-white' : 'text-zinc-800',
               )}
             >
-              LUMES <span className="text-violet-400">AI</span>
+              LUMES <span className="text-violet-500">AI</span>
             </SheetTitle>
           )}
         </div>
 
-        {/* Theme Toggle */}
+        {/* Alternador de tema */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -162,7 +162,7 @@ export function AppSidebar({
         />
       </div>
 
-      {/* ── New Chat Button ── */}
+      {/* ── Botão Novo Chat ── */}
       <div className="px-4 pb-2 shrink-0">
         <motion.button
           whileHover={{ scale: 1.01 }}
@@ -191,7 +191,7 @@ export function AppSidebar({
         </motion.button>
       </div>
 
-      {/* ── Chat History ── */}
+      {/* ── Histórico de conversas ── */}
       <div className="flex-1 min-h-0 flex flex-col px-4 pt-1">
         <h3
           className={cn(
@@ -257,7 +257,7 @@ export function AppSidebar({
         </ScrollArea>
       </div>
 
-      {/* ── Footer: User + Logout / Login ── */}
+      {/* ── Rodapé: Usuário + Logout / Login ── */}
       <div className="shrink-0 px-4 pb-4 pt-2">
         {!isUserLoading && (
           <>
@@ -308,7 +308,7 @@ export function AppSidebar({
                   </div>
                 </motion.button>
 
-                {/* Logout */}
+                {/* Botão de sair */}
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -342,7 +342,7 @@ export function AppSidebar({
 
   return (
     <>
-      {/* Versão Estática para Desktop (lg:) */}
+      {/* Versão fixa para desktop (lg:) */}
       <aside
         className={cn(
           'hidden lg:block w-[280px] h-screen shrink-0 relative z-20 border-r transition-colors duration-500',
@@ -354,7 +354,7 @@ export function AppSidebar({
         {renderSidebarContent(true)}
       </aside>
 
-      {/* Versão Sheet para Mobile (< lg) */}
+      {/* Versão em sheet para mobile (< lg) */}
       <div className="lg:hidden">
         <Sheet open={isOpen} onOpenChange={onClose}>
           <SheetContent

@@ -1,3 +1,4 @@
+// Tipos de documento suportados para ingestão
 export type DocumentType = 'text' | 'json' | 'pdf';
 
 export interface AdminDocument {

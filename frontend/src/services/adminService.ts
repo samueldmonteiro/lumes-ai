@@ -1,5 +1,6 @@
 import type { AdminDocument, AdminStats, DocumentType, IngestResult } from '@/types/admin';
 
+// Cliente da API administrativa — atualmente usa dados mockados
 export interface AdminApiClient {
   listDocuments(): Promise<AdminDocument[]>;
   ingestText(text: string, source: string): Promise<IngestResult>;

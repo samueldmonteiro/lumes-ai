@@ -5,6 +5,7 @@ import { updateProfileAction } from '@/actions/user';
 import type { UpdateUser, User } from '@/types/user.type';
 import type { ActionResponse } from '@/types/api.type';
 
+// Hook para atualização de perfil do usuário
 export function useUpdateProfile() {
   const [isPending, setIsPending] = useState(false);
 

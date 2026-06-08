@@ -17,7 +17,7 @@ export function ChatLayout({ children, isDarkTheme }: ChatLayoutProps) {
         isDarkTheme ? 'bg-[#07040D]' : 'bg-[#F4F4F6]',
       )}
     >
-      {/* Premium Ambient Background Mesh Glow - Only in dark mode for OLED eye comfort */}
+      {/* Brilho ambiente de fundo — apenas no modo escuro para conforto visual */}
       {isDarkTheme && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
           <motion.div

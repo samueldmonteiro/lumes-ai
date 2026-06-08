@@ -70,6 +70,7 @@ export function AdminSidebar({
               LUMES <span className="text-violet-400">ADM</span>
           </span>
         </div>
+        {/* Alternador de tema */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -98,6 +99,7 @@ export function AdminSidebar({
         <Separator className="bg-sidebar-border" />
       </div>
 
+      {/* Navegação principal */}
       <nav className="flex-1 flex flex-col gap-1 px-3 pt-2">
         {NAV_ITEMS.map((item) => (
           <motion.button
@@ -132,6 +134,7 @@ export function AdminSidebar({
         ))}
       </nav>
 
+      {/* Rodapé com botão Voltar e info do admin */}
       <div className="shrink-0 px-4 pb-4 pt-2">
         <Separator className="mb-3 bg-sidebar-border" />
         <motion.button
@@ -186,6 +189,7 @@ export function AdminSidebar({
               'w-[240px] sm:max-w-[240px] p-0 flex flex-col border-r-0 overflow-y-auto bg-sidebar/98 backdrop-blur-xl',
             )}
           >
+            {/* Título acessível para leitores de tela */}
             <SheetTitle className="sr-only">Menu Administrativo</SheetTitle>
             {renderContent()}
           </SheetContent>

@@ -284,7 +284,7 @@ export default function AdminPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-6">
-              {/* Content Type Tabs */}
+              {/* Abas de tipo de conteúdo */}
               <div className="flex flex-col gap-3">
                 <Label>Tipo de Conteúdo</Label>
                 <div className="flex gap-2">
@@ -304,7 +304,7 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Text Mode */}
+              {/* Modo texto */}
               {ingestMode === 'text' && (
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="text-content">Conteúdo em Texto</Label>
@@ -318,7 +318,7 @@ export default function AdminPage() {
                 </div>
               )}
 
-              {/* JSON Mode */}
+              {/* Modo JSON */}
               {ingestMode === 'json' && (
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="json-content">Conteúdo JSON</Label>
@@ -336,7 +336,7 @@ export default function AdminPage() {
                 </div>
               )}
 
-              {/* PDF Mode */}
+              {/* Modo PDF */}
               {ingestMode === 'pdf' && (
                 <div className="flex flex-col gap-2">
                   <Label>Arquivo PDF</Label>
@@ -374,7 +374,7 @@ export default function AdminPage() {
                 </div>
               )}
 
-              {/* Source Field */}
+              {/* Campo de origem */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="source">
                   Origem (Source)
@@ -417,7 +417,7 @@ export default function AdminPage() {
           </Card>
         </TabsContent>
 
-        {/* ═══════════════ DOCUMENTS ═══════════════ */}
+        {/* ═══════════════ DOCUMENTOS ═══════════════ */}
         <TabsContent value="documents" className="mt-0">
           <Card>
             <CardHeader>

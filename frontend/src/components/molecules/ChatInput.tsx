@@ -25,13 +25,13 @@ export function ChatInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Automatically adjust height based on text content
+  // Ajusta automaticamente a altura do textarea conforme o conteúdo
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = 'auto';
       const scrollHeight = textarea.scrollHeight;
-      // Keep height between 40px and 120px
+      // Mantém altura entre 40px e 120px
       textarea.style.height = `${Math.min(Math.max(scrollHeight, 40), 120)}px`;
     }
   }, [input]);
@@ -41,7 +41,7 @@ export function ChatInput({
       e.preventDefault();
       if (isLoading || !input.trim()) return;
 
-      // Submit the parent form
+      // Envia o formulário pai
       if (formRef.current) {
         formRef.current.requestSubmit();
       }
@@ -59,7 +59,7 @@ export function ChatInput({
               : 'bg-white border-zinc-200/90 shadow-[0_4px_24px_rgba(0,0,0,0.06)] focus-within:border-violet-400/60 focus-within:shadow-[0_4px_24px_rgba(139,92,246,0.12)]',
           )}
         >
-          {/* Dynamic Auto-Resizing Input Field */}
+          {/* Campo de input com redimensionamento automático */}
           <textarea
             ref={textareaRef}
             rows={1}
@@ -74,7 +74,7 @@ export function ChatInput({
             )}
           />
 
-          {/* Submission Button */}
+          {/* Botão de envio */}
           <motion.button
             whileHover={input.trim() && !isLoading ? { scale: 1.05 } : {}}
             whileTap={input.trim() && !isLoading ? { scale: 0.95 } : {}}

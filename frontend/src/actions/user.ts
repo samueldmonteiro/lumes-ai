@@ -5,6 +5,7 @@ import { updateUser } from '@/services/user.service';
 import type { UpdateUser, User } from '@/types/user.type';
 import type { ActionResponse } from '@/types/api.type';
 
+// Action para atualizar perfil do usuário autenticado
 export async function updateProfileAction(data: UpdateUser): Promise<ActionResponse<User>> {
   try {
     const response = await updateUser(data);

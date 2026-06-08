@@ -76,7 +76,7 @@ export default function HomePage() {
         isDark ? 'bg-[#07040D]' : 'bg-[#F4F4F6]',
       )}
     >
-      {/* Sidebar (Auto-responsiva) */}
+      {/* Sidebar responsiva — desktop fixa, mobile em sheet */}
       <AppSidebar
         isOpen={isSidebarOpen}
         onClose={handleCloseSidebar}
@@ -85,7 +85,7 @@ export default function HomePage() {
         onNewConversation={handleNewConversation}
       />
 
-      {/* Dot Pattern Overlay */}
+      {/* Fundo pontilhado decorativo */}
       <div
         className={cn(
           'absolute inset-0 pointer-events-none',
@@ -99,7 +99,7 @@ export default function HomePage() {
         }}
       />
 
-      {/* Decorative Glowing Orbs */}
+      {/* Orbes brilhantes decorativos */}
       {isDark && (
         <>
           <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
@@ -113,16 +113,16 @@ export default function HomePage() {
         </>
       )}
 
-      {/* Main Content Area */}
+      {/* Área de conteúdo principal */}
       <div
         className={cn(
           'relative z-10 flex-1 h-screen flex flex-col justify-between py-6 px-5 sm:px-8 transition-colors duration-500',
           isDark ? 'text-white' : 'text-zinc-900',
         )}
       >
-        {/* Top bar */}
+        {/* Barra superior */}
         <header className="flex items-center justify-between w-full shrink-0">
-          {/* Left Side: Sidebar Toggle Icon (Mobile Only) */}
+          {/* Botão de abrir sidebar (apenas mobile) */}
           <button
             type="button"
             onClick={() => setIsSidebarOpen(true)}
@@ -136,10 +136,10 @@ export default function HomePage() {
             <PanelLeft className="w-[22px] h-[22px] stroke-[1.8]" />
           </button>
 
-          {/* Spacer to push Entrar to the right */}
+          {/* Espaçador para empurrar botão Entrar à direita */}
           <div className="hidden lg:block" />
 
-          {/* Right Side: Entrar Button */}
+          {/* Botão Entrar (lado direito) */}
           {!isUserLoading && !user && (
             <button
               type="button"
@@ -151,20 +151,18 @@ export default function HomePage() {
           )}
         </header>
 
-        {/* Central container focusing the content vertically and horizontally */}
+        {/* Container central que alinha o conteúdo vertical e horizontalmente */}
         <div className="flex-1 flex flex-col lg:justify-center items-center w-full max-w-[720px] mx-auto my-auto py-8">
-          {/* Title & Subtitle */}
+          {/* Título e subtítulo da marca */}
           <div className="flex-1 lg:flex-none flex flex-col justify-center items-center text-center select-none lg:mb-12">
             <motion.h1
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className={cn(
-                'text-4xl md:text-5xl font-extrabold tracking-[0.25em] uppercase font-geist',
-                isDark ? 'text-white' : 'text-zinc-800',
-              )}
+              className="text-4xl md:text-5xl font-extrabold tracking-[0.25em] uppercase font-geist"
             >
-              LUMES AI
+              <span className={cn(isDark ? 'text-white' : 'text-zinc-800')}>LUMES</span>
+              <span className="text-violet-500 ml-3 sm:ml-4">AI</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -179,9 +177,9 @@ export default function HomePage() {
             </motion.p>
           </div>
 
-          {/* Bottom block: suggestions and chat input */}
+          {/* Bloco inferior: sugestões e input de chat */}
           <div className="w-full flex flex-col gap-6 mt-auto lg:mt-0">
-            {/* Suggestions Block */}
+            {/* Bloco de sugestões */}
             <div className="w-full flex flex-col gap-3">
               <h2
                 className={cn(
