@@ -74,7 +74,6 @@ export function AppSidebar({
 
   const handleLogout = useCallback(async () => {
     await logout();
-    localStorage.removeItem('lumes_seen_splash');
     localStorage.removeItem('lumes_theme');
     router.push('/login');
     onClose();
@@ -83,7 +82,7 @@ export function AppSidebar({
   const renderSidebarContent = (isStaticContent: boolean) => (
     <div className="w-full h-full flex flex-col bg-transparent">
       {/* ── Header: Logo + Theme Toggle ── */}
-      <div className="flex items-center justify-between px-5 pt-5 pb-3 flex-shrink-0">
+      <div className="flex items-center justify-between px-5 pt-5 pb-3 shrink-0">
         <div className="flex items-center gap-2.5 select-none">
           <div className="relative w-[30px] h-[30px]">
             <Image
@@ -164,7 +163,7 @@ export function AppSidebar({
       </div>
 
       {/* ── New Chat Button ── */}
-      <div className="px-4 pb-2 flex-shrink-0">
+      <div className="px-4 pb-2 shrink-0">
         <motion.button
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
@@ -196,7 +195,7 @@ export function AppSidebar({
       <div className="flex-1 min-h-0 flex flex-col px-4 pt-1">
         <h3
           className={cn(
-            'text-[10px] font-bold tracking-[0.1em] uppercase px-1 mb-2 select-none',
+            'text-[10px] font-bold tracking-widest uppercase px-1 mb-2 select-none',
             isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
           )}
         >
@@ -226,7 +225,7 @@ export function AppSidebar({
                 >
                   <MessageSquare
                     className={cn(
-                      'w-3.5 h-3.5 flex-shrink-0 stroke-[1.8] transition-colors',
+                      'w-3.5 h-3.5 shrink-0 stroke-[1.8] transition-colors',
                       activeChatId === chat.id
                         ? 'text-violet-400'
                         : isDarkTheme
@@ -259,7 +258,7 @@ export function AppSidebar({
       </div>
 
       {/* ── Footer: User + Logout / Login ── */}
-      <div className="flex-shrink-0 px-4 pb-4 pt-2">
+      <div className="shrink-0 px-4 pb-4 pt-2">
         {!isUserLoading && (
           <>
             <Separator
@@ -283,8 +282,8 @@ export function AppSidebar({
                     className={cn(
                       'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
                       isDarkTheme
-                        ? 'bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
-                        : 'bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
+                        ? 'bg-linear-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
+                        : 'bg-linear-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
                     )}
                   >
                     {userInitial}

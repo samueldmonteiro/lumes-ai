@@ -31,7 +31,7 @@ export function ChatHeader({
   return (
     <header
       className={cn(
-        'relative z-20 flex items-center justify-between px-4 py-2.5 w-full flex-shrink-0 border-b transition-colors duration-500',
+        'relative z-20 flex items-center justify-between px-4 py-2.5 w-full shrink-0 border-b transition-colors duration-500',
         isDarkTheme ? 'border-zinc-800/60' : 'border-zinc-200',
       )}
     >
@@ -85,8 +85,8 @@ export function ChatHeader({
               className={cn(
                 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
                 isDarkTheme
-                  ? 'bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
-                  : 'bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
+                  ? 'bg-linear-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
+                  : 'bg-linear-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
               )}
             >
               {userInitial}

@@ -154,7 +154,7 @@ function ChatContent() {
           >
             <h3
               className={cn(
-                'text-xs font-bold tracking-[0.1em] uppercase mb-4',
+                'text-xs font-bold tracking-widest uppercase mb-4',
                 isDark ? 'text-zinc-500' : 'text-zinc-400',
               )}
             >

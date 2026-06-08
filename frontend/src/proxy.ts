@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import type { User } from '@/types/user.type';
 
-const protectedRoutes = [, '/admin', '/home', '/config'];
+const protectedRoutes = ['/admin'];
 const publicOnlyRoutes = ['/chat', '/login', '/cadastro', '/presentation'];
 
 export function proxy(request: NextRequest) {

@@ -49,7 +49,7 @@ export function AdminSidebar({
 
   const renderContent = () => (
     <div className="w-full h-full flex flex-col bg-transparent">
-      <div className="flex items-center justify-between px-5 pt-5 pb-3 flex-shrink-0">
+      <div className="flex items-center justify-between px-5 pt-5 pb-3 shrink-0">
         <div className="flex items-center gap-2.5 select-none">
           <div className="relative w-[30px] h-[30px]">
             <Image
@@ -132,7 +132,7 @@ export function AdminSidebar({
         ))}
       </nav>
 
-      <div className="flex-shrink-0 px-4 pb-4 pt-2">
+      <div className="shrink-0 px-4 pb-4 pt-2">
         <Separator className="mb-3 bg-sidebar-border" />
         <motion.button
           whileHover={{ scale: 1.01 }}
@@ -153,8 +153,8 @@ export function AdminSidebar({
             <div className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
               isDarkTheme
-                ? 'bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
-                : 'bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
+                ? 'bg-linear-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
+                : 'bg-linear-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
             )}>
               {userInitial}
             </div>
