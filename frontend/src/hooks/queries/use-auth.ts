@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { loginAction, logoutAction, getCurrentUserAction, registerAction } from '@/app/actions/auth';
+import { loginAction, logoutAction, getCurrentUserAction, registerAction } from '@/actions/auth';
 import type { User, StoreUser } from '@/types/user.type';
 import type { ActionResponse } from '@/types/api.type';
 
+// Extrai os dados do usuário do cookie 'user'
 function getUserFromCookie(): User | null {
   if (typeof document === 'undefined') return null;
   const match = document.cookie.match(/(?:^|;\s*)user=([^;]*)/);
@@ -16,6 +17,7 @@ function getUserFromCookie(): User | null {
   }
 }
 
+// Hook para obter o usuário autenticado atual
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +33,7 @@ export function useUser() {
   return { user, isLoading };
 }
 
+// Hook para ação de login
 export function useLogin() {
   const [isPending, setIsPending] = useState(false);
 
@@ -46,6 +49,7 @@ export function useLogin() {
   return { login, isPending };
 }
 
+// Hook para ação de registro
 export function useRegister() {
   const [isPending, setIsPending] = useState(false);
 
@@ -61,6 +65,7 @@ export function useRegister() {
   return { register, isPending };
 }
 
+// Hook para ação de logout
 export function useLogout() {
   const [isPending, setIsPending] = useState(false);
 

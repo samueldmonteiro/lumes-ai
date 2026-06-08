@@ -11,7 +11,7 @@ export function MarkdownRenderer({ content }: { content: string }) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
         components={{
-          // Headings with clean tight spacing
+          // Títulos com espaçamento limpo e compacto
           h1: ({ children }) => (
             <h1 className="text-lg sm:text-xl font-bold font-geist mt-4.5 mb-2.5 text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-1 tracking-tight">
               {children}
@@ -28,14 +28,14 @@ export function MarkdownRenderer({ content }: { content: string }) {
             </h3>
           ),
           
-          // Paragraphs with tight, professional margins (fixing massive whitespace spacing)
+          // Parágrafos com margens compactas e profissionais
           p: ({ children }) => (
             <p className="mb-2.5 text-zinc-700 dark:text-zinc-300 last:mb-0 leading-relaxed">
               {children}
             </p>
           ),
           
-          // Lists with aligned spacing
+          // Listas com espaçamento alinhado
           ul: ({ children }) => (
             <ul className="list-disc list-inside pl-3.5 mb-2.5 space-y-1 text-zinc-700 dark:text-zinc-300">
               {children}
@@ -52,7 +52,7 @@ export function MarkdownRenderer({ content }: { content: string }) {
             </li>
           ),
 
-          // Explicit high-contrast customization for strong and bold text (Fixing unreadable dark text inside lists)
+          // Personalização de alto contraste para texto em negrito (corrige legibilidade no modo escuro)
           strong: ({ children }) => (
             <strong className="font-semibold text-zinc-900 dark:text-white">
               {children}
@@ -64,14 +64,14 @@ export function MarkdownRenderer({ content }: { content: string }) {
             </b>
           ),
 
-          // Blockquotes
+          // Citações em bloco
           blockquote: ({ children }) => (
             <blockquote className="border-l-4 border-violet-500/50 pl-4 py-1 my-3.5 text-zinc-700 dark:text-zinc-400 italic bg-zinc-100/50 dark:bg-zinc-900/40 rounded-r-lg pr-2">
               {children}
             </blockquote>
           ),
 
-          // Horizontal lines
+          // Linhas horizontais
           hr: () => (
             <hr className="my-4 border-t border-zinc-200 dark:border-zinc-800" />
           ),
@@ -88,7 +88,7 @@ export function MarkdownRenderer({ content }: { content: string }) {
             </a>
           ),
 
-          // Code block & inline code
+          // Bloco de código e código inline
           code({ className, children, ...props }: React.ComponentPropsWithoutRef<'code'>) {
             const isInline = !className?.includes('language-');
             
@@ -108,7 +108,7 @@ export function MarkdownRenderer({ content }: { content: string }) {
             );
           },
 
-          // Tables (Fixing unreadable table headers and borders)
+          // Tabelas (corrige legibilidade de cabeçalhos e bordas)
           table: ({ children }) => (
             <div className="w-full overflow-x-auto my-4.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 scrollbar-thin">
               <table className="w-full border-collapse text-left text-xs sm:text-sm">

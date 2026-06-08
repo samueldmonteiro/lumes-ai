@@ -6,6 +6,7 @@ import { storeUser } from '@/services/user.service';
 import type { User, StoreUser } from '@/types/user.type';
 import type { ActionResponse } from '@/types/api.type';
 
+// Action de login: autentica e define cookies de sessão
 export async function loginAction(email: string, password: string): Promise<ActionResponse<User>> {
   try {
     const response = await authService.login(email, password);
@@ -35,6 +36,7 @@ export async function loginAction(email: string, password: string): Promise<Acti
   }
 }
 
+// Action de logout: remove cookies de sessão
 export async function logoutAction(): Promise<ActionResponse> {
   const cookieStore = await cookies();
   cookieStore.delete('token');
@@ -42,6 +44,7 @@ export async function logoutAction(): Promise<ActionResponse> {
   return { success: true };
 }
 
+// Action de registro: cria conta e já autentica o usuário
 export async function registerAction(data: StoreUser): Promise<ActionResponse<User>> {
   try {
     await storeUser(data);
@@ -73,6 +76,7 @@ export async function registerAction(data: StoreUser): Promise<ActionResponse<Us
   }
 }
 
+// Obtém os dados do usuário atual a partir do cookie
 export async function getCurrentUserAction(): Promise<User | null> {
   const cookieStore = await cookies();
   const userCookie = cookieStore.get('user');

@@ -3,6 +3,7 @@
 import { useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+// Roteador raiz: redireciona para presentation (primeiro acesso) ou home/chat
 function RootRouterContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

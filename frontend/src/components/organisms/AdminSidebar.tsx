@@ -49,7 +49,7 @@ export function AdminSidebar({
 
   const renderContent = () => (
     <div className="w-full h-full flex flex-col bg-transparent">
-      <div className="flex items-center justify-between px-5 pt-5 pb-3 flex-shrink-0">
+      <div className="flex items-center justify-between px-5 pt-5 pb-3 shrink-0">
         <div className="flex items-center gap-2.5 select-none">
           <div className="relative w-[30px] h-[30px]">
             <Image
@@ -70,6 +70,7 @@ export function AdminSidebar({
               LUMES <span className="text-violet-400">ADM</span>
           </span>
         </div>
+        {/* Alternador de tema */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -98,6 +99,7 @@ export function AdminSidebar({
         <Separator className="bg-sidebar-border" />
       </div>
 
+      {/* Navegação principal */}
       <nav className="flex-1 flex flex-col gap-1 px-3 pt-2">
         {NAV_ITEMS.map((item) => (
           <motion.button
@@ -132,7 +134,8 @@ export function AdminSidebar({
         ))}
       </nav>
 
-      <div className="flex-shrink-0 px-4 pb-4 pt-2">
+      {/* Rodapé com botão Voltar e info do admin */}
+      <div className="shrink-0 px-4 pb-4 pt-2">
         <Separator className="mb-3 bg-sidebar-border" />
         <motion.button
           whileHover={{ scale: 1.01 }}
@@ -153,8 +156,8 @@ export function AdminSidebar({
             <div className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
               isDarkTheme
-                ? 'bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
-                : 'bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
+                ? 'bg-linear-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
+                : 'bg-linear-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
             )}>
               {userInitial}
             </div>
@@ -186,6 +189,7 @@ export function AdminSidebar({
               'w-[240px] sm:max-w-[240px] p-0 flex flex-col border-r-0 overflow-y-auto bg-sidebar/98 backdrop-blur-xl',
             )}
           >
+            {/* Título acessível para leitores de tela */}
             <SheetTitle className="sr-only">Menu Administrativo</SheetTitle>
             {renderContent()}
           </SheetContent>

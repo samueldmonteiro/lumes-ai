@@ -31,9 +31,9 @@ export function useScrollToBottom(
         const containerRect = container.getBoundingClientRect();
         const bubbleRect = bubble.getBoundingClientRect();
         
-        // Calculate position relative to container's scroll bounds
+        // Calcula posição relativa aos limites de scroll do container
         const relativeTop = bubbleRect.top - containerRect.top + container.scrollTop;
-        // Apply comfortable 12px margin so the bubble isn't tightly squished
+        // Aplica margem de 12px para a bolha não ficar colada na borda
         const targetScrollTop = Math.max(0, relativeTop - 12);
         
         container.scrollTo({
@@ -50,7 +50,7 @@ export function useScrollToBottom(
     setShowScrollButton(!isAtBottom);
   }, []);
 
-  // Monitor messages list to trigger contextual smart scroll
+  // Monitora a lista de mensagens para acionar scroll contextual
   useEffect(() => {
     if (messages.length === 0) {
       scrolledAssistantMessageId.current = null;
@@ -62,7 +62,7 @@ export function useScrollToBottom(
     if (lastMessage.role === 'user') {
       scrollToBottom();
     } else if (lastMessage.role === 'assistant') {
-      // Scroll to start of the AI response once upon generation start
+      // Rola para o início da resposta da IA assim que começa a gerar
       if (scrolledAssistantMessageId.current !== lastMessage.id) {
         scrolledAssistantMessageId.current = lastMessage.id;
         scrollToNewestAssistant();

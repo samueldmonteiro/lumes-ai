@@ -35,7 +35,7 @@ export function MessageList({
   return (
     <div className="flex-1 relative overflow-hidden flex flex-col min-h-0 w-full px-4 z-10">
       
-      {/* Scrollable conversation stream box */}
+      {/* Área de mensagens rolável */}
       <div
         ref={scrollRef}
         onScroll={handleScroll}
@@ -70,7 +70,7 @@ export function MessageList({
             })}
           </AnimatePresence>
 
-          {/* AI Typing / Generating State bubble */}
+          {/* Indicador de digitação da IA */}
           {isLoading && messages[messages.length - 1]?.role === 'user' && !error && (
             <motion.div
               layout="position"
@@ -92,7 +92,7 @@ export function MessageList({
             </motion.div>
           )}
 
-          {/* Connected API Errors */}
+          {/* Erros de conexão com a API */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -108,7 +108,7 @@ export function MessageList({
         </div>
       </div>
 
-      {/* Floating Scroll-to-Bottom Command */}
+      {/* Botão flutuante de rolar para o final */}
       <AnimatePresence>
         {showScrollButton && (
           <motion.div

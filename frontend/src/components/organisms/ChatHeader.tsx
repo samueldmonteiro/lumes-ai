@@ -31,13 +31,13 @@ export function ChatHeader({
   return (
     <header
       className={cn(
-        'relative z-20 flex items-center justify-between px-4 py-2.5 w-full flex-shrink-0 border-b transition-colors duration-500',
+        'relative z-20 flex items-center justify-between px-4 py-2.5 w-full shrink-0 border-b transition-colors duration-500',
         isDarkTheme ? 'border-zinc-800/60' : 'border-zinc-200',
       )}
     >
-      {/* Branding and sidebar control */}
+      {/* Marca e controle da sidebar */}
       <div className="flex items-center gap-3">
-        {/* Sidebar Trigger button */}
+        {/* Botão de abrir/fechar sidebar */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -53,7 +53,7 @@ export function ChatHeader({
           <PanelLeft className="w-[22px] h-[22px] stroke-[1.8]" />
         </motion.button>
 
-        {/* Brand logo & title side by side */}
+        {/* Logo e nome lado a lado */}
         <div className="flex items-center gap-2 select-none">
           <div className="relative w-[28px] h-[28px]">
             <Image
@@ -71,22 +71,22 @@ export function ChatHeader({
               isDarkTheme ? 'text-white' : 'text-zinc-800',
             )}
           >
-            LUMES <span className="text-violet-400">AI</span>
+            LUMES <span className="text-violet-500">AI</span>
           </span>
         </div>
       </div>
 
-      {/* Right controls */}
+      {/* Controles do lado direito */}
       <div className="flex items-center gap-3">
-        {/* User info / Login */}
+        {/* Informações do usuário / Login */}
         {user ? (
           <div className="flex items-center gap-2.5">
             <div
               className={cn(
                 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
                 isDarkTheme
-                  ? 'bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
-                  : 'bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
+                  ? 'bg-linear-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
+                  : 'bg-linear-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
               )}
             >
               {userInitial}
@@ -110,7 +110,7 @@ export function ChatHeader({
           </button>
         )}
 
-        {/* New Conversation button */}
+        {/* Botão de nova conversa */}
         <motion.button
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}

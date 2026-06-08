@@ -98,7 +98,7 @@ function ChatContent() {
   return (
     <ChatLayout isDarkTheme={isDark}>
       <div className="flex flex-row h-screen w-full overflow-hidden">
-        {/* Sidebar (Auto-responsiva) */}
+        {/* Sidebar responsiva — desktop fixa, mobile em sheet */}
         <AppSidebar
           isOpen={isSidebarOpen}
           onClose={handleCloseSidebar}
@@ -107,9 +107,9 @@ function ChatContent() {
           onNewConversation={handleNewConversation}
         />
 
-        {/* Chat Principal */}
+        {/* Área principal do chat */}
         <div className="flex-1 h-screen flex flex-col min-w-0 relative">
-          {/* Header */}
+          {/* Cabeçalho do chat */}
           <ChatHeader
             onNewConversation={handleNewConversation}
             onToggleSidebar={handleToggleSidebar}
@@ -117,9 +117,9 @@ function ChatContent() {
             user={user}
           />
 
-          {/* Área de Mensagens + Input centralizados com max-w-4xl no desktop */}
+          {/* Área de mensagens e input centralizados (max-w-4xl no desktop) */}
           <div className="flex-1 flex flex-col justify-between min-h-0 w-full max-w-4xl mx-auto">
-            {/* Main message viewport */}
+            {/* Viewport principal de mensagens */}
             <MessageList
               messages={messages}
               isLoading={isLoading}
@@ -132,7 +132,7 @@ function ChatContent() {
               handleScroll={handleScroll}
             />
 
-            {/* Fixed bottom interactive capsule */}
+            {/* Input fixo na parte inferior */}
             <ChatInput
               input={input}
               handleInputChange={handleInputChange}
@@ -144,7 +144,7 @@ function ChatContent() {
           </div>
         </div>
 
-        {/* Painel de Contexto (Desktop) */}
+        {/* Painel de contexto lateral (desktop) */}
         <div className="hidden lg:block w-[320px] h-screen shrink-0 relative z-20">
           <aside
             className={cn(
@@ -154,7 +154,7 @@ function ChatContent() {
           >
             <h3
               className={cn(
-                'text-xs font-bold tracking-[0.1em] uppercase mb-4',
+                'text-xs font-bold tracking-widest uppercase mb-4',
                 isDark ? 'text-zinc-500' : 'text-zinc-400',
               )}
             >
@@ -183,7 +183,7 @@ function ChatContent() {
               </div>
             </div>
 
-            {/* Estatísticas Simples */}
+            {/* Métricas da sessão */}
             <div className="flex flex-col gap-3.5 mb-6">
               <h4 className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Métricas da Sessão</h4>
               <div className="flex justify-between items-center text-xs">
@@ -198,7 +198,7 @@ function ChatContent() {
 
             <div className={cn('h-[1px] w-full my-5', isDark ? 'bg-zinc-800/60' : 'bg-zinc-200/80')} />
 
-            {/* Dicas / Atalhos */}
+            {/* Dicas de interação */}
             <div className="flex flex-col gap-3.5">
               <h4 className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Como interagir</h4>
               <div className="text-xs space-y-3 leading-relaxed">

@@ -127,7 +127,7 @@ export default function RegisterPage() {
         isDark ? 'bg-[#07040D] text-white' : 'bg-[#F4F4F6] text-zinc-900',
       )}
     >
-      {/* Light Pattern Overlay */}
+      {/* Padrão de fundo pontilhado */}
       <div
         className={cn('absolute inset-0 pointer-events-none', isDark ? 'opacity-20' : 'opacity-10')}
         style={{
@@ -136,7 +136,7 @@ export default function RegisterPage() {
         }}
       />
 
-      {/* Decorative Glowing Orbs */}
+      {/* Orbes brilhantes decorativos */}
       <div className={cn(
         'absolute top-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] pointer-events-none',
         isDark ? 'bg-violet-600/10' : 'bg-violet-300/15',
@@ -147,11 +147,11 @@ export default function RegisterPage() {
       )} />
 
       <main className="w-full max-w-[420px] z-10 flex flex-col items-center">
-        {/* Core Card Container */}
+        {/* Cartão central do formulário */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 25, delay: 0.1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           className={cn(
             'w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300',
             isDark
@@ -160,7 +160,7 @@ export default function RegisterPage() {
           )}
         >
           
-          {/* Brand Logo Header */}
+          {/* Cabeçalho da marca com logo */}
           <div className="flex flex-col items-center mb-6">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -180,11 +180,11 @@ export default function RegisterPage() {
             
             <div className="flex items-center gap-2 uppercase font-extrabold tracking-[0.2em] text-xl mt-2 select-none">
               <span className={cn(isDark ? 'text-white' : 'text-zinc-800')}>Lumes</span>
-              <span className="text-violet-400">AI</span>
+              <span className="text-violet-500">AI</span>
             </div>
           </div>
 
-          {/* Heading */}
+          {/* Título da etapa */}
           <div className="flex flex-col items-center text-center mb-6">
             <h2 className={cn(
               'text-2xl font-black leading-tight uppercase tracking-wider',
@@ -201,7 +201,7 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {/* Wizard Forms Container */}
+          {/* Container dos formulários por etapa */}
           <div className="relative w-full overflow-hidden">
             <AnimatePresence mode="wait">
               {step === 1 && (
@@ -214,7 +214,7 @@ export default function RegisterPage() {
                   onSubmit={handleNextStep}
                   className="flex flex-col gap-5 w-full"
                 >
-                  {/* Name Input */}
+                  {/* Campo de nome */}
                   <div className="flex flex-col gap-2">
                     <label
                       htmlFor="name"
@@ -246,7 +246,7 @@ export default function RegisterPage() {
                     )}
                   </div>
 
-                  {/* Continue Button */}
+                  {/* Botão de continuar */}
                   <button
                     type="submit"
                     disabled={name.trim().length < 3}
@@ -268,7 +268,7 @@ export default function RegisterPage() {
                   onSubmit={handleNextStep}
                   className="flex flex-col gap-5 w-full"
                 >
-                  {/* Back Indicator Info */}
+                  {/* Indicador da etapa anterior */}
                   <div className={cn(
                     'flex items-center justify-between p-3 rounded-xl border',
                     isDark
@@ -296,7 +296,7 @@ export default function RegisterPage() {
                     </button>
                   </div>
 
-                  {/* Email Input */}
+                  {/* Campo de e-mail */}
                   <div className="flex flex-col gap-2">
                     <label
                       htmlFor="email"
@@ -328,7 +328,7 @@ export default function RegisterPage() {
                     )}
                   </div>
 
-                  {/* Continue Button */}
+                  {/* Botão de continuar */}
                   <button
                     type="submit"
                     disabled={!isEmailValid}
@@ -350,7 +350,7 @@ export default function RegisterPage() {
                   onSubmit={handleFinalSubmit}
                   className="flex flex-col gap-5 w-full"
                 >
-                  {/* Back Indicator Info */}
+                  {/* Indicador da etapa anterior */}
                   <div className={cn(
                     'flex items-center justify-between p-3 rounded-xl border',
                     isDark
@@ -378,7 +378,7 @@ export default function RegisterPage() {
                     </button>
                   </div>
 
-                  {/* Password Input */}
+                  {/* Campo de senha */}
                   <div className="flex flex-col gap-2">
                     <label
                       htmlFor="password"
@@ -421,7 +421,7 @@ export default function RegisterPage() {
                     )}
                   </div>
 
-                  {/* Confirm Password Input */}
+                  {/* Campo de confirmação de senha */}
                   <div className="flex flex-col gap-2">
                     <label
                       htmlFor="confirmPassword"
@@ -463,7 +463,7 @@ export default function RegisterPage() {
                     )}
                   </div>
 
-                  {/* Server Error Displays */}
+                  {/* Exibição de erros do servidor */}
                   {serverError && (
                     <div className={cn(
                       'p-3 rounded-xl border animate-in fade-in',
@@ -477,7 +477,7 @@ export default function RegisterPage() {
                     </div>
                   )}
 
-                  {/* Register Button */}
+                  {/* Botão de cadastro */}
                   <button
                     type="submit"
                     disabled={password.length < 6 || confirmPassword.length < 6 || password !== confirmPassword}
@@ -491,7 +491,7 @@ export default function RegisterPage() {
           </div>
         </motion.div>
 
-        {/* Footer Login Link */}
+        {/* Link para login */}
         <div className="text-center mt-8 z-10">
           <p className={cn('text-xs font-geist', isDark ? 'text-zinc-400' : 'text-zinc-500')}>
             Já possui uma conta?{' '}
@@ -505,11 +505,11 @@ export default function RegisterPage() {
         </div>
       </main>
 
-      {/* CUSTOM TERMS OF USE MODAL DIALOG */}
+      {/* Modal de Termos de Uso */}
       <AnimatePresence>
         {showTerms && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Dark Backdrop Overlay */}
+            {/* Overlay escuro de fundo */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.6 }}
@@ -520,7 +520,7 @@ export default function RegisterPage() {
               }}
             />
 
-            {/* Modal Box */}
+            {/* Caixa do modal */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -533,7 +533,7 @@ export default function RegisterPage() {
                   : 'bg-white border border-zinc-200 shadow-2xl',
               )}
             >
-              {/* Header Title */}
+              {/* Título do cabeçalho */}
               <div className="flex flex-col gap-0 select-none">
                 <div className={cn(
                   'w-12 h-12 rounded-full flex items-center justify-center mb-4 text-violet-400',
@@ -552,7 +552,7 @@ export default function RegisterPage() {
                 </p>
               </div>
 
-              {/* Scrollable Terms Text Container */}
+              {/* Container rolável do texto dos termos */}
               <div className={cn(
                 'py-4 my-2 max-h-[220px] overflow-y-auto pr-2 border-y custom-scrollbar text-xs space-y-4',
                 isDark
@@ -591,9 +591,9 @@ export default function RegisterPage() {
                 </p>
               </div>
 
-              {/* Checkboxes List Container */}
+              {/* Lista de checkboxes */}
               <div className="flex flex-col gap-4 py-3 select-none">
-                {/* Checkbox 1: Terms */}
+                {/* Checkbox: Aceitação dos termos */}
                 <div
                   className="flex items-start gap-3 group cursor-pointer"
                   onClick={() => {
@@ -622,7 +622,7 @@ export default function RegisterPage() {
                   </span>
                 </div>
 
-                {/* Checkbox 2: Age */}
+                {/* Checkbox: Maioridade */}
                 <div
                   className="flex items-start gap-3 group cursor-pointer"
                   onClick={() => {
@@ -652,7 +652,7 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Action Confirm Button */}
+              {/* Botão de confirmação */}
               <div className="flex flex-col gap-2 mt-4">
                 <button
                   type="button"

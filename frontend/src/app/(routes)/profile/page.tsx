@@ -111,6 +111,7 @@ export default function ProfilePage() {
         isDark ? 'bg-[#07040D] text-white' : 'bg-[#F4F4F6] text-zinc-900',
       )}
     >
+      {/* Padrão de fundo pontilhado */}
       <div
         className={cn(
           'absolute inset-0 pointer-events-none',
@@ -124,6 +125,7 @@ export default function ProfilePage() {
         }}
       />
 
+      {/* Orbes brilhantes decorativos */}
       <div
         className={cn(
           'absolute top-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] pointer-events-none',
@@ -137,6 +139,7 @@ export default function ProfilePage() {
         )}
       />
 
+      {/* Botão Voltar (canto superior esquerdo) */}
       <div className="absolute top-5 left-5 z-50">
         <Link href="/home">
           <motion.button
@@ -156,6 +159,7 @@ export default function ProfilePage() {
       </div>
 
       <main className="w-full max-w-[480px] z-10">
+        {/* Cartão do perfil */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -167,6 +171,7 @@ export default function ProfilePage() {
               : 'bg-white/80 border-zinc-200/80 shadow-lg',
           )}
         >
+          {/* Avatar e título do perfil */}
           <div className="flex flex-col items-center mb-6">
             <div
               className={cn(
@@ -196,6 +201,7 @@ export default function ProfilePage() {
             </p>
           </div>
 
+          {/* Formulário de edição */}
           <form onSubmit={handleSave} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
               <Label

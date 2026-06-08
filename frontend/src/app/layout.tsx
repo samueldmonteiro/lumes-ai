@@ -45,6 +45,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Script inline para evitar flash de tema (aplica dark mode antes da renderização) */}
         <script
           id="theme-init"
           async

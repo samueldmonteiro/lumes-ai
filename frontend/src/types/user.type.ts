@@ -1,4 +1,5 @@
 
+// Papéis de usuário do sistema
 export type UserRole = 'USER' | 'ADMIN';
 
 export type User = {

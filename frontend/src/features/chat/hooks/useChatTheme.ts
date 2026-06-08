@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { Theme, UseChatThemeReturn } from '@/types/chat';
 
+// Hook que gerencia o tema (claro/escuro) com persistência em localStorage
 export function useChatTheme(): UseChatThemeReturn {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {

@@ -70,7 +70,7 @@ export default function LoginPage() {
         isDark ? 'bg-[#07040D] text-white' : 'bg-[#F4F4F6] text-zinc-900',
       )}
     >
-      {/* Light Pattern Overlay */}
+      {/* Padrão de fundo pontilhado */}
       <div
         className={cn(
           'absolute inset-0 pointer-events-none',
@@ -84,7 +84,7 @@ export default function LoginPage() {
         }}
       />
 
-      {/* Decorative Glowing Orbs */}
+      {/* Orbes brilhantes decorativos */}
       <div
         className={cn(
           'absolute top-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] pointer-events-none',
@@ -98,7 +98,7 @@ export default function LoginPage() {
         )}
       />
 
-      {/* Floating Back to Home button at Top-Left */}
+      {/* Botão Voltar para o Início (canto superior esquerdo) */}
       <div className="absolute top-5 left-5 z-50">
         <Link href="/home">
           <motion.button
@@ -118,11 +118,11 @@ export default function LoginPage() {
       </div>
 
       <main className="w-full max-w-[420px] z-10 flex flex-col items-center">
-        {/* Core Card Container */}
+        {/* Cartão central do formulário */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 25, delay: 0.1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           className={cn(
             'w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300 border',
             isDark
@@ -130,7 +130,7 @@ export default function LoginPage() {
               : 'bg-white/80 border-zinc-200/80 shadow-lg',
           )}
         >
-          {/* Brand Logo Header */}
+          {/* Cabeçalho da marca com logo */}
           <div className="flex flex-col items-center mb-6">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -153,11 +153,11 @@ export default function LoginPage() {
               <span className={cn(isDark ? 'text-white' : 'text-zinc-800')}>
                 Lumes
               </span>
-              <span className="text-violet-400">AI</span>
+              <span className="text-violet-500">AI</span>
             </div>
           </div>
 
-          {/* Heading */}
+          {/* Título da etapa */}
           <div className="flex flex-col items-center text-center mb-6">
             <h2
               className={cn(
@@ -179,7 +179,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Step-by-Step Forms Container */}
+          {/* Container dos formulários por etapa */}
           <div className="relative w-full overflow-hidden">
             <AnimatePresence mode="wait">
               {step === 1 ? (
@@ -192,7 +192,7 @@ export default function LoginPage() {
                   onSubmit={handleNextStep}
                   className="flex flex-col gap-5 w-full"
                 >
-                  {/* Email Input Field */}
+                  {/* Campo de e-mail */}
                   <div className="flex flex-col gap-2">
                     <label
                       htmlFor="email"
@@ -231,7 +231,7 @@ export default function LoginPage() {
                     )}
                   </div>
 
-                  {/* Continue Button */}
+                  {/* Botão de continuar */}
                   <button
                     type="submit"
                     disabled={!isEmailValid}
@@ -253,7 +253,7 @@ export default function LoginPage() {
                   onSubmit={handleLogin}
                   className="flex flex-col gap-5 w-full"
                 >
-                  {/* Account Badge Indicator */}
+                  {/* Indicador da conta selecionada */}
                   <div
                     className={cn(
                       'flex items-center justify-between p-3 rounded-xl border',
@@ -289,7 +289,7 @@ export default function LoginPage() {
                     </button>
                   </div>
 
-                  {/* Password Input Field */}
+                  {/* Campo de senha */}
                   <div className="flex flex-col gap-2">
                     <div className="flex justify-between items-center">
                       <label
@@ -351,7 +351,7 @@ export default function LoginPage() {
                     )}
                   </div>
 
-                  {/* Server errors */}
+                  {/* Erros do servidor */}
                   {serverError && (
                     <div
                       className={cn(
@@ -367,7 +367,7 @@ export default function LoginPage() {
                     </div>
                   )}
 
-                  {/* Submit Button */}
+                  {/* Botão de envio */}
                   <button
                     type="submit"
                     disabled={isLoading || password.length < 6}
@@ -385,7 +385,7 @@ export default function LoginPage() {
           </div>
         </motion.div>
 
-        {/* Signup Footer Link */}
+        {/* Link para cadastro */}
         <div className="text-center mt-6 z-10">
           <p
             className={cn(

@@ -1,3 +1,4 @@
+// Resposta de erro padronizada da API
 export type ApiResponseError = {
   ok: false
   code: number
@@ -7,6 +8,7 @@ export type ApiResponseError = {
   timestamp: string
 }
 
+// Resposta de sucesso padronizada da API
 export type ApiResponseSuccess<T> = {
   ok: true
   code: number
@@ -14,6 +16,7 @@ export type ApiResponseSuccess<T> = {
   data: T
 }
 
+// Resposta padronizada para Server Actions
 export type ActionResponse<T = void> = {
   success: boolean
   message?: string

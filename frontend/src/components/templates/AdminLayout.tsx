@@ -33,7 +33,7 @@ export function AdminLayout({
       transition={{ duration: 0.4 }}
       className="relative min-h-screen w-full flex overflow-hidden transition-colors duration-500 bg-background"
     >
-      {/* Dot Pattern */}
+      {/* Padrão de fundo pontilhado */}
       <div
         className={cn(
           'absolute inset-0 pointer-events-none',
@@ -47,7 +47,7 @@ export function AdminLayout({
         }}
       />
 
-      {/* Glowing Orbs */}
+      {/* Orbes brilhantes decorativos */}
       {isDark && (
         <>
           <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
@@ -71,7 +71,7 @@ export function AdminLayout({
       />
 
       <div className="relative z-10 flex-1 h-screen flex flex-col overflow-hidden transition-colors duration-500 text-foreground">
-        {/* Mobile header */}
+        {/* Cabeçalho mobile com botão de sidebar */}
         <header className="flex items-center justify-between px-5 py-3 shrink-0 lg:hidden">
           <button
             type="button"
