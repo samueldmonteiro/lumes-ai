@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { updateProfileAction } from '@/app/actions/user';
+import { updateProfileAction } from '@/actions/user';
 import type { UpdateUser, User } from '@/types/user.type';
 import type { ActionResponse } from '@/types/api.type';
 

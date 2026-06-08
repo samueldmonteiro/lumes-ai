@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { loginAction, logoutAction, getCurrentUserAction, registerAction } from '@/app/actions/auth';
+import { loginAction, logoutAction, getCurrentUserAction, registerAction } from '@/actions/auth';
 import type { User, StoreUser } from '@/types/user.type';
 import type { ActionResponse } from '@/types/api.type';
 
