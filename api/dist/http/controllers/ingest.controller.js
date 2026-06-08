@@ -49,6 +49,18 @@ let IngestController = class IngestController extends base_controller_1.BaseCont
         const result = await this.ingestService.ingestJSON(body.data, body.source ?? `json-${(0, node_crypto_1.randomUUID)()}`);
         return this.created(result, 'JSON ingerido com sucesso!');
     }
+    async listDocuments() {
+        const data = await this.ingestService.listDocuments();
+        return this.success(data, 'Documentos listados com sucesso');
+    }
+    async getStats() {
+        const data = await this.ingestService.getStats();
+        return this.success(data, 'Estatísticas obtidas com sucesso');
+    }
+    async deleteBySource(source) {
+        const data = await this.ingestService.deleteBySource(source);
+        return this.success(data, `${data.deletedChunks} chunks removidos com sucesso`);
+    }
 };
 exports.IngestController = IngestController;
 __decorate([
@@ -162,6 +174,31 @@ __decorate([
     __metadata("design:paramtypes", [ingest_dto_1.IngestJsonDto]),
     __metadata("design:returntype", Promise)
 ], IngestController.prototype, "ingestJson", null);
+__decorate([
+    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Lista todos os documentos agrupados por source' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'Lista de documentos' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], IngestController.prototype, "listDocuments", null);
+__decorate([
+    (0, common_1.Get)('stats'),
+    (0, swagger_1.ApiOperation)({ summary: 'Retorna estatísticas do dashboard de ingestão' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'Estatísticas de ingestão' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], IngestController.prototype, "getStats", null);
+__decorate([
+    (0, common_1.Delete)(':source'),
+    (0, swagger_1.ApiOperation)({ summary: 'Remove todos os chunks de uma source específica' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'Chunks removidos com sucesso' }),
+    __param(0, (0, common_1.Param)('source')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], IngestController.prototype, "deleteBySource", null);
 exports.IngestController = IngestController = __decorate([
     (0, swagger_1.ApiTags)('Ingest'),
     (0, swagger_1.ApiBearerAuth)(),

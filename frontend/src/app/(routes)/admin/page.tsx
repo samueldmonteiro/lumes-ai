@@ -29,7 +29,8 @@ import {
 import {
   Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
 } from '@/components/ui/dialog';
-import { adminClient } from '@/services/adminService';
+import { listDocumentsAction, getStatsAction } from '@/actions/ingest';
+import { useIngestText, useIngestJson, useIngestPdf, useDeleteDocument } from '@/hooks/queries/use-ingest';
 import { useChatTheme } from '@/features/chat/hooks/useChatTheme';
 import type { AdminDocument, IngestMode, AdminStats } from '@/types/admin';
 
@@ -49,8 +50,13 @@ export default function AdminPage() {
   const [jsonContent, setJsonContent] = useState('');
   const [source, setSource] = useState('');
   const [pdfFile, setPdfFile] = useState<File | null>(null);
-  const [ingesting, setIngesting] = useState(false);
   const [jsonError, setJsonError] = useState('');
+
+  const { ingestText, isPending: isTextPending } = useIngestText();
+  const { ingestJson, isPending: isJsonPending } = useIngestJson();
+  const { ingestPdf, isPending: isPdfPending } = useIngestPdf();
+  const { deleteDocument, isPending: isDeleting } = useDeleteDocument();
+  const ingesting = isTextPending || isJsonPending || isPdfPending;
 
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
@@ -60,13 +66,21 @@ export default function AdminPage() {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const [docs, st] = await Promise.all([
-        adminClient.listDocuments(),
-        adminClient.getStats(),
+      const [docsResult, statsResult] = await Promise.all([
+        listDocumentsAction(),
+        getStatsAction(),
       ]);
       if (cancelled) return;
-      setDocuments(docs);
-      setStats(st);
+      if (docsResult.success && docsResult.data) {
+        setDocuments(docsResult.data);
+      } else if (!docsResult.success) {
+        toast.error(docsResult.message ?? 'Erro ao listar documentos');
+      }
+      if (statsResult.success && statsResult.data) {
+        setStats(statsResult.data);
+      } else if (!statsResult.success) {
+        toast.error(statsResult.message ?? 'Erro ao carregar estatísticas');
+      }
       setLoading(false);
     })();
     return () => { cancelled = true; };
@@ -85,52 +99,59 @@ export default function AdminPage() {
       return;
     }
 
-    setIngesting(true);
-    try {
-      let result;
-      if (ingestMode === 'text') {
-        if (!textContent.trim() || textContent.trim().length < 10) {
-          toast.error('O texto deve ter pelo menos 10 caracteres');
-          setIngesting(false);
-          return;
-        }
-        result = await adminClient.ingestText(textContent.trim(), source.trim());
-      } else if (ingestMode === 'json') {
-        let parsed: Record<string, unknown>;
-        try { parsed = JSON.parse(jsonContent); } catch {
-          toast.error('JSON inválido. Verifique a sintaxe.');
-          setIngesting(false);
-          return;
-        }
-        result = await adminClient.ingestJson(parsed, source.trim());
-      } else {
-        if (!pdfFile) {
-          toast.error('Selecione um arquivo PDF');
-          setIngesting(false);
-          return;
-        }
-        result = await adminClient.ingestPdf(pdfFile, source.trim());
+    if (ingestMode === 'text') {
+      if (!textContent.trim() || textContent.trim().length < 10) {
+        toast.error('O texto deve ter pelo menos 10 caracteres');
+        return;
       }
-
-      toast.success(`Documento ingerido com sucesso! ${result.chunksSaved} chunks salvos.`);
-      setTextContent('');
-      setJsonContent('');
-      setPdfFile(null);
-      setSource('');
-      setDataKey((k) => k + 1);
-    } catch {
-      toast.error('Erro ao ingerir documento');
-    } finally {
-      setIngesting(false);
+      const result = await ingestText({ text: textContent.trim(), source: source.trim() });
+      if (!result.success) {
+        toast.error(result.message ?? 'Erro ao ingerir documento');
+        return;
+      }
+      toast.success(`Documento ingerido com sucesso! ${result.data?.chunksSaved ?? 0} chunks salvos.`);
+    } else if (ingestMode === 'json') {
+      let parsed: Record<string, unknown>;
+      try { parsed = JSON.parse(jsonContent); } catch {
+        toast.error('JSON inválido. Verifique a sintaxe.');
+        return;
+      }
+      const result = await ingestJson({ data: parsed, source: source.trim() });
+      if (!result.success) {
+        toast.error(result.message ?? 'Erro ao ingerir documento');
+        return;
+      }
+      toast.success(`Documento ingerido com sucesso! ${result.data?.chunksSaved ?? 0} chunks salvos.`);
+    } else {
+      if (!pdfFile) {
+        toast.error('Selecione um arquivo PDF');
+        return;
+      }
+      const result = await ingestPdf(pdfFile, source.trim());
+      if (!result.success) {
+        toast.error(result.message ?? 'Erro ao ingerir documento');
+        return;
+      }
+      toast.success(`Documento ingerido com sucesso! ${result.data?.chunksSaved ?? 0} chunks salvos.`);
     }
-  }, [source, ingestMode, textContent, jsonContent, pdfFile]);
+
+    setTextContent('');
+    setJsonContent('');
+    setPdfFile(null);
+    setSource('');
+    setDataKey((k) => k + 1);
+  }, [source, ingestMode, textContent, jsonContent, pdfFile, ingestText, ingestJson, ingestPdf]);
 
   const handleDelete = useCallback(async (src: string) => {
-    await adminClient.deleteDocument(src);
+    const result = await deleteDocument(src);
+    if (!result.success) {
+      toast.error(result.message ?? 'Erro ao excluir documento.');
+      return;
+    }
     toast.success('Documento excluído com sucesso!');
     setDeleteConfirm(null);
     setDataKey((k) => k + 1);
-  }, []);
+  }, [deleteDocument]);
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -475,10 +496,8 @@ export default function AdminPage() {
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
                             <Dialog>
-                              <DialogTrigger>
-                                <Button variant="ghost" size="icon-sm">
-                                  <Eye className="w-4 h-4" />
-                                </Button>
+                              <DialogTrigger render={<Button variant="ghost" size="icon-sm" />}>
+                                <Eye className="w-4 h-4" />
                               </DialogTrigger>
                               <DialogContent className="sm:max-w-lg">
                                 <DialogHeader>
@@ -495,10 +514,8 @@ export default function AdminPage() {
                             </Dialog>
 
                             <Dialog open={deleteConfirm === doc.source} onOpenChange={(o) => !o && setDeleteConfirm(null)}>
-                              <DialogTrigger>
-                                <Button variant="ghost" size="icon-sm" onClick={() => setDeleteConfirm(doc.source)}>
-                                  <Trash2 className="w-4 h-4 text-destructive" />
-                                </Button>
+                              <DialogTrigger render={<Button variant="ghost" size="icon-sm" onClick={() => setDeleteConfirm(doc.source)} />}>
+                                <Trash2 className="w-4 h-4 text-destructive" />
                               </DialogTrigger>
                               <DialogContent>
                                 <DialogHeader>

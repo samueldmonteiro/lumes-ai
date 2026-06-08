@@ -1,6 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
+  Param,
   Post,
   UploadedFile,
   UseGuards,
@@ -15,6 +18,7 @@ import {
   ApiConsumes,
   ApiBody,
   ApiCreatedResponse,
+  ApiOkResponse,
 } from '@nestjs/swagger';
 import { IngestService } from '@/services/ingest.service';
 import { BaseController } from './base.controller';
@@ -170,5 +174,29 @@ export class IngestController extends BaseController {
       body.source ?? `json-${randomUUID()}`,
     );
     return this.created(result, 'JSON ingerido com sucesso!');
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Lista todos os documentos agrupados por source' })
+  @ApiOkResponse({ description: 'Lista de documentos' })
+  async listDocuments() {
+    const data = await this.ingestService.listDocuments();
+    return this.success(data, 'Documentos listados com sucesso');
+  }
+
+  @Get('stats')
+  @ApiOperation({ summary: 'Retorna estatísticas do dashboard de ingestão' })
+  @ApiOkResponse({ description: 'Estatísticas de ingestão' })
+  async getStats() {
+    const data = await this.ingestService.getStats();
+    return this.success(data, 'Estatísticas obtidas com sucesso');
+  }
+
+  @Delete(':source')
+  @ApiOperation({ summary: 'Remove todos os chunks de uma source específica' })
+  @ApiOkResponse({ description: 'Chunks removidos com sucesso' })
+  async deleteBySource(@Param('source') source: string) {
+    const data = await this.ingestService.deleteBySource(source);
+    return this.success(data, `${data.deletedChunks} chunks removidos com sucesso`);
   }
 }
