@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import { Theme, UseChatThemeReturn } from "@/types/chat";
+import { useState, useCallback } from 'react';
+import { Theme, UseChatThemeReturn } from '@/types/chat';
 
 export function useChatTheme(): UseChatThemeReturn {
   const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("lumes_theme") as Theme | null;
-      return saved === "light" ? "light" : "dark";
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('lumes_theme') as Theme | null;
+      return saved === 'light' ? 'light' : 'dark';
     }
-    return "dark";
+    return 'dark';
   });
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {
-      const nextTheme = prev === "dark" ? "light" : "dark";
-      if (nextTheme === "dark") {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("lumes_theme", "dark");
+      const nextTheme = prev === 'dark' ? 'light' : 'dark';
+      if (nextTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('lumes_theme', 'dark');
       } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("lumes_theme", "light");
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('lumes_theme', 'light');
       }
       return nextTheme;
     });
@@ -28,7 +28,7 @@ export function useChatTheme(): UseChatThemeReturn {
 
   return {
     theme,
-    isDark: theme === "dark",
+    isDark: theme === 'dark',
     toggleTheme,
   };
 }

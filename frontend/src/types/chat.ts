@@ -1,6 +1,6 @@
-import { Message as SDKMessage } from "ai";
+import { Message as SDKMessage } from 'ai';
 
-export type Theme = "light" | "dark";
+export type Theme = 'light' | 'dark';
 
 export type ChatMessage = SDKMessage;
 

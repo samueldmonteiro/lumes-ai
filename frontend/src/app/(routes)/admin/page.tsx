@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { motion } from "framer-motion";
-import { toast } from "sonner";
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 import {
   FileText,
   Braces,
@@ -13,44 +13,44 @@ import {
   Search,
   FileJson,
   FileType,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { AdminLayout } from "@/components/templates/AdminLayout";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { AdminLayout } from '@/components/templates/AdminLayout';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Table, TableHeader, TableBody, TableHead, TableRow, TableCell,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
-} from "@/components/ui/dialog";
-import { adminClient } from "@/services/adminService";
-import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
-import type { AdminDocument, IngestMode, AdminStats } from "@/types/admin";
+} from '@/components/ui/dialog';
+import { adminClient } from '@/services/adminService';
+import { useChatTheme } from '@/features/chat/hooks/useChatTheme';
+import type { AdminDocument, IngestMode, AdminStats } from '@/types/admin';
 
-type TabId = "dashboard" | "upload" | "documents";
+type TabId = 'dashboard' | 'upload' | 'documents';
 
 export default function AdminPage() {
   const { isDark } = useChatTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<TabId>("dashboard");
+  const [activeTab, setActiveTab] = useState<TabId>('dashboard');
   const [documents, setDocuments] = useState<AdminDocument[]>([]);
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const [ingestMode, setIngestMode] = useState<IngestMode>("text");
-  const [textContent, setTextContent] = useState("");
-  const [jsonContent, setJsonContent] = useState("");
-  const [source, setSource] = useState("");
+  const [ingestMode, setIngestMode] = useState<IngestMode>('text');
+  const [textContent, setTextContent] = useState('');
+  const [jsonContent, setJsonContent] = useState('');
+  const [source, setSource] = useState('');
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [ingesting, setIngesting] = useState(false);
-  const [jsonError, setJsonError] = useState("");
+  const [jsonError, setJsonError] = useState('');
 
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
@@ -76,36 +76,36 @@ export default function AdminPage() {
     () => searchQuery
       ? documents.filter((d) => d.source.toLowerCase().includes(searchQuery.toLowerCase()))
       : documents,
-    [documents, searchQuery]
+    [documents, searchQuery],
   );
 
   const handleIngest = useCallback(async () => {
     if (!source.trim()) {
-      toast.error("O campo Origem é obrigatório");
+      toast.error('O campo Origem é obrigatório');
       return;
     }
 
     setIngesting(true);
     try {
       let result;
-      if (ingestMode === "text") {
+      if (ingestMode === 'text') {
         if (!textContent.trim() || textContent.trim().length < 10) {
-          toast.error("O texto deve ter pelo menos 10 caracteres");
+          toast.error('O texto deve ter pelo menos 10 caracteres');
           setIngesting(false);
           return;
         }
         result = await adminClient.ingestText(textContent.trim(), source.trim());
-      } else if (ingestMode === "json") {
+      } else if (ingestMode === 'json') {
         let parsed: Record<string, unknown>;
         try { parsed = JSON.parse(jsonContent); } catch {
-          toast.error("JSON inválido. Verifique a sintaxe.");
+          toast.error('JSON inválido. Verifique a sintaxe.');
           setIngesting(false);
           return;
         }
         result = await adminClient.ingestJson(parsed, source.trim());
       } else {
         if (!pdfFile) {
-          toast.error("Selecione um arquivo PDF");
+          toast.error('Selecione um arquivo PDF');
           setIngesting(false);
           return;
         }
@@ -113,13 +113,13 @@ export default function AdminPage() {
       }
 
       toast.success(`Documento ingerido com sucesso! ${result.chunksSaved} chunks salvos.`);
-      setTextContent("");
-      setJsonContent("");
+      setTextContent('');
+      setJsonContent('');
       setPdfFile(null);
-      setSource("");
+      setSource('');
       setDataKey((k) => k + 1);
     } catch {
-      toast.error("Erro ao ingerir documento");
+      toast.error('Erro ao ingerir documento');
     } finally {
       setIngesting(false);
     }
@@ -127,7 +127,7 @@ export default function AdminPage() {
 
   const handleDelete = useCallback(async (src: string) => {
     await adminClient.deleteDocument(src);
-    toast.success("Documento excluído com sucesso!");
+    toast.success('Documento excluído com sucesso!');
     setDeleteConfirm(null);
     setDataKey((k) => k + 1);
   }, []);
@@ -135,21 +135,21 @@ export default function AdminPage() {
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.type !== "application/pdf") {
-        toast.error("Apenas arquivos PDF são aceitos");
+      if (file.type !== 'application/pdf') {
+        toast.error('Apenas arquivos PDF são aceitos');
         return;
       }
       setPdfFile(file);
-      setSource(file.name.replace(/\.pdf$/i, ""));
+      setSource(file.name.replace(/\.pdf$/i, ''));
     }
   }, []);
 
-  const formatDate = (d: string) => new Date(d).toLocaleString("pt-BR");
+  const formatDate = (d: string) => new Date(d).toLocaleString('pt-BR');
 
   const typeConfig: Record<IngestMode, { icon: React.ReactNode; label: string; placeholder: string }> = {
-    text: { icon: <FileText className="w-4 h-4" />, label: "Texto", placeholder: "Cole seu texto aqui..." },
-    json: { icon: <Braces className="w-4 h-4" />, label: "JSON", placeholder: '{"chave": "valor"}' },
-    pdf: { icon: <FileUp className="w-4 h-4" />, label: "PDF", placeholder: "" },
+    text: { icon: <FileText className="w-4 h-4" />, label: 'Texto', placeholder: 'Cole seu texto aqui...' },
+    json: { icon: <Braces className="w-4 h-4" />, label: 'JSON', placeholder: '{"chave": "valor"}' },
+    pdf: { icon: <FileUp className="w-4 h-4" />, label: 'PDF', placeholder: '' },
   };
 
   if (loading && !stats) {
@@ -218,7 +218,7 @@ export default function AdminPage() {
                 <CardHeader>
                   <CardDescription>Último Upload</CardDescription>
                   <CardTitle className="text-sm font-medium truncate">
-                    {stats?.lastUpload ? formatDate(stats.lastUpload) : "Nenhum"}
+                    {stats?.lastUpload ? formatDate(stats.lastUpload) : 'Nenhum'}
                   </CardTitle>
                 </CardHeader>
               </Card>
@@ -232,12 +232,12 @@ export default function AdminPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col gap-3">
-                  {(["text", "json", "pdf"] as const).map((type) => (
+                  {(['text', 'json', 'pdf'] as const).map((type) => (
                     <div key={type} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        {type === "text" && <FileType className="w-4 h-4 text-blue-400" />}
-                        {type === "json" && <FileJson className="w-4 h-4 text-amber-400" />}
-                        {type === "pdf" && <FileUp className="w-4 h-4 text-red-400" />}
+                        {type === 'text' && <FileType className="w-4 h-4 text-blue-400" />}
+                        {type === 'json' && <FileJson className="w-4 h-4 text-amber-400" />}
+                        {type === 'pdf' && <FileUp className="w-4 h-4 text-red-400" />}
                         <span className="text-sm capitalize">{type}</span>
                       </div>
                       <Badge variant="secondary">{stats?.documentsByType[type] ?? 0}</Badge>
@@ -260,7 +260,7 @@ export default function AdminPage() {
                       <div key={doc.id} className="flex items-center justify-between text-sm">
                         <span className="truncate max-w-[200px] font-medium">{doc.source}</span>
                         <div className="flex items-center gap-2 shrink-0">
-                          <Badge variant={doc.type === "pdf" ? "destructive" : doc.type === "json" ? "outline" : "secondary"}>
+                          <Badge variant={doc.type === 'pdf' ? 'destructive' : doc.type === 'json' ? 'outline' : 'secondary'}>
                             {doc.type}
                           </Badge>
                           <span className="text-xs text-muted-foreground">{formatDate(doc.createdAt)}</span>
@@ -292,9 +292,9 @@ export default function AdminPage() {
                     <Button
                       key={mode}
                       type="button"
-                      variant={ingestMode === mode ? "default" : "outline"}
+                      variant={ingestMode === mode ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => { setIngestMode(mode); setJsonError(""); }}
+                      onClick={() => { setIngestMode(mode); setJsonError(''); }}
                       className="gap-1.5"
                     >
                       {cfg.icon}
@@ -305,7 +305,7 @@ export default function AdminPage() {
               </div>
 
               {/* Text Mode */}
-              {ingestMode === "text" && (
+              {ingestMode === 'text' && (
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="text-content">Conteúdo em Texto</Label>
                   <Textarea
@@ -319,7 +319,7 @@ export default function AdminPage() {
               )}
 
               {/* JSON Mode */}
-              {ingestMode === "json" && (
+              {ingestMode === 'json' && (
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="json-content">Conteúdo JSON</Label>
                   <Textarea
@@ -328,7 +328,7 @@ export default function AdminPage() {
                     value={jsonContent}
                     onChange={(e) => {
                       setJsonContent(e.target.value);
-                      try { JSON.parse(e.target.value); setJsonError(""); } catch { setJsonError("JSON inválido"); }
+                      try { JSON.parse(e.target.value); setJsonError(''); } catch { setJsonError('JSON inválido'); }
                     }}
                     className="min-h-[200px] font-mono text-sm"
                   />
@@ -337,15 +337,15 @@ export default function AdminPage() {
               )}
 
               {/* PDF Mode */}
-              {ingestMode === "pdf" && (
+              {ingestMode === 'pdf' && (
                 <div className="flex flex-col gap-2">
                   <Label>Arquivo PDF</Label>
                   <label
                     className={cn(
-                      "flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 cursor-pointer transition-colors",
+                      'flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 cursor-pointer transition-colors',
                       isDark 
-                        ? "border-input hover:border-violet-500/50 bg-muted" 
-                        : "border-input hover:border-violet-400 bg-background"
+                        ? 'border-input hover:border-violet-500/50 bg-muted' 
+                        : 'border-input hover:border-violet-400 bg-background',
                     )}
                   >
                     <input
@@ -359,7 +359,7 @@ export default function AdminPage() {
                         <FileUp className="w-8 h-8 text-violet-400" />
                         <p className="text-sm font-medium">{pdfFile.name}</p>
                         <p className="text-xs text-muted-foreground">{(pdfFile.size / 1024).toFixed(1)} KB</p>
-                        <Button type="button" variant="ghost" size="xs" onClick={(e) => { e.preventDefault(); setPdfFile(null); setSource(""); }}>
+                        <Button type="button" variant="ghost" size="xs" onClick={(e) => { e.preventDefault(); setPdfFile(null); setSource(''); }}>
                           Remover
                         </Button>
                       </div>
@@ -378,7 +378,7 @@ export default function AdminPage() {
               <div className="flex flex-col gap-2">
                 <Label htmlFor="source">
                   Origem (Source)
-                  {ingestMode === "pdf" && (
+                  {ingestMode === 'pdf' && (
                     <span className="text-xs text-muted-foreground ml-2">(preenchido automaticamente)</span>
                   )}
                 </Label>
@@ -389,9 +389,9 @@ export default function AdminPage() {
                   onChange={(e) => setSource(e.target.value)}
                 />
                 <p className="text-xs text-muted-foreground">
-                  {ingestMode === "pdf"
-                    ? "O nome do arquivo foi usado como origem. Você pode alterar se necessário."
-                    : "Identificador único do documento. Se já existir, o documento será sobrescrito."}
+                  {ingestMode === 'pdf'
+                    ? 'O nome do arquivo foi usado como origem. Você pode alterar se necessário.'
+                    : 'Identificador único do documento. Se já existir, o documento será sobrescrito.'}
                 </p>
               </div>
 
@@ -453,7 +453,7 @@ export default function AdminPage() {
                   {filteredDocuments.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
-                        {searchQuery ? "Nenhum documento encontrado para esta busca." : "Nenhum documento ingerido ainda."}
+                        {searchQuery ? 'Nenhum documento encontrado para esta busca.' : 'Nenhum documento ingerido ainda.'}
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -461,7 +461,7 @@ export default function AdminPage() {
                       <TableRow key={doc.id}>
                         <TableCell className="font-medium max-w-[200px] truncate">{doc.source}</TableCell>
                         <TableCell>
-                          <Badge variant={doc.type === "pdf" ? "destructive" : doc.type === "json" ? "outline" : "secondary"}>
+                          <Badge variant={doc.type === 'pdf' ? 'destructive' : doc.type === 'json' ? 'outline' : 'secondary'}>
                             {doc.type}
                           </Badge>
                         </TableCell>

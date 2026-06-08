@@ -1,4 +1,4 @@
-## Pending Commands — Remover flash ao voltar para a home page
+## Pending Commands — Corrigir erros de render e linter no front
 
 ### Install
 ```bash

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowDown } from "lucide-react";
-import { MessageBubble } from "@/components/molecules/MessageBubble";
-import { LoadingDots } from "@/components/atoms/LoadingDots";
-import { Avatar } from "@/components/atoms/Avatar";
-import { Button } from "@/components/ui/button";
-import { ChatMessage } from "@/types/chat";
-import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowDown } from 'lucide-react';
+import { MessageBubble } from '@/components/molecules/MessageBubble';
+import { LoadingDots } from '@/components/atoms/LoadingDots';
+import { Avatar } from '@/components/atoms/Avatar';
+import { Button } from '@/components/ui/button';
+import { ChatMessage } from '@/types/chat';
+import { cn } from '@/lib/utils';
 
 interface MessageListProps {
   messages: ChatMessage[];
@@ -45,7 +45,7 @@ export function MessageList({
           <AnimatePresence mode="popLayout" initial={false}>
             {messages.map((message, index) => {
               const isLast = index === messages.length - 1;
-              const isAssistant = message.role === "assistant";
+              const isAssistant = message.role === 'assistant';
               return (
                 <motion.div
                   key={message.id}
@@ -55,9 +55,9 @@ export function MessageList({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -12, scale: 0.98 }}
                   transition={{
-                    layout: { type: "spring", stiffness: 350, damping: 30 },
+                    layout: { type: 'spring', stiffness: 350, damping: 30 },
                     opacity: { duration: 0.2 },
-                    y: { type: "spring", stiffness: 350, damping: 30 },
+                    y: { type: 'spring', stiffness: 350, damping: 30 },
                   }}
                   className="w-full"
                 >
@@ -71,7 +71,7 @@ export function MessageList({
           </AnimatePresence>
 
           {/* AI Typing / Generating State bubble */}
-          {isLoading && messages[messages.length - 1]?.role === "user" && !error && (
+          {isLoading && messages[messages.length - 1]?.role === 'user' && !error && (
             <motion.div
               layout="position"
               initial={{ opacity: 0, y: 10 }}
@@ -81,10 +81,10 @@ export function MessageList({
               <Avatar role="assistant" className="mt-1" />
               <div
                 className={cn(
-                  "p-4 rounded-2xl rounded-tl-sm w-full max-w-[85%] sm:max-w-[75%] border transition-all duration-300",
+                  'p-4 rounded-2xl rounded-tl-sm w-full max-w-[85%] sm:max-w-[75%] border transition-all duration-300',
                   isDarkTheme
-                    ? "bg-[#130F22]/70 border-zinc-800/80"
-                    : "bg-zinc-50 border-zinc-250/80"
+                    ? 'bg-[#130F22]/70 border-zinc-800/80'
+                    : 'bg-zinc-50 border-zinc-250/80',
                 )}
               >
                 <LoadingDots />
@@ -101,7 +101,7 @@ export function MessageList({
             >
               <div className="bg-destructive/10 text-destructive text-xs px-4 py-2.5 rounded-xl border border-destructive/20 flex items-center gap-2 font-medium">
                 <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
-                {error.message || "Erro de conexão. Tente novamente."}
+                {error.message || 'Erro de conexão. Tente novamente.'}
               </div>
             </motion.div>
           )}
@@ -115,17 +115,17 @@ export function MessageList({
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20"
           >
             <Button
               variant="secondary"
               size="icon"
               className={cn(
-                "rounded-full shadow-lg border backdrop-blur-sm transition-all duration-300 hover:scale-105 active:scale-95 w-10 h-10 flex items-center justify-center cursor-pointer",
+                'rounded-full shadow-lg border backdrop-blur-sm transition-all duration-300 hover:scale-105 active:scale-95 w-10 h-10 flex items-center justify-center cursor-pointer',
                 isDarkTheme
-                  ? "border-zinc-800 bg-[#0E0A1A]/90 hover:bg-zinc-800 text-violet-400 hover:text-violet-300"
-                  : "border-zinc-200 bg-white hover:bg-zinc-50 text-violet-600 hover:text-[#7c3aed]"
+                  ? 'border-zinc-800 bg-[#0E0A1A]/90 hover:bg-zinc-800 text-violet-400 hover:text-violet-300'
+                  : 'border-zinc-200 bg-white hover:bg-zinc-50 text-violet-600 hover:text-[#7c3aed]',
               )}
               onClick={scrollToBottom}
             >
