@@ -41,13 +41,13 @@ Responda usando Markdown com títulos, listas, tabelas quando necessário e dest
     if (isQuotaError) {
       return new Response('Limite de uso atingido. Por favor, aguarde alguns minutos e tente novamente.', { 
         status: 429,
-        headers: { 'Content-Type': 'text/plain' }
+        headers: { 'Content-Type': 'text/plain' },
       });
     }
 
     return new Response('Ocorreu um erro ao processar sua mensagem. Tente novamente em breve.', { 
       status: 500,
-      headers: { 'Content-Type': 'text/plain' }
+      headers: { 'Content-Type': 'text/plain' },
     });
   }
 }

@@ -138,13 +138,12 @@ export default function LoginPage() {
               transition={{ type: 'spring', stiffness: 150 }}
               className="relative w-24 h-24 mb-1"
             >
-              {/* Glow Behind Logo */}
-              <div className="absolute inset-0 rounded-full bg-violet-500/20 blur-xl" />
               <Image
                 src="/lumes_logo.png"
                 alt="Lumes AI Logo"
                 fill
                 priority
+                unoptimized
                 className="object-contain drop-shadow-md"
                 sizes="96px"
               />

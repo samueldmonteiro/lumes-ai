@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useRef, useState, useCallback, useEffect } from "react";
-import { ChatMessage, UseScrollToBottomReturn } from "@/types/chat";
+import { useRef, useState, useCallback, useEffect } from 'react';
+import { ChatMessage, UseScrollToBottomReturn } from '@/types/chat';
 
 export function useScrollToBottom(
-  messages: ChatMessage[]
+  messages: ChatMessage[],
 ): UseScrollToBottomReturn {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const newestAssistantRef = useRef<HTMLDivElement | null>(null);
@@ -16,7 +16,7 @@ export function useScrollToBottom(
       if (scrollRef.current) {
         scrollRef.current.scrollTo({
           top: scrollRef.current.scrollHeight,
-          behavior: "smooth",
+          behavior: 'smooth',
         });
       }
     }, 50);
@@ -38,7 +38,7 @@ export function useScrollToBottom(
         
         container.scrollTo({
           top: targetScrollTop,
-          behavior: "smooth",
+          behavior: 'smooth',
         });
       }
     }, 80);
@@ -59,9 +59,9 @@ export function useScrollToBottom(
 
     const lastMessage = messages[messages.length - 1];
 
-    if (lastMessage.role === "user") {
+    if (lastMessage.role === 'user') {
       scrollToBottom();
-    } else if (lastMessage.role === "assistant") {
+    } else if (lastMessage.role === 'assistant') {
       // Scroll to start of the AI response once upon generation start
       if (scrolledAssistantMessageId.current !== lastMessage.id) {
         scrolledAssistantMessageId.current = lastMessage.id;

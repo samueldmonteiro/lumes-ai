@@ -1,4 +1,4 @@
-## Pending Commands — Otimização de performance e transições suaves nas telas do frontend
+## Pending Commands — Corrigir erros de render e linter no front
 
 ### Install
 ```bash
@@ -7,5 +7,5 @@ none
 
 ### Run
 ```bash
-pnpm dev
+none
 ```

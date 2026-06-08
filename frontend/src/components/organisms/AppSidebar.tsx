@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { useCallback, useMemo } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { useCallback, useMemo } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
   MessageSquare,
   LogOut,
   Sun,
   Moon,
-} from "lucide-react";
+} from 'lucide-react';
 import {
   Sheet,
   SheetContent,
   SheetTitle,
-} from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { useUser, useLogout } from "@/hooks/queries/use-auth";
+} from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import { useUser, useLogout } from '@/hooks/queries/use-auth';
 
 interface ChatHistoryItem {
   id: string;
@@ -52,11 +52,11 @@ export function AppSidebar({
   const { user } = useUser();
   const { logout } = useLogout();
 
-  const displayName = user?.name ?? propUserName ?? "Usuário";
+  const displayName = user?.name ?? propUserName ?? 'Usuário';
 
   const userInitial = useMemo(
     () => displayName.charAt(0).toUpperCase(),
-    [displayName]
+    [displayName],
   );
 
   const handleNewChat = useCallback(() => {
@@ -69,14 +69,14 @@ export function AppSidebar({
       router.push(`/chat?id=${chatId}`);
       onClose();
     },
-    [router, onClose]
+    [router, onClose],
   );
 
   const handleLogout = useCallback(async () => {
     await logout();
-    localStorage.removeItem("lumes_seen_splash");
-    localStorage.removeItem("lumes_theme");
-    router.push("/login");
+    localStorage.removeItem('lumes_seen_splash');
+    localStorage.removeItem('lumes_theme');
+    router.push('/login');
     onClose();
   }, [logout, router, onClose]);
 
@@ -90,6 +90,7 @@ export function AppSidebar({
               src="/lumes_logo.png"
               alt="Lumes AI Logo"
               fill
+              unoptimized
               className="object-contain"
               sizes="30px"
             />
@@ -97,8 +98,8 @@ export function AppSidebar({
           {isStaticContent ? (
             <h2
               className={cn(
-                "text-sm font-extrabold tracking-[0.15em] font-geist leading-none m-0",
-                isDarkTheme ? "text-white" : "text-zinc-800"
+                'text-sm font-extrabold tracking-[0.15em] font-geist leading-none m-0',
+                isDarkTheme ? 'text-white' : 'text-zinc-800',
               )}
             >
               LUMES <span className="text-violet-400">AI</span>
@@ -106,8 +107,8 @@ export function AppSidebar({
           ) : (
             <SheetTitle
               className={cn(
-                "text-sm font-extrabold tracking-[0.15em] font-geist leading-none m-0",
-                isDarkTheme ? "text-white" : "text-zinc-800"
+                'text-sm font-extrabold tracking-[0.15em] font-geist leading-none m-0',
+                isDarkTheme ? 'text-white' : 'text-zinc-800',
               )}
             >
               LUMES <span className="text-violet-400">AI</span>
@@ -121,12 +122,12 @@ export function AppSidebar({
           whileTap={{ scale: 0.9 }}
           onClick={onToggleTheme}
           className={cn(
-            "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer",
+            'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer',
             isDarkTheme
-              ? "text-zinc-400 hover:text-amber-300 hover:bg-zinc-800/60"
-              : "text-zinc-500 hover:text-amber-600 hover:bg-zinc-100"
+              ? 'text-zinc-400 hover:text-amber-300 hover:bg-zinc-800/60'
+              : 'text-zinc-500 hover:text-amber-600 hover:bg-zinc-100',
           )}
-          title={isDarkTheme ? "Modo Claro" : "Modo Escuro"}
+          title={isDarkTheme ? 'Modo Claro' : 'Modo Escuro'}
         >
           <AnimatePresence mode="wait">
             {isDarkTheme ? (
@@ -157,7 +158,7 @@ export function AppSidebar({
       <div className="px-4 pb-2">
         <Separator
           className={cn(
-            isDarkTheme ? "bg-zinc-800/60" : "bg-zinc-200/80"
+            isDarkTheme ? 'bg-zinc-800/60' : 'bg-zinc-200/80',
           )}
         />
       </div>
@@ -169,18 +170,18 @@ export function AppSidebar({
           whileTap={{ scale: 0.98 }}
           onClick={handleNewChat}
           className={cn(
-            "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-300 cursor-pointer text-left group border",
+            'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-300 cursor-pointer text-left group border',
             isDarkTheme
-              ? "bg-violet-500/10 border-violet-500/20 text-violet-300 hover:bg-violet-500/15 hover:border-violet-500/30"
-              : "bg-violet-50 border-violet-200/60 text-violet-700 hover:bg-violet-100 hover:border-violet-300"
+              ? 'bg-violet-500/10 border-violet-500/20 text-violet-300 hover:bg-violet-500/15 hover:border-violet-500/30'
+              : 'bg-violet-50 border-violet-200/60 text-violet-700 hover:bg-violet-100 hover:border-violet-300',
           )}
         >
           <div
             className={cn(
-              "w-7 h-7 rounded-lg flex items-center justify-center transition-colors",
+              'w-7 h-7 rounded-lg flex items-center justify-center transition-colors',
               isDarkTheme
-                ? "bg-violet-500/20 group-hover:bg-violet-500/30"
-                : "bg-violet-100 group-hover:bg-violet-200"
+                ? 'bg-violet-500/20 group-hover:bg-violet-500/30'
+                : 'bg-violet-100 group-hover:bg-violet-200',
             )}
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -195,8 +196,8 @@ export function AppSidebar({
       <div className="flex-1 min-h-0 flex flex-col px-4 pt-1">
         <h3
           className={cn(
-            "text-[10px] font-bold tracking-[0.1em] uppercase px-1 mb-2 select-none",
-            isDarkTheme ? "text-zinc-500" : "text-zinc-400"
+            'text-[10px] font-bold tracking-[0.1em] uppercase px-1 mb-2 select-none',
+            isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
           )}
         >
           Recentes
@@ -213,24 +214,24 @@ export function AppSidebar({
                   transition={{ delay: idx * 0.03, duration: 0.2 }}
                   onClick={() => handleChatSelect(chat.id)}
                   className={cn(
-                    "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-200 cursor-pointer group",
+                    'w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-200 cursor-pointer group',
                     activeChatId === chat.id
                       ? isDarkTheme
-                        ? "bg-zinc-800/70 text-white"
-                        : "bg-zinc-100 text-zinc-900"
+                        ? 'bg-zinc-800/70 text-white'
+                        : 'bg-zinc-100 text-zinc-900'
                       : isDarkTheme
-                        ? "text-zinc-400 hover:bg-zinc-800/40 hover:text-zinc-200"
-                        : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800"
+                        ? 'text-zinc-400 hover:bg-zinc-800/40 hover:text-zinc-200'
+                        : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800',
                   )}
                 >
                   <MessageSquare
                     className={cn(
-                      "w-3.5 h-3.5 flex-shrink-0 stroke-[1.8] transition-colors",
+                      'w-3.5 h-3.5 flex-shrink-0 stroke-[1.8] transition-colors',
                       activeChatId === chat.id
-                        ? "text-violet-400"
+                        ? 'text-violet-400'
                         : isDarkTheme
-                          ? "text-zinc-600 group-hover:text-zinc-400"
-                          : "text-zinc-400 group-hover:text-zinc-500"
+                          ? 'text-zinc-600 group-hover:text-zinc-400'
+                          : 'text-zinc-400 group-hover:text-zinc-500',
                     )}
                   />
                   <span className="text-[13px] truncate flex-1 leading-tight">
@@ -241,8 +242,8 @@ export function AppSidebar({
             ) : (
               <div
                 className={cn(
-                  "flex flex-col items-center justify-center py-10 gap-3 select-none",
-                  isDarkTheme ? "text-zinc-600" : "text-zinc-400"
+                  'flex flex-col items-center justify-center py-10 gap-3 select-none',
+                  isDarkTheme ? 'text-zinc-600' : 'text-zinc-400',
                 )}
               >
                 <MessageSquare className="w-8 h-8 stroke-[1.2] opacity-50" />
@@ -261,43 +262,50 @@ export function AppSidebar({
       <div className="flex-shrink-0 px-4 pb-4 pt-2">
         <Separator
           className={cn(
-            "mb-3",
-            isDarkTheme ? "bg-zinc-800/60" : "bg-zinc-200/80"
+            'mb-3',
+            isDarkTheme ? 'bg-zinc-800/60' : 'bg-zinc-200/80',
           )}
         />
         {user ? (
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              {/* User Avatar */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                router.push('/profile');
+                onClose();
+              }}
+              className="flex items-center gap-2.5 flex-1 min-w-0 text-left cursor-pointer"
+            >
               <div
                 className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none",
+                  'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold select-none',
                   isDarkTheme
-                    ? "bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20"
-                    : "bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60"
+                    ? 'bg-gradient-to-br from-violet-500/30 to-indigo-500/30 text-violet-300 border border-violet-500/20'
+                    : 'bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 border border-violet-200/60',
                 )}
               >
                 {userInitial}
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0">
                 <span
                   className={cn(
-                    "text-[13px] font-semibold leading-tight truncate max-w-[140px]",
-                    isDarkTheme ? "text-zinc-200" : "text-zinc-700"
+                    'text-[13px] font-semibold leading-tight truncate max-w-[120px]',
+                    isDarkTheme ? 'text-zinc-200' : 'text-zinc-700',
                   )}
                 >
                   {displayName}
                 </span>
                 <span
                   className={cn(
-                    "text-[10px] leading-tight",
-                    isDarkTheme ? "text-zinc-500" : "text-zinc-400"
+                    'text-[10px] leading-tight',
+                    isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
                   )}
                 >
                   {user?.role === 'ADMIN' ? 'Administrador' : 'Conta pessoal'}
                 </span>
               </div>
-            </div>
+            </motion.button>
 
             {/* Logout */}
             <motion.button
@@ -305,10 +313,10 @@ export function AppSidebar({
               whileTap={{ scale: 0.9 }}
               onClick={handleLogout}
               className={cn(
-                "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer",
+                'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer',
                 isDarkTheme
-                  ? "text-zinc-500 hover:text-red-400 hover:bg-red-50/10"
-                  : "text-zinc-400 hover:text-red-500 hover:bg-red-50"
+                  ? 'text-zinc-500 hover:text-red-400 hover:bg-red-50/10'
+                  : 'text-zinc-400 hover:text-red-500 hover:bg-red-50',
               )}
               title="Sair"
             >
@@ -334,10 +342,10 @@ export function AppSidebar({
       {/* Versão Estática para Desktop (lg:) */}
       <aside
         className={cn(
-          "hidden lg:block w-[280px] h-screen shrink-0 relative z-20 border-r transition-colors duration-500",
+          'hidden lg:block w-[280px] h-screen shrink-0 relative z-20 border-r transition-colors duration-500',
           isDarkTheme
-            ? "bg-[#0A0714] border-zinc-900/60"
-            : "bg-white border-zinc-200/80"
+            ? 'bg-[#0A0714] border-zinc-900/60'
+            : 'bg-white border-zinc-200/80',
         )}
       >
         {renderSidebarContent(true)}
@@ -350,10 +358,10 @@ export function AppSidebar({
             side="left"
             showCloseButton={false}
             className={cn(
-              "w-[280px] sm:max-w-[280px] p-0 flex flex-col border-r-0",
+              'w-[280px] sm:max-w-[280px] p-0 flex flex-col border-r-0',
               isDarkTheme
-                ? "bg-[#0A0714]/98 backdrop-blur-xl"
-                : "bg-white/98 backdrop-blur-xl"
+                ? 'bg-[#0A0714]/98 backdrop-blur-xl'
+                : 'bg-white/98 backdrop-blur-xl',
             )}
           >
             {renderSidebarContent(false)}

@@ -1,4 +1,4 @@
-export type DocumentType = "text" | "json" | "pdf";
+export type DocumentType = 'text' | 'json' | 'pdf';
 
 export interface AdminDocument {
   id: string;
@@ -25,4 +25,4 @@ export interface AdminStats {
   documentsByType: Record<DocumentType, number>;
 }
 
-export type IngestMode = "text" | "json" | "pdf";
+export type IngestMode = 'text' | 'json' | 'pdf';

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 interface ChatLayoutProps {
   children: React.ReactNode;
@@ -13,8 +13,8 @@ export function ChatLayout({ children, isDarkTheme }: ChatLayoutProps) {
   return (
     <div
       className={cn(
-        "flex flex-col h-screen w-full transition-colors duration-500 relative overflow-hidden font-sans",
-        isDarkTheme ? "bg-[#07040D]" : "bg-[#F4F4F6]"
+        'flex flex-col h-screen w-full transition-colors duration-500 relative overflow-hidden font-sans',
+        isDarkTheme ? 'bg-[#07040D]' : 'bg-[#F4F4F6]',
       )}
     >
       {/* Premium Ambient Background Mesh Glow - Only in dark mode for OLED eye comfort */}
@@ -28,7 +28,7 @@ export function ChatLayout({ children, isDarkTheme }: ChatLayoutProps) {
             transition={{
               duration: 8,
               repeat: Infinity,
-              ease: "easeInOut",
+              ease: 'easeInOut',
             }}
             className="absolute top-[-25%] left-[-15%] w-[80vw] h-[80vw] sm:w-[500px] sm:h-[500px] rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 blur-[90px] sm:blur-[130px]"
           />
@@ -40,7 +40,7 @@ export function ChatLayout({ children, isDarkTheme }: ChatLayoutProps) {
             transition={{
               duration: 10,
               repeat: Infinity,
-              ease: "easeInOut",
+              ease: 'easeInOut',
             }}
             className="absolute bottom-[-20%] right-[-10%] w-[80vw] h-[80vw] sm:w-[500px] sm:h-[500px] rounded-full bg-gradient-to-tr from-[#6366f1] to-purple-600 blur-[90px] sm:blur-[130px]"
           />

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { PanelLeft } from "lucide-react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { AdminSidebar, type AdminTab } from "@/components/organisms/AdminSidebar";
-import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
+import { PanelLeft } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import { AdminSidebar, type AdminTab } from '@/components/organisms/AdminSidebar';
+import { useChatTheme } from '@/features/chat/hooks/useChatTheme';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -36,14 +36,14 @@ export function AdminLayout({
       {/* Dot Pattern */}
       <div
         className={cn(
-          "absolute inset-0 pointer-events-none",
-          isDark ? "opacity-20" : "opacity-10"
+          'absolute inset-0 pointer-events-none',
+          isDark ? 'opacity-20' : 'opacity-10',
         )}
         style={{
           backgroundImage: isDark
-            ? "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)"
-            : "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.08) 1px, transparent 0)",
-          backgroundSize: "24px 24px",
+            ? 'radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)'
+            : 'radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.08) 1px, transparent 0)',
+          backgroundSize: '24px 24px',
         }}
       />
 
@@ -77,7 +77,7 @@ export function AdminLayout({
             type="button"
             onClick={onSidebarOpen}
             className={cn(
-              "p-2 -ml-2 rounded-xl transition-colors duration-200 active:scale-95 cursor-pointer text-muted-foreground hover:text-foreground"
+              'p-2 -ml-2 rounded-xl transition-colors duration-200 active:scale-95 cursor-pointer text-muted-foreground hover:text-foreground',
             )}
           >
             <PanelLeft className="w-[22px] h-[22px] stroke-[1.8]" />

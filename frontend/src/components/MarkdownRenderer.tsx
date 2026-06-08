@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 
 export function MarkdownRenderer({ content }: { content: string }) {
   return (
@@ -89,8 +89,8 @@ export function MarkdownRenderer({ content }: { content: string }) {
           ),
 
           // Code block & inline code
-          code({ className, children, ...props }: React.ComponentPropsWithoutRef<"code">) {
-            const isInline = !className?.includes("language-");
+          code({ className, children, ...props }: React.ComponentPropsWithoutRef<'code'>) {
+            const isInline = !className?.includes('language-');
             
             return isInline ? (
               <code 

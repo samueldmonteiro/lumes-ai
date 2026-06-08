@@ -1,3 +1,5 @@
 {
-    "editor.fontFamily": "Consolas, 'Google Sans Code', monospace, "
+    "editor.fontFamily": "FiraCode, Consolas, 'Courier New', monospace",
+    "editor.fontSize": 16,
+    "files.autoSave": "afterDelay"
 }

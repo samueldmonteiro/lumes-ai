@@ -5,11 +5,11 @@ export declare class UserService {
     private readonly logger;
     constructor(userRepo: PrismaUserRepository);
     updateProfile(userId: number, dto: UpdateProfileDto): Promise<{
-        id: number;
-        createdAt: Date;
-        updatedAt: Date;
         email: string;
+        createdAt: Date;
+        id: number;
         name: string;
+        updatedAt: Date;
         role: import("../generated/prisma/enums").UserRole;
     }>;
 }

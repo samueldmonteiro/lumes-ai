@@ -14,12 +14,14 @@ import { cn } from '@/lib/utils';
 import { ChatInput } from '@/components/molecules/ChatInput';
 import { AppSidebar } from '@/components/organisms/AppSidebar';
 import { useChatTheme } from '@/features/chat/hooks/useChatTheme';
+import { useUser } from '@/hooks/queries/use-auth';
 
 export default function HomePage() {
   const [input, setInput] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
   const { isDark, toggleTheme } = useChatTheme();
+  const { user } = useUser();
 
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -68,11 +70,7 @@ export default function HomePage() {
   ], [isDark]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
+    <div
       className={cn(
         'relative min-h-screen w-full flex overflow-hidden transition-colors duration-500',
         isDark ? 'bg-[#07040D]' : 'bg-[#F4F4F6]',
@@ -142,13 +140,15 @@ export default function HomePage() {
           <div className="hidden lg:block" />
 
           {/* Right Side: Entrar Button */}
-          <button
-            type="button"
-            onClick={() => router.push('/login')}
-            className="px-5 py-2 text-xs font-bold text-white rounded-full bg-linear-to-r from-[#6366f1] via-[#8b5cf6] to-[#a855f7] shadow-md transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-[0.97] cursor-pointer"
-          >
-            Entrar
-          </button>
+          {!user && (
+            <button
+              type="button"
+              onClick={() => router.push('/login')}
+              className="px-5 py-2 text-xs font-bold text-white rounded-full bg-linear-to-r from-[#6366f1] via-[#8b5cf6] to-[#a855f7] shadow-md transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-[0.97] cursor-pointer"
+            >
+              Entrar
+            </button>
+          )}
         </header>
 
         {/* Central container focusing the content vertically and horizontally */}
@@ -236,6 +236,6 @@ export default function HomePage() {
         </div>
 
       </div>
-    </motion.div>
+    </div>
   );
 }

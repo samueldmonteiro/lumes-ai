@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import React, { useState, useCallback } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronRight, Eye, EyeOff, Lock, Mail, User, ShieldCheck, Check } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useChatTheme } from "@/features/chat/hooks/useChatTheme";
-import { useRegister } from "@/hooks/queries/use-auth";
-import { cn } from "@/lib/utils";
+import React, { useState, useCallback } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, ChevronRight, Eye, EyeOff, Lock, Mail, User, ShieldCheck, Check } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useChatTheme } from '@/features/chat/hooks/useChatTheme';
+import { useRegister } from '@/hooks/queries/use-auth';
+import { cn } from '@/lib/utils';
 
 export default function RegisterPage() {
   const router = useRouter();
   const { isDark } = useChatTheme();
-  const { register, isPending: isRegistering } = useRegister();
+  const { register } = useRegister();
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const [serverError, setServerError] = useState("");
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [serverError, setServerError] = useState('');
   
   const [isLoading, setIsLoading] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
@@ -40,23 +40,23 @@ export default function RegisterPage() {
     e.preventDefault();
     if (step === 1) {
       if (name.trim().length < 3) {
-        setNameError("O nome deve ter pelo menos 3 caracteres.");
+        setNameError('O nome deve ter pelo menos 3 caracteres.');
         return;
       }
-      setNameError("");
+      setNameError('');
       setStep(2);
     } else if (step === 2) {
       if (!isEmailValid) {
-        setEmailError("Por favor, insira um e-mail válido.");
+        setEmailError('Por favor, insira um e-mail válido.');
         return;
       }
-      setEmailError("");
+      setEmailError('');
       setStep(3);
     }
   }, [step, name, isEmailValid]);
 
   const handleBack = useCallback(() => {
-    setServerError("");
+    setServerError('');
     if (step === 2) setStep(1);
     if (step === 3) setStep(2);
   }, [step]);
@@ -64,16 +64,16 @@ export default function RegisterPage() {
   const handleFinalSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (password.length < 6) {
-      setPasswordError("A senha deve ter pelo menos 6 caracteres.");
+      setPasswordError('A senha deve ter pelo menos 6 caracteres.');
       return;
     }
-    setPasswordError("");
+    setPasswordError('');
 
     if (password !== confirmPassword) {
-      setConfirmPasswordError("As senhas não coincidem.");
+      setConfirmPasswordError('As senhas não coincidem.');
       return;
     }
-    setConfirmPasswordError("");
+    setConfirmPasswordError('');
     
     // Valid password & matching -> trigger Terms Dialogue
     setShowTerms(true);
@@ -82,38 +82,38 @@ export default function RegisterPage() {
   const handleConfirmRegistration = useCallback(async () => {
     if (!acceptedTerms || !isAdult) return;
     setIsLoading(true);
-    setServerError("");
+    setServerError('');
 
     const result = await register({ name, email, password });
 
     if (!result.success) {
-      setServerError(result.message || "Não foi possível criar a conta. Tente novamente.");
+      setServerError(result.message || 'Não foi possível criar a conta. Tente novamente.');
       setShowTerms(false);
       setIsLoading(false);
       return;
     }
 
-    localStorage.setItem("lumes_seen_splash", "true");
-    router.push("/home");
+    localStorage.setItem('lumes_seen_splash', 'true');
+    router.push('/home');
   }, [acceptedTerms, isAdult, register, name, email, password, router]);
 
   const inputClasses = cn(
-    "w-full h-12 pl-12 pr-4 rounded-xl font-geist focus:border-violet-500/80 focus:ring-4 focus:ring-violet-500/10 outline-none transition-all duration-300",
+    'w-full h-12 pl-12 pr-4 rounded-xl font-geist focus:border-violet-500/80 focus:ring-4 focus:ring-violet-500/10 outline-none transition-all duration-300',
     isDark
-      ? "bg-zinc-950/70 border border-zinc-800/80 text-white placeholder-zinc-600"
-      : "bg-zinc-100/80 border border-zinc-200 text-zinc-800 placeholder-zinc-400"
+      ? 'bg-zinc-950/70 border border-zinc-800/80 text-white placeholder-zinc-600'
+      : 'bg-zinc-100/80 border border-zinc-200 text-zinc-800 placeholder-zinc-400',
   );
 
   const inputWithToggleClasses = cn(
-    "w-full h-12 pl-12 pr-12 rounded-xl font-geist focus:border-violet-500/80 focus:ring-4 focus:ring-violet-500/10 outline-none transition-all duration-300",
+    'w-full h-12 pl-12 pr-12 rounded-xl font-geist focus:border-violet-500/80 focus:ring-4 focus:ring-violet-500/10 outline-none transition-all duration-300',
     isDark
-      ? "bg-zinc-950/70 border border-zinc-800/80 text-white placeholder-zinc-600"
-      : "bg-zinc-100/80 border border-zinc-200 text-zinc-800 placeholder-zinc-400"
+      ? 'bg-zinc-950/70 border border-zinc-800/80 text-white placeholder-zinc-600'
+      : 'bg-zinc-100/80 border border-zinc-200 text-zinc-800 placeholder-zinc-400',
   );
 
   const labelClasses = cn(
-    "text-[10px] font-bold uppercase tracking-widest",
-    isDark ? "text-zinc-400" : "text-zinc-500"
+    'text-[10px] font-bold uppercase tracking-widest',
+    isDark ? 'text-zinc-400' : 'text-zinc-500',
   );
 
   return (
@@ -123,27 +123,27 @@ export default function RegisterPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
       className={cn(
-        "min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist transition-colors duration-500",
-        isDark ? "bg-[#07040D] text-white" : "bg-[#F4F4F6] text-zinc-900"
+        'min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-geist transition-colors duration-500',
+        isDark ? 'bg-[#07040D] text-white' : 'bg-[#F4F4F6] text-zinc-900',
       )}
     >
       {/* Light Pattern Overlay */}
       <div
-        className={cn("absolute inset-0 pointer-events-none", isDark ? "opacity-20" : "opacity-10")}
+        className={cn('absolute inset-0 pointer-events-none', isDark ? 'opacity-20' : 'opacity-10')}
         style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)",
-          backgroundSize: "24px 24px",
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)',
+          backgroundSize: '24px 24px',
         }}
       />
 
       {/* Decorative Glowing Orbs */}
       <div className={cn(
-        "absolute top-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] pointer-events-none",
-        isDark ? "bg-violet-600/10" : "bg-violet-300/15"
+        'absolute top-[-10%] right-[-5%] w-96 h-96 rounded-full blur-[120px] pointer-events-none',
+        isDark ? 'bg-violet-600/10' : 'bg-violet-300/15',
       )} />
       <div className={cn(
-        "absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full blur-[100px] pointer-events-none",
-        isDark ? "bg-fuchsia-600/10" : "bg-fuchsia-300/15"
+        'absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full blur-[100px] pointer-events-none',
+        isDark ? 'bg-fuchsia-600/10' : 'bg-fuchsia-300/15',
       )} />
 
       <main className="w-full max-w-[420px] z-10 flex flex-col items-center">
@@ -151,12 +151,12 @@ export default function RegisterPage() {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 25, delay: 0.1 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 25, delay: 0.1 }}
           className={cn(
-            "w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300",
+            'w-full rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300',
             isDark
-              ? "bg-[#120D1F]/50 border border-zinc-800/60"
-              : "bg-white/80 border border-zinc-200/80 shadow-lg"
+              ? 'bg-[#120D1F]/50 border border-zinc-800/60'
+              : 'bg-white/80 border border-zinc-200/80 shadow-lg',
           )}
         >
           
@@ -167,20 +167,19 @@ export default function RegisterPage() {
               animate={{ scale: 1, opacity: 1 }}
               className="relative w-24 h-24 mb-1"
             >
-              {/* Glow Behind Logo */}
-              <div className="absolute inset-0 rounded-full bg-violet-500/20 blur-xl" />
               <Image
                 src="/lumes_logo.png"
                 alt="Lumes AI Logo"
                 fill
                 priority
+                unoptimized
                 className="object-contain drop-shadow-md"
                 sizes="96px"
               />
             </motion.div>
             
             <div className="flex items-center gap-2 uppercase font-extrabold tracking-[0.2em] text-xl mt-2 select-none">
-              <span className={cn(isDark ? "text-white" : "text-zinc-800")}>Lumes</span>
+              <span className={cn(isDark ? 'text-white' : 'text-zinc-800')}>Lumes</span>
               <span className="text-violet-400">AI</span>
             </div>
           </div>
@@ -188,17 +187,17 @@ export default function RegisterPage() {
           {/* Heading */}
           <div className="flex flex-col items-center text-center mb-6">
             <h2 className={cn(
-              "text-2xl font-black leading-tight uppercase tracking-wider",
-              isDark ? "text-white" : "text-zinc-800"
+              'text-2xl font-black leading-tight uppercase tracking-wider',
+              isDark ? 'text-white' : 'text-zinc-800',
             )}>
-              {step === 1 && "Crie sua conta"}
-              {step === 2 && "E-mail"}
-              {step === 3 && "Segurança"}
+              {step === 1 && 'Crie sua conta'}
+              {step === 2 && 'E-mail'}
+              {step === 3 && 'Segurança'}
             </h2>
-            <p className={cn("text-xs mt-1", isDark ? "text-zinc-400" : "text-zinc-500")}>
-              {step === 1 && "Primeiro passo: Como devemos chamar você?"}
-              {step === 2 && "Segundo passo: Seu e-mail de acesso"}
-              {step === 3 && "Terceiro passo: Proteja sua conta"}
+            <p className={cn('text-xs mt-1', isDark ? 'text-zinc-400' : 'text-zinc-500')}>
+              {step === 1 && 'Primeiro passo: Como devemos chamar você?'}
+              {step === 2 && 'Segundo passo: Seu e-mail de acesso'}
+              {step === 3 && 'Terceiro passo: Proteja sua conta'}
             </p>
           </div>
 
@@ -232,8 +231,8 @@ export default function RegisterPage() {
                         value={name}
                         onChange={(e) => {
                           setName(e.target.value);
-                          if (nameError) setNameError("");
-                          if (serverError) setServerError("");
+                          if (nameError) setNameError('');
+                          if (serverError) setServerError('');
                         }}
                         className={inputClasses}
                         required
@@ -271,18 +270,18 @@ export default function RegisterPage() {
                 >
                   {/* Back Indicator Info */}
                   <div className={cn(
-                    "flex items-center justify-between p-3 rounded-xl border",
+                    'flex items-center justify-between p-3 rounded-xl border',
                     isDark
-                      ? "bg-violet-950/20 border-violet-500/10"
-                      : "bg-violet-50 border-violet-200/60"
+                      ? 'bg-violet-950/20 border-violet-500/10'
+                      : 'bg-violet-50 border-violet-200/60',
                   )}>
                     <div className="flex flex-col overflow-hidden">
                       <span className="text-[9px] uppercase font-bold text-violet-400 tracking-wider">
                         Nome
                       </span>
                       <span className={cn(
-                        "text-xs font-semibold truncate",
-                        isDark ? "text-white" : "text-zinc-800"
+                        'text-xs font-semibold truncate',
+                        isDark ? 'text-white' : 'text-zinc-800',
                       )}>
                         {name}
                       </span>
@@ -314,8 +313,8 @@ export default function RegisterPage() {
                         value={email}
                         onChange={(e) => {
                           setEmail(e.target.value);
-                          if (emailError) setEmailError("");
-                          if (serverError) setServerError("");
+                          if (emailError) setEmailError('');
+                          if (serverError) setServerError('');
                         }}
                         className={inputClasses}
                         required
@@ -353,18 +352,18 @@ export default function RegisterPage() {
                 >
                   {/* Back Indicator Info */}
                   <div className={cn(
-                    "flex items-center justify-between p-3 rounded-xl border",
+                    'flex items-center justify-between p-3 rounded-xl border',
                     isDark
-                      ? "bg-violet-950/20 border-violet-500/10"
-                      : "bg-violet-50 border-violet-200/60"
+                      ? 'bg-violet-950/20 border-violet-500/10'
+                      : 'bg-violet-50 border-violet-200/60',
                   )}>
                     <div className="flex flex-col overflow-hidden">
                       <span className="text-[9px] uppercase font-bold text-violet-400 tracking-wider">
                         E-mail
                       </span>
                       <span className={cn(
-                        "text-xs font-semibold truncate",
-                        isDark ? "text-white" : "text-zinc-800"
+                        'text-xs font-semibold truncate',
+                        isDark ? 'text-white' : 'text-zinc-800',
                       )}>
                         {email}
                       </span>
@@ -391,13 +390,13 @@ export default function RegisterPage() {
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 group-focus-within:text-violet-400 transition-colors" />
                       <input
                         id="password"
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => {
                           setPassword(e.target.value);
-                          if (passwordError) setPasswordError("");
-                          if (serverError) setServerError("");
+                          if (passwordError) setPasswordError('');
+                          if (serverError) setServerError('');
                         }}
                         className={inputWithToggleClasses}
                         required
@@ -434,13 +433,13 @@ export default function RegisterPage() {
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 group-focus-within:text-violet-400 transition-colors" />
                       <input
                         id="confirmPassword"
-                        type={showConfirmPassword ? "text" : "password"}
+                        type={showConfirmPassword ? 'text' : 'password'}
                         placeholder="••••••••"
                         value={confirmPassword}
                         onChange={(e) => {
                           setConfirmPassword(e.target.value);
-                          if (confirmPasswordError) setConfirmPasswordError("");
-                          if (serverError) setServerError("");
+                          if (confirmPasswordError) setConfirmPasswordError('');
+                          if (serverError) setServerError('');
                         }}
                         className={inputWithToggleClasses}
                         required
@@ -467,10 +466,10 @@ export default function RegisterPage() {
                   {/* Server Error Displays */}
                   {serverError && (
                     <div className={cn(
-                      "p-3 rounded-xl border animate-in fade-in",
+                      'p-3 rounded-xl border animate-in fade-in',
                       isDark
-                        ? "bg-rose-950/30 border-rose-500/20"
-                        : "bg-rose-50 border-rose-200"
+                        ? 'bg-rose-950/30 border-rose-500/20'
+                        : 'bg-rose-50 border-rose-200',
                     )}>
                       <p className="text-xs text-rose-400 font-medium text-center">
                         {serverError}
@@ -494,8 +493,8 @@ export default function RegisterPage() {
 
         {/* Footer Login Link */}
         <div className="text-center mt-8 z-10">
-          <p className={cn("text-xs font-geist", isDark ? "text-zinc-400" : "text-zinc-500")}>
-            Já possui uma conta?{" "}
+          <p className={cn('text-xs font-geist', isDark ? 'text-zinc-400' : 'text-zinc-500')}>
+            Já possui uma conta?{' '}
             <Link
               className="font-bold text-violet-400 hover:underline transition-all hover:text-violet-300"
               href="/login"
@@ -526,46 +525,46 @@ export default function RegisterPage() {
               initial={{ opacity: 0, scale: 0.9, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 15 }}
-              transition={{ type: "spring", damping: 20 }}
+              transition={{ type: 'spring', damping: 20 }}
               className={cn(
-                "relative w-full max-w-[425px] rounded-3xl p-6 z-10 flex flex-col max-h-[90vh]",
+                'relative w-full max-w-[425px] rounded-3xl p-6 z-10 flex flex-col max-h-[90vh]',
                 isDark
-                  ? "bg-[#120D1F] border border-zinc-800 shadow-2xl"
-                  : "bg-white border border-zinc-200 shadow-2xl"
+                  ? 'bg-[#120D1F] border border-zinc-800 shadow-2xl'
+                  : 'bg-white border border-zinc-200 shadow-2xl',
               )}
             >
               {/* Header Title */}
               <div className="flex flex-col gap-0 select-none">
                 <div className={cn(
-                  "w-12 h-12 rounded-full flex items-center justify-center mb-4 text-violet-400",
-                  isDark ? "bg-violet-500/10" : "bg-violet-50"
+                  'w-12 h-12 rounded-full flex items-center justify-center mb-4 text-violet-400',
+                  isDark ? 'bg-violet-500/10' : 'bg-violet-50',
                 )}>
                   <ShieldCheck className="w-6 h-6 animate-pulse" />
                 </div>
                 <h3 className={cn(
-                  "text-2xl font-black leading-none",
-                  isDark ? "text-white" : "text-zinc-800"
+                  'text-2xl font-black leading-none',
+                  isDark ? 'text-white' : 'text-zinc-800',
                 )}>
                   Termos de Uso
                 </h3>
-                <p className={cn("text-xs mt-2", isDark ? "text-zinc-400" : "text-zinc-500")}>
+                <p className={cn('text-xs mt-2', isDark ? 'text-zinc-400' : 'text-zinc-500')}>
                   Por favor, leia e aceite os termos para continuar.
                 </p>
               </div>
 
               {/* Scrollable Terms Text Container */}
               <div className={cn(
-                "py-4 my-2 max-h-[220px] overflow-y-auto pr-2 border-y custom-scrollbar text-xs space-y-4",
+                'py-4 my-2 max-h-[220px] overflow-y-auto pr-2 border-y custom-scrollbar text-xs space-y-4',
                 isDark
-                  ? "border-zinc-800/80 text-zinc-400"
-                  : "border-zinc-200/80 text-zinc-500"
+                  ? 'border-zinc-800/80 text-zinc-400'
+                  : 'border-zinc-200/80 text-zinc-500',
               )}>
                 <p className="leading-relaxed">
                   Estes são os termos de uso do <strong>Lumes AI</strong>. Ao utilizar nossa plataforma, você concorda em seguir todas as diretrizes de segurança, privacidade e termos descritos. O Lumes AI é um assistente inteligente projetado para auxiliar em seus estudos e otimizar seu aprendizado de forma ética e eficiente.
                 </p>
                 <p className={cn(
-                  "leading-relaxed font-bold",
-                  isDark ? "text-zinc-300" : "text-zinc-700"
+                  'leading-relaxed font-bold',
+                  isDark ? 'text-zinc-300' : 'text-zinc-700',
                 )}>
                   1. Privacidade e Proteção de Dados
                 </p>
@@ -573,8 +572,8 @@ export default function RegisterPage() {
                   Suas informações de estudo e histórico de interações estão devidamente protegidas em conformidade total com a Lei Geral de Proteção de Dados (LGPD). Não compartilhamos seus dados pessoais com terceiros sob nenhuma circunstância.
                 </p>
                 <p className={cn(
-                  "leading-relaxed font-bold",
-                  isDark ? "text-zinc-300" : "text-zinc-700"
+                  'leading-relaxed font-bold',
+                  isDark ? 'text-zinc-300' : 'text-zinc-700',
                 )}>
                   2. Conduta do Usuário
                 </p>
@@ -582,8 +581,8 @@ export default function RegisterPage() {
                   Ao usar a plataforma, você se compromete a não submeter conteúdos maliciosos, ofensivos ou que violem direitos de terceiros. A falsidade ideológica ou criação de contas falsas poderá acarretar na suspensão imediata do seu acesso.
                 </p>
                 <p className={cn(
-                  "leading-relaxed font-bold",
-                  isDark ? "text-zinc-300" : "text-zinc-700"
+                  'leading-relaxed font-bold',
+                  isDark ? 'text-zinc-300' : 'text-zinc-700',
                 )}>
                   3. Idade Mínima
                 </p>
@@ -603,21 +602,21 @@ export default function RegisterPage() {
                 >
                   <div
                     className={cn(
-                      "w-5 h-5 rounded-md border flex items-center justify-center transition-all duration-300 shrink-0 mt-0.5",
+                      'w-5 h-5 rounded-md border flex items-center justify-center transition-all duration-300 shrink-0 mt-0.5',
                       acceptedTerms
-                        ? "bg-violet-600 border-violet-600"
+                        ? 'bg-violet-600 border-violet-600'
                         : isDark
-                          ? "border-zinc-700 bg-zinc-950/40 group-hover:border-zinc-500"
-                          : "border-zinc-300 bg-zinc-100 group-hover:border-zinc-400"
+                          ? 'border-zinc-700 bg-zinc-950/40 group-hover:border-zinc-500'
+                          : 'border-zinc-300 bg-zinc-100 group-hover:border-zinc-400',
                     )}
                   >
                     {acceptedTerms && <Check className="w-3.5 h-3.5 text-white stroke-[3.5]" />}
                   </div>
                   <span className={cn(
-                    "text-xs transition-colors leading-snug",
+                    'text-xs transition-colors leading-snug',
                     isDark
-                      ? "text-zinc-400 group-hover:text-zinc-200"
-                      : "text-zinc-500 group-hover:text-zinc-700"
+                      ? 'text-zinc-400 group-hover:text-zinc-200'
+                      : 'text-zinc-500 group-hover:text-zinc-700',
                   )}>
                     Eu li e aceito os termos de uso e política de privacidade.
                   </span>
@@ -632,21 +631,21 @@ export default function RegisterPage() {
                 >
                   <div
                     className={cn(
-                      "w-5 h-5 rounded-md border flex items-center justify-center transition-all duration-300 shrink-0 mt-0.5",
+                      'w-5 h-5 rounded-md border flex items-center justify-center transition-all duration-300 shrink-0 mt-0.5',
                       isAdult
-                        ? "bg-violet-600 border-violet-600"
+                        ? 'bg-violet-600 border-violet-600'
                         : isDark
-                          ? "border-zinc-700 bg-zinc-950/40 group-hover:border-zinc-500"
-                          : "border-zinc-300 bg-zinc-100 group-hover:border-zinc-400"
+                          ? 'border-zinc-700 bg-zinc-950/40 group-hover:border-zinc-500'
+                          : 'border-zinc-300 bg-zinc-100 group-hover:border-zinc-400',
                     )}
                   >
                     {isAdult && <Check className="w-3.5 h-3.5 text-white stroke-[3.5]" />}
                   </div>
                   <span className={cn(
-                    "text-xs transition-colors leading-snug",
+                    'text-xs transition-colors leading-snug',
                     isDark
-                      ? "text-zinc-400 group-hover:text-zinc-200"
-                      : "text-zinc-500 group-hover:text-zinc-700"
+                      ? 'text-zinc-400 group-hover:text-zinc-200'
+                      : 'text-zinc-500 group-hover:text-zinc-700',
                   )}>
                     Confirmo que tenho 18 anos ou mais.
                   </span>
@@ -664,7 +663,7 @@ export default function RegisterPage() {
                   {isLoading ? (
                     <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   ) : (
-                    "Concluir e Criar Conta"
+                    'Concluir e Criar Conta'
                   )}
                 </button>
               </div>

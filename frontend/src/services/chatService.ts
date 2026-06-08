@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 /**
  * ⚠️ FASE 1 - Integração Temporária (Gemini)
@@ -27,11 +27,11 @@ export async function sendMessage(message: string, history: { role: string; cont
   const apiKey = process.env.GEMINI_API_KEY;
   
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY não configurada no ambiente.");
+    throw new Error('GEMINI_API_KEY não configurada no ambiente.');
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const systemInstruction = `
     Você é o Lumes AI, um assistente inteligente focado em tirar dúvidas de estudantes saindo do ensino medio e que estão na faculdade deve responder comparações entre cursos e faculdades.
@@ -55,15 +55,15 @@ export async function sendMessage(message: string, history: { role: string; cont
     const chat = model.startChat({
       history: formattedHistory,
       systemInstruction: {
-        role: "system",
-        parts: [{ text: systemInstruction }]
-      }
+        role: 'system',
+        parts: [{ text: systemInstruction }],
+      },
     });
 
     const result = await chat.sendMessage(message);
     return result.response.text();
   } catch (error) {
-    console.error("Erro ao comunicar com a API:", error);
-    throw new Error("Falha ao gerar resposta.");
+    console.error('Erro ao comunicar com a API:', error);
+    throw new Error('Falha ao gerar resposta.');
   }
 }
