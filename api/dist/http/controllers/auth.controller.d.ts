@@ -7,10 +7,10 @@ export declare class AuthController extends BaseController {
     constructor(authService: AuthService);
     register(body: RegisterDto): Promise<import("./base.controller").ApiResponse<{
         user: {
+            role: import("../../generated/prisma/enums").UserRole;
             email: string;
             id: number;
             name: string;
-            role: import("../../generated/prisma/enums").UserRole;
         };
         token: string;
     }>>;

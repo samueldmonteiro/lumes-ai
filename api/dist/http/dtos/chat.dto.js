@@ -42,7 +42,7 @@ __decorate([
     }),
     (0, class_validator_1.IsString)({ message: 'A pergunta deve ser um texto válido' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'A pergunta não pode estar vazia' }),
-    (0, class_validator_1.MinLength)(3, { message: 'A pergunta é muito curta' }),
+    (0, class_validator_1.MinLength)(1, { message: 'A pergunta é muito curta' }),
     __metadata("design:type", String)
 ], ChatRequestDto.prototype, "question", void 0);
 __decorate([

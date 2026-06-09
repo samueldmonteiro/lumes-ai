@@ -5,7 +5,7 @@ import type { User } from '@/types/user.type';
 // Rotas que exigem autenticação
 const protectedRoutes = ['/admin'];
 // Rotas acessíveis apenas para usuários não autenticados
-const publicOnlyRoutes = ['/chat', '/login', '/cadastro', '/presentation'];
+const publicOnlyRoutes = ['/login', '/cadastro', '/presentation'];
 
 // Middleware de roteamento: protege rotas admin, redireciona usuários logados, etc.
 export function proxy(request: NextRequest) {

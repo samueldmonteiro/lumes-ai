@@ -21,6 +21,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { useUser, useLogout } from '@/hooks/queries/use-auth';
+import { useChatSessions } from '@/hooks/queries/use-chat';
 
 interface ChatHistoryItem {
   id: string;
@@ -46,12 +47,25 @@ export function AppSidebar({
   onToggleTheme,
   onNewConversation,
   userName: propUserName,
-  chatHistory = [],
+  chatHistory,
   activeChatId,
 }: AppSidebarProps) {
   const router = useRouter();
   const { user, isLoading: isUserLoading } = useUser();
   const { logout } = useLogout();
+  const { sessions } = useChatSessions();
+
+  const activeChatHistory = useMemo(() => {
+    if (!user) return [];
+    if (chatHistory && chatHistory.length > 0) {
+      return chatHistory;
+    }
+    return sessions.map((s) => ({
+      id: s.id,
+      title: s.title,
+      timestamp: s.updatedAt || s.createdAt || '',
+    }));
+  }, [user, chatHistory, sessions]);
 
   const displayName = user?.name ?? propUserName ?? 'Usuário';
 
@@ -164,99 +178,103 @@ export function AppSidebar({
       </div>
 
       {/* ── Botão Novo Chat ── */}
-      <div className="px-4 pb-2 shrink-0">
-        <motion.button
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleNewChat}
-          className={cn(
-            'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-300 cursor-pointer text-left group border',
-            isDarkTheme
-              ? 'bg-violet-500/10 border-violet-500/20 text-violet-300 hover:bg-violet-500/15 hover:border-violet-500/30'
-              : 'bg-violet-50 border-violet-200/60 text-violet-700 hover:bg-violet-100 hover:border-violet-300',
-          )}
-        >
-          <div
+      {user && (
+        <div className="px-4 pb-2 shrink-0">
+          <motion.button
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleNewChat}
             className={cn(
-              'w-7 h-7 rounded-lg flex items-center justify-center transition-colors',
+              'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-300 cursor-pointer text-left group border',
               isDarkTheme
-                ? 'bg-violet-500/20 group-hover:bg-violet-500/30'
-                : 'bg-violet-100 group-hover:bg-violet-200',
+                ? 'bg-violet-500/10 border-violet-500/20 text-violet-300 hover:bg-violet-500/15 hover:border-violet-500/30'
+                : 'bg-violet-55 border-violet-200/60 text-violet-700 hover:bg-violet-100 hover:border-violet-300',
             )}
           >
-            <Plus className="w-4 h-4 stroke-[2.5]" />
-          </div>
-          <span className="text-[13px] font-semibold tracking-wide">
-            Novo Chat
-          </span>
-        </motion.button>
-      </div>
+            <div
+              className={cn(
+                'w-7 h-7 rounded-lg flex items-center justify-center transition-colors',
+                isDarkTheme
+                  ? 'bg-violet-500/20 group-hover:bg-violet-500/30'
+                  : 'bg-violet-100 group-hover:bg-violet-200',
+              )}
+            >
+              <Plus className="w-4 h-4 stroke-[2.5]" />
+            </div>
+            <span className="text-[13px] font-semibold tracking-wide">
+              Novo Chat
+            </span>
+          </motion.button>
+        </div>
+      )}
 
       {/* ── Histórico de conversas ── */}
-      <div className="flex-1 min-h-0 flex flex-col px-4 pt-1">
-        <h3
-          className={cn(
-            'text-[10px] font-bold tracking-widest uppercase px-1 mb-2 select-none',
-            isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
-          )}
-        >
-          Recentes
-        </h3>
+      {user && (
+        <div className="flex-1 min-h-0 flex flex-col px-4 pt-1">
+          <h3
+            className={cn(
+              'text-[10px] font-bold tracking-widest uppercase px-1 mb-2 select-none',
+              isDarkTheme ? 'text-zinc-500' : 'text-zinc-400',
+            )}
+          >
+            Recentes
+          </h3>
 
-        <ScrollArea className="flex-1">
-          <div className="flex flex-col gap-0.5 pb-2">
-            {chatHistory.length > 0 ? (
-              chatHistory.map((chat, idx) => (
-                <motion.button
-                  key={chat.id}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.03, duration: 0.2 }}
-                  onClick={() => handleChatSelect(chat.id)}
+          <ScrollArea className="flex-1">
+            <div className="flex flex-col gap-0.5 pb-2">
+              {activeChatHistory.length > 0 ? (
+                activeChatHistory.map((chat, idx) => (
+                  <motion.button
+                    key={chat.id}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.03, duration: 0.2 }}
+                    onClick={() => handleChatSelect(chat.id)}
+                    className={cn(
+                      'w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-200 cursor-pointer group',
+                      activeChatId === chat.id
+                        ? isDarkTheme
+                          ? 'bg-zinc-800/70 text-white'
+                          : 'bg-zinc-100 text-zinc-900'
+                        : isDarkTheme
+                          ? 'text-zinc-400 hover:bg-zinc-800/40 hover:text-zinc-200'
+                          : 'text-zinc-650 hover:bg-zinc-50 hover:text-zinc-800',
+                    )}
+                  >
+                    <MessageSquare
+                      className={cn(
+                        'w-3.5 h-3.5 shrink-0 stroke-[1.8] transition-colors',
+                        activeChatId === chat.id
+                          ? 'text-violet-400'
+                          : isDarkTheme
+                            ? 'text-zinc-600 group-hover:text-zinc-400'
+                            : 'text-zinc-405 group-hover:text-zinc-500',
+                      )}
+                    />
+                    <span className="text-[13px] truncate flex-1 leading-tight">
+                      {chat.title}
+                    </span>
+                  </motion.button>
+                ))
+              ) : (
+                <div
                   className={cn(
-                    'w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-200 cursor-pointer group',
-                    activeChatId === chat.id
-                      ? isDarkTheme
-                        ? 'bg-zinc-800/70 text-white'
-                        : 'bg-zinc-100 text-zinc-900'
-                      : isDarkTheme
-                        ? 'text-zinc-400 hover:bg-zinc-800/40 hover:text-zinc-200'
-                        : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800',
+                    'flex flex-col items-center justify-center py-10 gap-3 select-none',
+                    isDarkTheme ? 'text-zinc-600' : 'text-zinc-400',
                   )}
                 >
-                  <MessageSquare
-                    className={cn(
-                      'w-3.5 h-3.5 shrink-0 stroke-[1.8] transition-colors',
-                      activeChatId === chat.id
-                        ? 'text-violet-400'
-                        : isDarkTheme
-                          ? 'text-zinc-600 group-hover:text-zinc-400'
-                          : 'text-zinc-400 group-hover:text-zinc-500',
-                    )}
-                  />
-                  <span className="text-[13px] truncate flex-1 leading-tight">
-                    {chat.title}
-                  </span>
-                </motion.button>
-              ))
-            ) : (
-              <div
-                className={cn(
-                  'flex flex-col items-center justify-center py-10 gap-3 select-none',
-                  isDarkTheme ? 'text-zinc-600' : 'text-zinc-400',
-                )}
-              >
-                <MessageSquare className="w-8 h-8 stroke-[1.2] opacity-50" />
-                <p className="text-xs text-center leading-relaxed opacity-70">
-                  Nenhuma conversa ainda.
-                  <br />
-                  Comece um novo chat!
-                </p>
-              </div>
-            )}
-          </div>
-        </ScrollArea>
-      </div>
+                  <MessageSquare className="w-8 h-8 stroke-[1.2] opacity-50" />
+                  <p className="text-xs text-center leading-relaxed opacity-70">
+                    Nenhuma conversa ainda.
+                    <br />
+                    Comece um novo chat!
+                  </p>
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+        </div>
+      )}
 
       {/* ── Rodapé: Usuário + Logout / Login ── */}
       <div className="shrink-0 px-4 pb-4 pt-2">

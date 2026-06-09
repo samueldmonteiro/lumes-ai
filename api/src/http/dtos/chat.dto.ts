@@ -27,7 +27,7 @@ export class ChatRequestDto {
   })
   @IsString({ message: 'A pergunta deve ser um texto válido' })
   @IsNotEmpty({ message: 'A pergunta não pode estar vazia' })
-  @MinLength(3, { message: 'A pergunta é muito curta' })
+  @MinLength(1, { message: 'A pergunta é muito curta' })
     question!: string;
 
   @ApiProperty({

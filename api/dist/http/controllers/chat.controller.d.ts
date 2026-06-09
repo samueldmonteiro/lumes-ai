@@ -9,26 +9,26 @@ export declare class ChatController extends BaseController {
     getHistory(user: JwtPayload, limit?: number): Promise<import("./base.controller").ApiResponse<import("../../repositories/prisma/prisma-chat-log.repository").ChatLogEntry[]>>;
     getSessions(user: JwtPayload, limit?: number): Promise<import("./base.controller").ApiResponse<{
         title: string;
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         userId: number;
         updatedAt: Date;
     }[]>>;
     getSessionDetails(id: string, user: JwtPayload): Promise<import("./base.controller").ApiResponse<{
         chatLogs: {
             question: string;
-            answer: string;
-            sources: import("@prisma/client/runtime/client").JsonValue;
-            similarity: number | null;
-            createdAt: Date;
-            id: number;
-            userId: number | null;
             sessionId: string | null;
+            answer: string;
+            similarity: number | null;
+            sources: import("@prisma/client/runtime/client").JsonValue;
+            id: number;
+            createdAt: Date;
+            userId: number | null;
         }[];
     } & {
         title: string;
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         userId: number;
         updatedAt: Date;
     }>>;

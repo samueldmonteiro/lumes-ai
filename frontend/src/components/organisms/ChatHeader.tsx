@@ -110,21 +110,23 @@ export function ChatHeader({
           </button>
         )}
 
-        {/* Botão de nova conversa */}
-        <motion.button
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.92 }}
-          onClick={onNewConversation}
-          className={cn(
-            'w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer shadow-sm select-none border',
-            isDarkTheme
-              ? 'border-zinc-800 text-zinc-400 bg-zinc-900/60 hover:bg-zinc-800/80 hover:text-white hover:border-zinc-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.15)]'
-              : 'border-zinc-200 text-zinc-650 bg-white hover:bg-zinc-50 hover:text-zinc-900 hover:border-zinc-300',
-          )}
-          title="Nova Conversa"
-        >
-          <Plus className="w-[19px] h-[19px] stroke-[2.5]" />
-        </motion.button>
+        {/* Botão de nova conversa — apenas para usuários logados */}
+        {user && (
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            onClick={onNewConversation}
+            className={cn(
+              'w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer shadow-sm select-none border',
+              isDarkTheme
+                ? 'border-zinc-800 text-zinc-400 bg-zinc-900/60 hover:bg-zinc-800/80 hover:text-white hover:border-zinc-700 hover:shadow-[0_0_15px_rgba(139,92,246,0.15)]'
+                : 'border-zinc-200 text-zinc-650 bg-white hover:bg-zinc-50 hover:text-zinc-900 hover:border-zinc-300',
+            )}
+            title="Nova Conversa"
+          >
+            <Plus className="w-[19px] h-[19px] stroke-[2.5]" />
+          </motion.button>
+        )}
       </div>
     </header>
   );
