@@ -14,10 +14,10 @@ export declare class AuthService {
     constructor(userRepo: PrismaUserRepository, jwtService: JwtService);
     register(dto: RegisterDto): Promise<{
         user: {
-            role: UserRole;
-            email: string;
             id: number;
+            email: string;
             name: string;
+            role: UserRole;
         };
         token: string;
     }>;

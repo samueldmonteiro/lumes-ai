@@ -6,11 +6,11 @@ export declare class UserController extends BaseController {
     private readonly userService;
     constructor(userService: UserService);
     updateProfile(user: JwtPayload, body: UpdateProfileDto): Promise<import("./base.controller").ApiResponse<{
-        role: import("../../generated/prisma/enums").UserRole;
-        email: string;
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        email: string;
         name: string;
+        role: import("../../generated/prisma/enums").UserRole;
     }>>;
 }

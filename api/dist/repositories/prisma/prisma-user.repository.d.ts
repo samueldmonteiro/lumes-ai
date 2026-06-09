@@ -5,12 +5,12 @@ export declare class PrismaUserRepository {
     constructor(prisma: PrismaService);
     findByEmail(email: string): Promise<User | null>;
     findById(id: number): import("../../generated/prisma/models").Prisma__UserClient<{
-        email: string;
-        createdAt: Date;
         id: number;
-        name: string;
+        createdAt: Date;
         updatedAt: Date;
-        role: import("@/generated/prisma/client").UserRole;
+        email: string;
+        name: string;
+        role: import("../../generated/prisma/client").UserRole;
     } | null, null, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
@@ -19,20 +19,20 @@ export declare class PrismaUserRepository {
         password: string;
         name: string;
     }): import("../../generated/prisma/models").Prisma__UserClient<{
-        email: string;
         id: number;
+        email: string;
         name: string;
-        role: import("@/generated/prisma/client").UserRole;
+        role: import("../../generated/prisma/client").UserRole;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
     update(id: number, data: Partial<Pick<User, 'email' | 'name' | 'password'>>): import("../../generated/prisma/models").Prisma__UserClient<{
-        email: string;
-        createdAt: Date;
         id: number;
-        name: string;
+        createdAt: Date;
         updatedAt: Date;
-        role: import("@/generated/prisma/client").UserRole;
+        email: string;
+        name: string;
+        role: import("../../generated/prisma/client").UserRole;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;

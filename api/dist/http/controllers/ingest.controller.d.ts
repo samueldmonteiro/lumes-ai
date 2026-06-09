@@ -12,9 +12,9 @@ interface UploadedMulterFile {
 export declare class IngestController extends BaseController {
     private readonly ingestService;
     constructor(ingestService: IngestService);
-    ingestText(body: IngestTextDto): Promise<import("./base.controller").ApiResponse<import("@/services/ingest.service").IngestResult>>;
-    ingestPDF(file: UploadedMulterFile | undefined, source?: string): Promise<import("./base.controller").ApiResponse<import("@/services/ingest.service").IngestResult>>;
-    ingestJson(body: IngestJsonDto): Promise<import("./base.controller").ApiResponse<import("@/services/ingest.service").IngestResult>>;
+    ingestText(body: IngestTextDto): Promise<import("./base.controller").ApiResponse<import("../../services/ingest.service").IngestResult>>;
+    ingestPDF(file: UploadedMulterFile | undefined, source?: string): Promise<import("./base.controller").ApiResponse<import("../../services/ingest.service").IngestResult>>;
+    ingestJson(body: IngestJsonDto): Promise<import("./base.controller").ApiResponse<import("../../services/ingest.service").IngestResult>>;
     listDocuments(): Promise<import("./base.controller").ApiResponse<{
         id: string;
         source: string;
